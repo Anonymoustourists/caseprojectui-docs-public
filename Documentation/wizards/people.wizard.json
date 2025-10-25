@@ -1,0 +1,417 @@
+{
+  "version": 1,
+  "entity": "people",
+  "types": [
+    {
+      "id": "defendant",
+      "label": "Defendant",
+      "defaultEmoji": "⚖️",
+      "defaultIconPath": "defendant.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "dob",
+          "label": "Date of Birth",
+          "type": "date"
+        },
+        {
+          "id": "aliases",
+          "label": "Aliases",
+          "type": "text",
+          "help": "Separate multiple aliases with commas"
+        },
+        {
+          "id": "phone_numbers",
+          "label": "Phone Number(s)",
+          "type": "textarea",
+          "help": "Enter phone numbers, one per line"
+        },
+        {
+          "id": "addresses",
+          "label": "Address(es)",
+          "type": "textarea",
+          "help": "Enter addresses, one per line"
+        },
+        {
+          "id": "social_media",
+          "label": "Social Media Accounts",
+          "type": "textarea",
+          "help": "Format: [screenname] @ [platform], one per line"
+        },
+        {
+          "id": "email_addresses",
+          "label": "Email Address(es)",
+          "type": "textarea",
+          "help": "Enter email addresses, one per line"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_defendant"
+        }
+      ],
+      "tags": ["defendant"]
+    },
+    {
+      "id": "witness",
+      "label": "Witness",
+      "defaultEmoji": "👁️",
+      "defaultIconPath": "witness.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "relation",
+          "label": "Relation to Case",
+          "type": "select",
+          "options": ["Witness to Offense", "Expert", "Fact Witness", "Other"]
+        },
+        {
+          "id": "relation_other",
+          "label": "Specify Other Role",
+          "type": "text",
+          "show_if": { "relation": "Other" },
+          "help": "Describe the person's role in the case"
+        },
+        {
+          "id": "specialty",
+          "label": "Specialty/Expertise",
+          "type": "text",
+          "show_if": { "relation": "Expert" }
+        },
+        {
+          "id": "expert_employer",
+          "label": "Employer",
+          "type": "text",
+          "show_if": { "relation": "Expert" }
+        },
+        {
+          "id": "expert_for",
+          "label": "Expert For",
+          "type": "select",
+          "options": ["Defense", "Prosecution", "Other"],
+          "show_if": { "relation": "Expert" }
+        },
+        {
+          "id": "phone_numbers",
+          "label": "Phone Number(s)",
+          "type": "textarea",
+          "help": "Enter phone numbers, one per line"
+        },
+        {
+          "id": "addresses",
+          "label": "Address(es)",
+          "type": "textarea",
+          "help": "Enter addresses, one per line"
+        },
+        {
+          "id": "social_media",
+          "label": "Social Media Accounts",
+          "type": "textarea",
+          "help": "Format: [screenname] @ [platform], one per line"
+        },
+        {
+          "id": "email_addresses",
+          "label": "Email Address(es)",
+          "type": "textarea",
+          "help": "Enter email addresses, one per line"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_witness"
+        }
+      ],
+      "tags": ["witness", "{{relation}}"]
+    },
+    {
+      "id": "complainant",
+      "label": "Complainant",
+      "defaultEmoji": "🗣️",
+      "defaultIconPath": "complainant.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "phone_numbers",
+          "label": "Phone Number(s)",
+          "type": "textarea",
+          "help": "Enter phone numbers, one per line"
+        },
+        {
+          "id": "addresses",
+          "label": "Address(es)",
+          "type": "textarea",
+          "help": "Enter addresses, one per line"
+        },
+        {
+          "id": "social_media",
+          "label": "Social Media Accounts",
+          "type": "textarea",
+          "help": "Format: [screenname] @ [platform], one per line"
+        },
+        {
+          "id": "email_addresses",
+          "label": "Email Address(es)",
+          "type": "textarea",
+          "help": "Enter email addresses, one per line"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_complainant"
+        }
+      ],
+      "tags": ["complainant"]
+    },
+    {
+      "id": "officer",
+      "label": "Officer",
+      "defaultEmoji": "👮",
+      "defaultIconPath": "officer.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "agency_type",
+          "label": "Agency",
+          "type": "select",
+          "options": ["Michigan State Police", "City Police", "Sheriff", "Other"],
+          "required": true
+        },
+        {
+          "id": "agency_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "agency_type": "City Police" },
+          "required": true
+        },
+        {
+          "id": "agency_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "agency_type": "Sheriff" },
+          "required": true
+        },
+        {
+          "id": "agency_other",
+          "label": "Specify Agency",
+          "type": "text",
+          "show_if": { "agency_type": "Other" },
+          "required": true
+        },
+        {
+          "id": "officer_role",
+          "label": "Role",
+          "type": "select",
+          "options": ["Officer in Charge", "Arresting Officer", "Canvassed Witnesses", "Other"]
+        },
+        {
+          "id": "officer_role_other",
+          "label": "Specify Other Role",
+          "type": "text",
+          "show_if": { "officer_role": "Other" }
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_{{agency_type|slug}}"
+        }
+      ],
+      "tags": ["officer", "{{agency_type}}", "{{officer_role}}"]
+    },
+    {
+      "id": "attorney",
+      "label": "Attorney",
+      "defaultEmoji": "💼",
+      "defaultIconPath": "attorney.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "attorney_side",
+          "label": "Attorney For",
+          "type": "select",
+          "options": ["Defense Attorney", "Prosecutor"],
+          "required": true
+        },
+        {
+          "id": "attorney_level",
+          "label": "Counsel Level",
+          "type": "select",
+          "options": ["Trial Counsel", "Appellate Counsel", "Other"]
+        },
+        {
+          "id": "attorney_level_other",
+          "label": "Specify Other Level",
+          "type": "text",
+          "show_if": { "attorney_level": "Other" }
+        },
+        {
+          "id": "bar_number",
+          "label": "Bar Number",
+          "type": "text"
+        },
+        {
+          "id": "firm",
+          "label": "Law Firm",
+          "type": "text"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_{{attorney_side|slug}}"
+        }
+      ],
+      "tags": ["attorney", "{{attorney_side}}", "{{attorney_level}}"]
+    },
+    {
+      "id": "judge",
+      "label": "Judge",
+      "defaultEmoji": "🧑‍⚖️",
+      "defaultIconPath": "judge.svg",
+      "fields": [
+        {
+          "id": "first_name",
+          "label": "First Name",
+          "type": "text"
+        },
+        {
+          "id": "last_name",
+          "label": "Last Name",
+          "type": "text"
+        },
+        {
+          "id": "user_comment",
+          "label": "User Comment",
+          "type": "textarea",
+          "help": "Add any notes about this person"
+        },
+        {
+          "id": "court_type",
+          "label": "Court Type",
+          "type": "select",
+          "options": ["District Court", "Circuit Court", "Other"],
+          "required": true
+        },
+        {
+          "id": "district_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "court_type": "District Court" },
+          "help": "Specify the city for District Court"
+        },
+        {
+          "id": "circuit_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "court_type": "Circuit Court" },
+          "help": "Specify the county for Circuit Court"
+        },
+        {
+          "id": "court_other",
+          "label": "Specify Court",
+          "type": "text",
+          "show_if": { "court_type": "Other" },
+          "help": "Specify the court type"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{last_name|slug}}_{{first_name|slug}}_judge"
+        }
+      ],
+      "tags": ["judge", "{{court_type}}"]
+    }
+  ],
+  "lookups": {},
+  "helpers": {
+    "slug": true,
+    "upper": true,
+    "omit_empty_segments": true,
+    "joiner": "_"
+  }
+}

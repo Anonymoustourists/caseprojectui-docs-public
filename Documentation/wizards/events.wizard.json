@@ -1,0 +1,559 @@
+{
+  "version": 1,
+  "entity": "events",
+  "types": [
+    {
+      "id": "hearing",
+      "label": "Court Hearing",
+      "category": "legal",
+      "defaultEmoji": "⚖️",
+      "defaultIconPath": "court.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "hearing_type",
+          "label": "Hearing Type",
+          "type": "select",
+          "options": [
+            "Arraignment",
+            "Preliminary Examination",
+            "Pretrial Hearing",
+            "Status Conference",
+            "Motion Hearing",
+            "Final Pretrial",
+            "Trial",
+            "Sentencing",
+            "Postconviction Hearing"
+          ],
+          "required": true
+        },
+        {
+          "id": "motion_specify",
+          "label": "Specify Motions",
+          "type": "textarea",
+          "show_if": { "hearing_type": "Motion Hearing" },
+          "help": "List the motions being heard"
+        },
+        {
+          "id": "motion_witness_testimony",
+          "label": "Witness Testimony Received?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Motion Hearing" }
+        },
+        {
+          "id": "motion_witnesses",
+          "label": "Select Witnesses",
+          "type": "person_multi_select",
+          "show_if": { "motion_witness_testimony": "Yes" },
+          "help": "Select witnesses who testified"
+        },
+        {
+          "id": "trial_volume",
+          "label": "Trial Volume Number",
+          "type": "text",
+          "show_if": { "hearing_type": "Trial" },
+          "help": "Specify volume number if applicable"
+        },
+        {
+          "id": "trial_jury_selected",
+          "label": "Jury Selected?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Trial" }
+        },
+        {
+          "id": "trial_verdict_reached",
+          "label": "Verdict Reached?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Trial" }
+        },
+        {
+          "id": "postconviction_witness_testimony",
+          "label": "Witness Testimony Received?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Postconviction Hearing" }
+        },
+        {
+          "id": "postconviction_witnesses",
+          "label": "Select Witnesses",
+          "type": "person_multi_select",
+          "show_if": { "postconviction_witness_testimony": "Yes" },
+          "help": "Select witnesses who testified"
+        },
+        {
+          "id": "court",
+          "label": "Court",
+          "type": "select",
+          "options": ["District Court", "Circuit Court", "Court of Appeals", "Supreme Court"],
+          "required": true
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{hearing_type|slug}}_hearing"
+        }
+      ],
+      "metadata": ["hearing", "{{hearing_type}}", "{{court}}"]
+    },
+    {
+      "id": "filing",
+      "label": "Court Filing",
+      "category": "legal",
+      "defaultEmoji": "📋",
+      "defaultIconPath": "filing.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Filing Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "party_filing",
+          "label": "Party Filing",
+          "type": "select",
+          "options": ["Prosecutor", "Defendant", "Judge"],
+          "required": true
+        },
+        {
+          "id": "filing_type_party",
+          "label": "Filing Type",
+          "type": "select",
+          "options": [
+            "Complaint",
+            "Information",
+            "Discovery Demand",
+            "Notice",
+            "Disclosure",
+            "Motion / Brief",
+            "Proposed Jury Instruction",
+            "Sentencing Memorandum",
+            "Postconviction Motion",
+            "Appellate Brief/Application"
+          ],
+          "show_if": { "party_filing": { "in": ["Prosecutor", "Defendant"] } },
+          "required": true
+        },
+        {
+          "id": "notice_type",
+          "label": "Notice Type",
+          "type": "select",
+          "options": ["Other Acts", "Other"],
+          "show_if": { "filing_type_party": "Notice" }
+        },
+        {
+          "id": "notice_other_specify",
+          "label": "Specify Notice Type",
+          "type": "text",
+          "show_if": { "notice_type": "Other" }
+        },
+        {
+          "id": "disclosure_specify",
+          "label": "Specify Disclosure",
+          "type": "text",
+          "show_if": { "filing_type_party": "Disclosure" }
+        },
+        {
+          "id": "motion_brief_specify",
+          "label": "Specify Motion/Brief",
+          "type": "text",
+          "show_if": { "filing_type_party": "Motion / Brief" }
+        },
+        {
+          "id": "filing_type_judge",
+          "label": "Filing Type",
+          "type": "select",
+          "options": [
+            "Scheduling Order",
+            "Bindover",
+            "Ruling on Motion",
+            "Other Order",
+            "Judgment of Sentence"
+          ],
+          "show_if": { "party_filing": "Judge" },
+          "required": true
+        },
+        {
+          "id": "ruling_motion_specify",
+          "label": "Specify Motion",
+          "type": "text",
+          "show_if": { "filing_type_judge": "Ruling on Motion" }
+        },
+        {
+          "id": "other_order_specify",
+          "label": "Specify Order",
+          "type": "text",
+          "show_if": { "filing_type_judge": "Other Order" }
+        },
+        {
+          "id": "has_source_document",
+          "label": "Link Source Document?",
+          "type": "select",
+          "options": ["Yes - Link Existing Source", "Yes - Upload New Source", "No"],
+          "help": "Link this filing to the actual court document"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "motion_brief_party",
+          "when": { "filing_type_party": "Motion / Brief" },
+          "template": "{{party_filing}}'s Motion for {{motion_brief_specify}}"
+        },
+        {
+          "id": "notice_party",
+          "when": { "filing_type_party": "Notice" },
+          "template": "{{party_filing}}'s {{notice_type}} Notice{{#notice_other_specify}} - {{notice_other_specify}}{{/notice_other_specify}}"
+        },
+        {
+          "id": "disclosure_party",
+          "when": { "filing_type_party": "Disclosure" },
+          "template": "{{party_filing}}'s Disclosure{{#disclosure_specify}} - {{disclosure_specify}}{{/disclosure_specify}}"
+        },
+        {
+          "id": "ruling_motion_judge",
+          "when": { "filing_type_judge": "Ruling on Motion" },
+          "template": "Order re {{ruling_motion_specify}}"
+        },
+        {
+          "id": "other_order_judge",
+          "when": { "filing_type_judge": "Other Order" },
+          "template": "{{other_order_specify}}"
+        },
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{party_filing|slug}}_{{filing_type_party|slug}}{{filing_type_judge|slug}}"
+        }
+      ],
+      "metadata": ["filing", "{{party_filing}}", "{{filing_type_party}}", "{{filing_type_judge}}"]
+    },
+    {
+      "id": "incident",
+      "label": "Incident",
+      "category": "factual",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "time",
+          "label": "Time",
+          "type": "time"
+        },
+        {
+          "id": "incident_type",
+          "label": "Incident Type",
+          "type": "select",
+          "options": ["Arrest", "Search", "Interview", "Crime", "Other"],
+          "required": true
+        },
+        {
+          "id": "location",
+          "label": "Location",
+          "type": "text"
+        },
+        {
+          "id": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": true
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{incident_type|slug}}_incident"
+        }
+      ],
+      "metadata": ["incident", "{{incident_type}}"]
+    },
+    {
+      "id": "offense_date",
+      "label": "Offense Date",
+      "category": "investigatory",
+      "defaultEmoji": "🚨",
+      "defaultIconPath": "offense.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "date_end",
+          "label": "End Date (if range)",
+          "type": "date",
+          "required": false
+        },
+        {
+          "id": "time",
+          "label": "Time",
+          "type": "time",
+          "required": false
+        },
+        {
+          "id": "time_end",
+          "label": "End Time (if range)",
+          "type": "time",
+          "required": false
+        },
+        {
+          "id": "location",
+          "label": "Location",
+          "type": "text",
+          "required": false
+        },
+        {
+          "id": "witnesses",
+          "label": "Witnesses",
+          "type": "person_multi_select",
+          "help": "Select witnesses to the offense",
+          "required": false
+        },
+        {
+          "id": "perpetrators",
+          "label": "Alleged Perpetrator(s)",
+          "type": "person_multi_select",
+          "help": "Select alleged perpetrators",
+          "required": false
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea",
+          "required": false
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_offense_date"
+        }
+      ],
+      "metadata": ["offense_date", "{{location}}"]
+    },
+    {
+      "id": "birthday",
+      "label": "Birthday",
+      "category": "background",
+      "defaultEmoji": "🎂",
+      "defaultIconPath": "birthday.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Birthday",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "person",
+          "label": "Person",
+          "type": "person_select",
+          "help": "Select the person whose birthday this is",
+          "required": true
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_birthday_{{person|slug}}"
+        }
+      ],
+      "metadata": ["birthday", "{{person}}"]
+    },
+    {
+      "id": "moving",
+      "label": "Moving",
+      "category": "background",
+      "defaultEmoji": "📦",
+      "defaultIconPath": "moving.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Moving Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "from_address",
+          "label": "From (Address)",
+          "type": "address_select",
+          "help": "Select the origin address",
+         "required": false
+        },
+        {
+          "id": "to_address",
+          "label": "To (Address)",
+          "type": "address_select",
+          "help": "Select the destination address",
+         "required": false
+        },
+        {
+          "id": "person",
+          "label": "Person",
+          "type": "person_select",
+          "help": "Person who is moving",
+          "required": true
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_moving_{{person|slug}}"
+        }
+      ],
+      "metadata": ["moving", "{{person}}", "{{from_address}}", "{{to_address}}"]
+    },
+    {
+      "id": "arrest",
+      "label": "Arrest",
+      "category": "investigation",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Arrest Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "person",
+          "label": "Person Arrested",
+          "type": "person_select",
+          "help": "Select the person who was arrested",
+          "required": true
+        },
+        {
+          "id": "police_agency",
+          "label": "Police Agency",
+          "type": "text",
+          "help": "Enter the arresting agency",
+         "required": false
+        },
+        {
+          "id": "charge",
+          "label": "Charge",
+          "type": "textarea",
+          "help": "Enter the charge(s)",
+         "required": false
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_arrest_{{person|slug}}"
+        }
+      ],
+      "metadata": ["arrest", "{{person}}", "{{police_agency}}"]
+    },
+    {
+      "id": "release_parole",
+      "label": "Release/Parole",
+      "category": "investigation",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Release Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "person",
+          "label": "Person Released",
+          "type": "person_select",
+          "help": "Select the person who was released",
+          "required": true
+        },
+        {
+          "id": "police_agency",
+          "label": "Police Agency/Facility",
+          "type": "text",
+          "help": "Enter the releasing agency or facility",
+            "required": false
+        },
+        {
+          "id": "reason",
+          "label": "Reason for Release",
+          "type": "select",
+          "options": [
+            "Completed Sentence",
+            "Charges Dropped",
+            "Bail/Bond",
+            "Parole",
+            "Other"
+          ],
+            "required": false
+        },
+        {
+          "id": "reason_other_specify",
+          "label": "Specify Other Reason",
+          "type": "text",
+          "show_if": { "reason": "Other" }
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "other_reason",
+          "when": { "reason": "Other" },
+          "template": "{{date|YYYY-MM-DD}}_release_{{person|slug}}_{{reason_other_specify|slug}}"
+        },
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_release_{{person|slug}}_{{reason|slug}}"
+        }
+      ],
+      "metadata": ["release", "parole", "{{person}}", "{{police_agency}}", "{{reason}}"]
+    }
+  ],
+  "lookups": {},
+  "helpers": {
+    "slug": true,
+    "upper": true,
+    "omit_empty_segments": true,
+    "joiner": "_"
+  }
+}

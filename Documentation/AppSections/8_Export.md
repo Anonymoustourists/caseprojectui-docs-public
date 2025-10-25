@@ -1,0 +1,5 @@
+User should be able to:
+
+1. output notes mds to word documents, converting CITES to normal citations using their [citename] + page number/range or timestamps.
+2. Output an appendix that generates a PDF of all documents cited with a cover page in front of each document, with or with bates numbers, in either chronological order or order of appearance in the notes. Then output the note as a word document, which lists the CITES by their Appendix # or Bates number. A/V files are exported as Appendix # - [file name] into a single folder
+3. Output a witness outline, which is a word document with questions and presumed answers, with citations in the presumed answers converted to normal citations using their [citename] + page number/range or timestamps. Also output an appendix that generates a PDF of all documents cited with a cover page in front of each document, with or with bates numbers, in either chronological order or order of appearance in the witness outline. Then output the witness outline as a word document, which lists the CITES by their Appendix # or Bates number. A/V files are exported as Appendix # - [file name] into a single folder

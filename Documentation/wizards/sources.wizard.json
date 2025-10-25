@@ -1,0 +1,794 @@
+{
+  "version": 2,
+  "entity": "sources",
+  "types": [
+    {
+      "id": "transcript",
+      "label": "Transcript",
+      "view": "dialogue",
+      "defaultEmoji": "📝",
+      "defaultIconPath": "transcript.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "hearing_type",
+          "label": "Hearing Type",
+          "type": "select",
+          "options": [
+            "Arraignment",
+            "Preliminary Examination",
+            "Pretrial Hearing",
+            "Status Conference",
+            "Motion Hearing",
+            "Final Pretrial",
+            "Trial",
+            "Sentencing",
+            "Postconviction Hearing"
+          ]
+        },
+        {
+          "id": "motion_specify",
+          "label": "Specify Motions",
+          "type": "textarea",
+          "show_if": { "hearing_type": "Motion Hearing" },
+          "help": "List the motions being heard"
+        },
+        {
+          "id": "motion_witness_testimony",
+          "label": "Witness Testimony Received?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Motion Hearing" }
+        },
+        {
+          "id": "motion_witnesses",
+          "label": "Select Witnesses",
+          "type": "person_multi_select",
+          "show_if": { "motion_witness_testimony": "Yes" },
+          "help": "Select witnesses who testified"
+        },
+        {
+          "id": "trial_volume",
+          "label": "Trial Volume Number",
+          "type": "text",
+          "show_if": { "hearing_type": "Trial" },
+          "help": "Specify volume number if applicable"
+        },
+        {
+          "id": "trial_jury_selected",
+          "label": "Jury Selected?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Trial" }
+        },
+        {
+          "id": "trial_verdict_reached",
+          "label": "Verdict Reached?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Trial" }
+        },
+        {
+          "id": "postconviction_witness_testimony",
+          "label": "Witness Testimony Received?",
+          "type": "select",
+          "options": ["Yes", "No"],
+          "show_if": { "hearing_type": "Postconviction Hearing" }
+        },
+        {
+          "id": "postconviction_witnesses",
+          "label": "Select Witnesses",
+          "type": "person_multi_select",
+          "show_if": { "postconviction_witness_testimony": "Yes" },
+          "help": "Select witnesses who testified"
+        },
+        {
+          "id": "court",
+          "label": "Court",
+          "type": "select",
+          "options": ["District Court", "Circuit Court"],
+          "required": true,
+          "help": "Preliminary Examination is always held in District Court."
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{hearing_type|slug}}_Transcript.pdf"
+        }
+      ],
+      "tags": ["transcript", "{{court}}", "{{hearing_type}}"]
+    },
+    {
+      "id": "legal_filing",
+      "label": "Legal Filing",
+      "view": "narrative",
+      "defaultEmoji": "📚",
+      "defaultIconPath": "filing.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date of Filing",
+          "type": "date",
+          "required": true
+        },
+        { "id": "filer", "label": "Filer", "type": "select", "options": ["Court", "Prosecutor", "Defendant"], "required": true },
+        { "id": "court", "label": "Court", "type": "select", "options": ["District Court", "Circuit Court", "Court of Appeals", "Supreme Court"], "show_if": { "filer": "Court" } },
+
+        { "id": "filing_type_court_district", "label": "Filing Type (District Court)", "type": "select", "options": ["Arrest Warrant", "Search Warrant", "Bindover", "Other"], "show_if": { "filer": "Court", "court": "District Court" } },
+        { "id": "district_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_district": "Other" } },
+
+        { "id": "filing_type_court_circuit", "label": "Filing Type (Circuit Court)", "type": "select", "options": ["Scheduling Order", "Order re Motion", "Other Order", "Judgment of Sentence", "Verdict", "Claim of Appeal", "Notice of Appointment", "Order", "Other"], "show_if": { "filer": "Court", "court": "Circuit Court" } },
+        { "id": "circuit_order_motion_specify", "label": "Specify Motion", "type": "text", "show_if": { "filing_type_court_circuit": "Order re Motion" } },
+        { "id": "circuit_other_order_specify", "label": "Specify Other Order", "type": "text", "show_if": { "filing_type_court_circuit": "Other Order" } },
+        { "id": "circuit_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_circuit": "Other" } },
+
+        { "id": "filing_type_court_coa", "label": "Filing Type (Court of Appeals)", "type": "select", "options": ["Unpublished Opinion", "Published Opinion", "Order Granting/Denying Remand", "Administrative Order", "Other Order", "Notice of Oral Argument", "Correspondence", "Other"], "show_if": { "filer": "Court", "court": "Court of Appeals" } },
+        { "id": "coa_admin_order_specify", "label": "Specify Administrative Order", "type": "text", "show_if": { "filing_type_court_coa": "Administrative Order" } },
+        { "id": "coa_other_order_specify", "label": "Specify Other Order", "type": "text", "show_if": { "filing_type_court_coa": "Other Order" } },
+        { "id": "coa_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_coa": "Other" } },
+
+        { "id": "filing_type_court_sc", "label": "Filing Type (Supreme Court)", "type": "select", "options": ["Order re Leave to Appeal", "Opinion", "Other Order", "Other"], "show_if": { "filer": "Court", "court": "Supreme Court" } },
+        { "id": "sc_lta_disposition", "label": "Leave to Appeal Disposition", "type": "select", "options": ["Grant", "Deny", "MOAA", "Remand", "Other"], "show_if": { "filing_type_court_sc": "Order re Leave to Appeal" } },
+        { "id": "sc_lta_other_specify", "label": "Specify Other Disposition", "type": "text", "show_if": { "sc_lta_disposition": "Other" } },
+        { "id": "sc_other_order_specify", "label": "Specify Other Order", "type": "text", "show_if": { "filing_type_court_sc": "Other Order" } },
+        { "id": "sc_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_sc": "Other" } },
+
+        { "id": "filing_type_prosecutor", "label": "Filing Type (Prosecutor)", "type": "select", "options": ["Complaint", "Information", "Motion", "Brief on Appeal", "Other"], "show_if": { "filer": "Prosecutor" } },
+        { "id": "pros_motion_specify", "label": "Specify Motion", "type": "text", "show_if": { "filing_type_prosecutor": "Motion" } },
+        { "id": "pros_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_prosecutor": "Other" } },
+
+        { "id": "filing_type_defendant", "label": "Filing Type (Defendant)", "type": "select", "options": ["Motion", "Appearance", "Discovery Demand", "Speedy Trial Demand", "Sentencing Memorandum", "Brief on Appeal", "Application", "Other"], "show_if": { "filer": "Defendant" } },
+        { "id": "def_motion_specify", "label": "Specify Motion", "type": "text", "show_if": { "filing_type_defendant": "Motion" } },
+        { "id": "def_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_defendant": "Other" } },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        { "id": "court_dc_arrest_warrant", "when": { "filer": "Court", "court": "District Court", "filing_type_court_district": "Arrest Warrant" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Arrest_Warrant.pdf" },
+        { "id": "court_dc_search_warrant", "when": { "filer": "Court", "court": "District Court", "filing_type_court_district": "Search Warrant" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Search_Warrant.pdf" },
+        { "id": "court_dc_bindover", "when": { "filer": "Court", "court": "District Court", "filing_type_court_district": "Bindover" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Bindover.pdf" },
+        { "id": "court_dc_other", "when": { "filer": "Court", "court": "District Court", "filing_type_court_district": "Other" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{district_other_specify|slug}}.pdf" },
+
+        { "id": "court_circ_sched_order", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Scheduling Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Scheduling_Order.pdf" },
+        { "id": "court_circ_order_re_motion", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Order re Motion" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Order_re_{{circuit_order_motion_specify|slug}}.pdf" },
+        { "id": "court_circ_other_order", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Other Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{circuit_other_order_specify|slug}}.pdf" },
+        { "id": "court_circ_jos", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Judgment of Sentence" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Judgment_of_Sentence.pdf" },
+        { "id": "court_circ_verdict", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Verdict" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Verdict.pdf" },
+        { "id": "court_circ_coa", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Claim of Appeal" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Claim_of_Appeal.pdf" },
+        { "id": "court_circ_noa", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Notice of Appointment" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Notice_of_Appointment.pdf" },
+        { "id": "court_circ_order", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Order.pdf" },
+        { "id": "court_circ_other", "when": { "filer": "Court", "court": "Circuit Court", "filing_type_court_circuit": "Other" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{circuit_other_specify|slug}}.pdf" },
+
+        { "id": "court_coa_unpub", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Unpublished Opinion" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Unpublished_Opinion.pdf" },
+        { "id": "court_coa_pub", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Published Opinion" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Published_Opinion.pdf" },
+        { "id": "court_coa_remand", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Order Granting/Denying Remand" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Order_Granting-Denying_Remand.pdf" },
+        { "id": "court_coa_admin_order", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Administrative Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{coa_admin_order_specify|slug}}.pdf" },
+        { "id": "court_coa_other_order", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Other Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{coa_other_order_specify|slug}}.pdf" },
+        { "id": "court_coa_noa", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Notice of Oral Argument" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Notice_of_Oral_Argument.pdf" },
+        { "id": "court_coa_corresp", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Correspondence" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Correspondence.pdf" },
+        { "id": "court_coa_other", "when": { "filer": "Court", "court": "Court of Appeals", "filing_type_court_coa": "Other" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{coa_other_specify|slug}}.pdf" },
+
+        { "id": "court_sc_lta_other_disp", "when": { "filer": "Court", "court": "Supreme Court", "filing_type_court_sc": "Order re Leave to Appeal", "sc_lta_disposition": "Other" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Order_re_Leave_to_Appeal_{{sc_lta_disposition|slug}}_{{sc_lta_other_specify|slug}}.pdf" },
+        { "id": "court_sc_lta", "when": { "filer": "Court", "court": "Supreme Court", "filing_type_court_sc": "Order re Leave to Appeal" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Order_re_Leave_to_Appeal_{{sc_lta_disposition|slug}}.pdf" },
+        { "id": "court_sc_opinion", "when": { "filer": "Court", "court": "Supreme Court", "filing_type_court_sc": "Opinion" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_Opinion.pdf" },
+        { "id": "court_sc_other_order", "when": { "filer": "Court", "court": "Supreme Court", "filing_type_court_sc": "Other Order" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{sc_other_order_specify|slug}}.pdf" },
+        { "id": "court_sc_other", "when": { "filer": "Court", "court": "Supreme Court", "filing_type_court_sc": "Other" }, "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{sc_other_specify|slug}}.pdf" },
+
+        { "id": "pros_motion", "when": { "filer": "Prosecutor", "filing_type_prosecutor": "Motion" }, "template": "{{date|YYYY-MM-DD}}_Prosecutor_Motion_{{pros_motion_specify|slug}}.pdf" },
+        { "id": "pros_other", "when": { "filer": "Prosecutor", "filing_type_prosecutor": "Other" }, "template": "{{date|YYYY-MM-DD}}_Prosecutor_{{pros_other_specify|slug}}.pdf" },
+        { "id": "pros_default", "when": { "filer": "Prosecutor" }, "template": "{{date|YYYY-MM-DD}}_Prosecutor_{{filing_type_prosecutor|slug}}.pdf" },
+
+        { "id": "def_motion", "when": { "filer": "Defendant", "filing_type_defendant": "Motion" }, "template": "{{date|YYYY-MM-DD}}_Defendant_Motion_{{def_motion_specify|slug}}.pdf" },
+        { "id": "def_other", "when": { "filer": "Defendant", "filing_type_defendant": "Other" }, "template": "{{date|YYYY-MM-DD}}_Defendant_{{def_other_specify|slug}}.pdf" },
+        { "id": "def_default", "when": { "filer": "Defendant" }, "template": "{{date|YYYY-MM-DD}}_Defendant_{{filing_type_defendant|slug}}.pdf" },
+
+        { "id": "default", "template": "{{date|YYYY-MM-DD}}_legal_filing.pdf" }
+      ],
+      "tags": ["legal-filing", "{{filer}}", "{{court}}"]
+    },
+    {
+      "id": "police_report",
+      "label": "Police Report or Other Document",
+      "view": "narrative",
+      "defaultEmoji": "🖋️",
+      "defaultIconPath": "police.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date of Filing",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "agency_type",
+          "label": "Police Agency",
+          "type": "select",
+          "options": [
+            "Michigan State Police",
+            "County Sheriff",
+            "City Police Department",
+            "Other"
+          ]
+        },
+        {
+          "id": "agency_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "agency_type": "County Sheriff" },
+          "help": "Enter county name"
+        },
+        {
+          "id": "agency_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "agency_type": "City Police Department" },
+          "help": "Enter city name"
+        },
+        {
+          "id": "agency_other",
+          "label": "Specify Agency",
+          "type": "text",
+          "show_if": { "agency_type": "Other" }
+        },
+        {
+          "id": "case_incident_numbers",
+          "label": "Case/Incident Number(s)",
+          "type": "text",
+          "help": "Enter case or incident numbers"
+        },
+        {
+          "id": "officer",
+          "label": "Officer",
+          "type": "person_multi_select",
+          "help": "Select officer(s) or leave blank"
+        },
+        {
+          "id": "officer_specify",
+          "label": "Specify Officer (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "document_type",
+          "label": "Type of Document",
+          "type": "select",
+          "options": [
+            "Initial Incident Report",
+            "Supplemental Incident Report",
+            "Witness Statement",
+            "Warrant / Affidavit / Return"
+          ],
+          "required": true
+        },
+        {
+          "id": "supplemental_report_number",
+          "label": "Report Number",
+          "type": "text",
+          "show_if": { "document_type": "Supplemental Incident Report" }
+        },
+        {
+          "id": "witness_statement_witness",
+          "label": "Witness",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Witness Statement" }
+        },
+        {
+          "id": "witness_statement_witness_specify",
+          "label": "Specify Witness (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Witness Statement" }
+        },
+        {
+          "id": "witness_statement_interviewer",
+          "label": "Interviewer",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Witness Statement" }
+        },
+        {
+          "id": "witness_statement_interviewer_specify",
+          "label": "Specify Interviewer (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Witness Statement" }
+        },
+        {
+          "id": "warrant_seeking",
+          "label": "Warrant Seeking",
+          "type": "text",
+          "show_if": { "document_type": "Warrant / Affidavit / Return" }
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "supplemental",
+          "when": { "document_type": "Supplemental Incident Report" },
+          "template": "{{date|YYYY-MM-DD}}_{{agency_type|slug}}_Supplemental_{{supplemental_report_number}}.pdf"
+        },
+        {
+          "id": "warrant",
+          "when": { "document_type": "Warrant / Affidavit / Return" },
+          "template": "{{date|YYYY-MM-DD}}_{{agency_type|slug}}_Warrant_{{warrant_seeking|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{agency_type|slug}}_{{document_type|slug}}.pdf"
+        }
+      ],
+      "tags": ["police-report", "{{agency_type}}", "{{document_type}}"]
+    },
+    {
+      "id": "investigatory_document",
+      "label": "Other Investigatory Document",
+      "view": "narrative",
+      "defaultEmoji": "📄",
+      "defaultIconPath": "document.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "document_type",
+          "label": "Type of Document",
+          "type": "select",
+          "options": [
+            "Forensic Interview",
+            "Medical Report",
+            "Lab Report",
+            "Autopsy Report",
+            "Evidence Log",
+            "Communications"
+          ]
+        },
+        {
+          "id": "forensic_witness",
+          "label": "Witness",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Forensic Interview" }
+        },
+        {
+          "id": "forensic_witness_specify",
+          "label": "Specify Witness (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Forensic Interview" }
+        },
+        {
+          "id": "forensic_interviewer",
+          "label": "Interviewer",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Forensic Interview" }
+        },
+        {
+          "id": "forensic_interviewer_specify",
+          "label": "Specify Interviewer (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Forensic Interview" }
+        },
+        {
+          "id": "medical_person",
+          "label": "Person",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Medical Report" }
+        },
+        {
+          "id": "medical_specify",
+          "label": "Specify (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Medical Report" }
+        },
+        {
+          "id": "lab_agency",
+          "label": "Police Agency",
+          "type": "text",
+          "show_if": { "document_type": "Lab Report" }
+        },
+        {
+          "id": "lab_person",
+          "label": "Analyst",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Lab Report" }
+        },
+        {
+          "id": "lab_specify",
+          "label": "Specify (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Lab Report" }
+        },
+        {
+          "id": "evidence_specify",
+          "label": "Evidence",
+          "type": "text",
+          "show_if": { "document_type": "Evidence Log" },
+          "help": "Describe evidence"
+        },
+        {
+          "id": "communications_person",
+          "label": "Person",
+          "type": "person_multi_select",
+          "show_if": { "document_type": "Communications" }
+        },
+        {
+          "id": "communications_specify",
+          "label": "Specify (if not in list)",
+          "type": "text",
+          "show_if": { "document_type": "Communications" }
+        },
+        {
+          "id": "communications_type",
+          "label": "Communication Type",
+          "type": "select",
+          "options": [
+            "Email",
+            "Text Message",
+            "Social Media Post",
+            "Cellular Records",
+            "Cellebrite Extraction Report"
+          ],
+          "show_if": { "document_type": "Communications" }
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "forensic",
+          "when": { "document_type": "Forensic Interview" },
+          "template": "{{date|YYYY-MM-DD}}_Forensic_Interview.pdf"
+        },
+        {
+          "id": "communications",
+          "when": { "document_type": "Communications" },
+          "template": "{{date|YYYY-MM-DD}}_{{communications_type|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{document_type|slug}}.pdf"
+        }
+      ],
+      "tags": ["investigatory", "{{document_type}}"]
+    },
+    {
+      "id": "av_police_interview",
+      "label": "A/V Recording: Police Interview",
+      "view": "dialogue",
+      "defaultEmoji": "🎤",
+      "defaultIconPath": "interview.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "time",
+          "label": "Time (optional)",
+          "type": "text",
+          "help": "Enter time in HH:MM format if known"
+        },
+        {
+          "id": "witness",
+          "label": "Witness / Subject",
+          "type": "person_multi_select",
+          "help": "Select the person(s) being interviewed"
+        },
+        {
+          "id": "witness_specify",
+          "label": "Specify Witness (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "interviewer",
+          "label": "Interviewer / Officer",
+          "type": "person_multi_select",
+          "help": "Select the person(s) conducting the interview"
+        },
+        {
+          "id": "interviewer_specify",
+          "label": "Specify Interviewer (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "agency_type",
+          "label": "Agency",
+          "type": "select",
+          "options": [
+            "Michigan State Police",
+            "Sheriff",
+            "Police Department"
+          ]
+        },
+        {
+          "id": "agency_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "agency_type": "Sheriff" },
+          "help": "Enter county name (will append 'County Sheriff')"
+        },
+        {
+          "id": "agency_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "agency_type": "Police Department" },
+          "help": "Enter city name (will append 'Police Department')"
+        },
+        {
+          "id": "case_number",
+          "label": "Case Number",
+          "type": "text"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_Police_Interview.mp4"
+        }
+      ],
+      "tags": ["av-recording", "police-interview", "{{agency_type}}"]
+    },
+    {
+      "id": "av_911_call",
+      "label": "A/V Recording: 911 Call",
+      "view": "dialogue",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "id": "time_of_call",
+          "label": "Time of Call (HH:MM)",
+          "type": "text",
+          "help": "Enter time in HH:MM format"
+        },
+        {
+          "id": "caller",
+          "label": "Caller",
+          "type": "person_multi_select"
+        },
+        {
+          "id": "caller_specify",
+          "label": "Specify Caller (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "agency",
+          "label": "Dispatch Agency",
+          "type": "text"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_911_Call_{{time_of_call}}.mp3"
+        }
+      ],
+      "tags": ["av-recording", "911-call"]
+    },
+    {
+      "id": "av_bodycam",
+      "label": "A/V Recording: Police Bodycam",
+      "view": "dialogue",
+      "defaultEmoji": "📹",
+      "defaultIconPath": "camera.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "id": "time",
+          "label": "Time (HH:MM)",
+          "type": "text",
+          "help": "Enter time in HH:MM format (optional)"
+        },
+        {
+          "id": "officer",
+          "label": "Officer",
+          "type": "person_multi_select",
+          "help": "Select officer whose bodycam this is"
+        },
+        {
+          "id": "officer_specify",
+          "label": "Specify Officer (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "agency_type",
+          "label": "Agency",
+          "type": "select",
+          "options": [
+            "Michigan State Police",
+            "Sheriff",
+            "Police Department"
+          ]
+        },
+        {
+          "id": "agency_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "agency_type": "Sheriff" },
+          "help": "Enter county name (will append 'County Sheriff')"
+        },
+        {
+          "id": "agency_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "agency_type": "Police Department" },
+          "help": "Enter city name (will append 'Police Department')"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_Bodycam.mp4"
+        }
+      ],
+      "tags": ["av-recording", "bodycam", "{{agency_type}}"]
+    },
+    {
+      "id": "av_dashcam",
+      "label": "A/V Recording: Police Dashcam",
+      "view": "dialogue",
+      "defaultEmoji": "📹",
+      "defaultIconPath": "dashcam.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "id": "time",
+          "label": "Time (HH:MM)",
+          "type": "text",
+          "help": "Enter time in HH:MM format (optional)"
+        },
+        {
+          "id": "officer",
+          "label": "Officer",
+          "type": "person_multi_select",
+          "help": "Select officer whose dashcam this is"
+        },
+        {
+          "id": "officer_specify",
+          "label": "Specify Officer (if not in list)",
+          "type": "text"
+        },
+        {
+          "id": "agency_type",
+          "label": "Agency",
+          "type": "select",
+          "options": [
+            "Michigan State Police",
+            "Sheriff",
+            "Police Department"
+          ]
+        },
+        {
+          "id": "agency_county",
+          "label": "County",
+          "type": "text",
+          "show_if": { "agency_type": "Sheriff" },
+          "help": "Enter county name (will append 'County Sheriff')"
+        },
+        {
+          "id": "agency_city",
+          "label": "City",
+          "type": "text",
+          "show_if": { "agency_type": "Police Department" },
+          "help": "Enter city name (will append 'Police Department')"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_Dashcam.mp4"
+        }
+      ],
+      "tags": ["av-recording", "dashcam", "{{agency_type}}"]
+    },
+    {
+      "id": "av_other",
+      "label": "A/V Recording: Other",
+      "view": "dialogue",
+      "defaultEmoji": "🎬",
+      "defaultIconPath": "video.svg",
+      "fields": [
+        {
+          "id": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "id": "time",
+          "label": "Time (HH:MM)",
+          "type": "text",
+          "help": "Enter time in HH:MM format (optional)"
+        },
+        {
+          "id": "recording_type",
+          "label": "Specify Recording Type",
+          "type": "text",
+          "help": "Describe the type of recording"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "default",
+          "template": "{{date|YYYY-MM-DD}}_{{recording_type|slug}}.mp4"
+        }
+      ],
+      "tags": ["av-recording", "other"]
+    }
+  ],
+  "lookups": {},
+  "helpers": {
+    "slug": true,
+    "upper": true,
+    "abbr": {
+      "Published": "PUB",
+      "Unpublished": "UNP"
+    },
+    "omit_empty_segments": true,
+    "joiner": "_"
+  }
+}
