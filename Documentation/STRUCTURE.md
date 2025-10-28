@@ -70,6 +70,7 @@ Documentation/
 - **Related Docs**: `PR{N}-{descriptor}.md` (e.g., `PR35-CHECKLIST.md`)
 
 **Location**:
+
 - Active work → `PRs/in-progress/`
 - Completed work → `PRs/completed/`
 
@@ -86,6 +87,7 @@ Documentation/
 ### PRs
 
 All PRs must be listed in `index.md` under:
+
 - **🚧 In Progress / Incomplete PRs** (while working)
 - **✅ Completed PRs** (when done)
 - Appropriate **Work Category** section
@@ -93,6 +95,7 @@ All PRs must be listed in `index.md` under:
 ### Patches
 
 All patches must be listed in `index.md` under:
+
 - **🔧 Completed Hotfixes**
 
 Format: `- [x] **YYYY-MM-DD** — [slug](PATCHES/patch-file.md) — Description`
@@ -104,25 +107,30 @@ Format: `- [x] **YYYY-MM-DD** — [slug](PATCHES/patch-file.md) — Description`
 **✅ No duplicates**: Each file exists in only one location  
 **✅ No orphans**: All PRs and patches indexed in `index.md`  
 **✅ Proper naming**: Files follow conventions above  
-**✅ Clear hierarchy**: Active work at root, historical in subdirectories  
+**✅ Clear hierarchy**: Active work at root, historical in subdirectories
 
 ---
 
 ## Quick Navigation
 
 ### For Users
+
 → Start with `USER_GUIDE.md`
 
-### For Developers  
+### For Developers
+
 → Start with `TECHNICAL_REFERENCE.md`
 
 ### For Contributors
+
 → Check `index.md` for current work, then read relevant PRs
 
 ### For New Features
+
 → Follow PR workflow in `README.md` and `.github/instructions/primaryinstructions.instructions.md`
 
 ### For Small Fixes
+
 → Follow patch workflow in `PATCHES/README.md`
 
 ---
@@ -130,22 +138,26 @@ Format: `- [x] **YYYY-MM-DD** — [slug](PATCHES/patch-file.md) — Description`
 ## Recent Cleanup (October 14, 2025)
 
 **Phase 1**: Duplicate removal
+
 - 23 duplicate/obsolete files from `PRs/`
 - `PRs/ROOT_ARCHIVE/` directory (duplicates)
 - `PRs/PR-32/` and `PRs/PR-33/` directories (old structure)
 
 **Phase 2**: Archival organization
+
 - Polish docs → `archive/`
 - Historical tracking → `history/`
 - Misnamed patches → `PATCHES/` with proper naming
 
 **Phase 3**: Status-based organization (October 14, 2025)
+
 - Created `PRs/in-progress/` for active work (~50 files)
 - Created `PRs/completed/` for finished PRs (~110 files)
 - Added README.md in each subdirectory
 - Physical location now mirrors PR status
 
 **Result**:
+
 - Clear separation of active vs completed work
 - Easier navigation (13 in-progress vs 40+ completed)
 - All patches in `PATCHES/` following naming conventions

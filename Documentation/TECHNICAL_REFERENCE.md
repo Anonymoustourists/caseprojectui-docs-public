@@ -123,6 +123,7 @@ Case Project is a legal case management application for organizing, annotating, 
 ### Tech Stack
 
 **Frontend**:
+
 - React 18 + TypeScript
 - Vite (build tool)
 - Zustand (state management)
@@ -130,11 +131,13 @@ Case Project is a legal case management application for organizing, annotating, 
 - Lucide React (icons)
 
 **Backend**:
+
 - Node.js + Express
 - TypeScript
 - File-based storage (no database)
 
 **Ingestion Pipeline**:
+
 - Python (PDFPlumber, faster-whisper)
 - TypeScript adapters
 - YAML-based document type detection
@@ -279,12 +282,12 @@ Original uploaded files (PDFs, audio, video) that get processed into canonical b
 
 ```typescript
 type SourceManifest = {
-  docId: string;              // ULID
-  docKey: string;             // Human-friendly key
-  type: string;               // "Document" | "Transcript" | etc.
+  docId: string; // ULID
+  docKey: string; // Human-friendly key
+  type: string; // "Document" | "Transcript" | etc.
   source: {
     originalFilename: string;
-    path: string;             // Relative path to file
+    path: string; // Relative path to file
   };
   filename: {
     templateKey: string;
@@ -292,16 +295,17 @@ type SourceManifest = {
     history: string[];
   };
   dates?: {
-    source?: string;          // YYYY-MM-DD from document
-    upload?: string;          // ISO 8601 upload timestamp
+    source?: string; // YYYY-MM-DD from document
+    upload?: string; // ISO 8601 upload timestamp
   };
-  createdAt: string;          // ISO 8601
-  updatedAt: string;          // ISO 8601
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
   meta?: Record<string, any>;
 };
 ```
 
-**Storage**: 
+**Storage**:
+
 - Original file: `sources/{type}/{filename}`
 - Manifest: `canonical/{docId}/manifest.json`
 - Processed blocks: `canonical/{docId}/blocks.jsonl`
@@ -313,22 +317,22 @@ Atomic units of content extracted from sources. All blocks have a unique ID and 
 ```typescript
 type SourceRef = {
   kind: "pdf" | "av" | "image" | "text";
-  sourceId: string;           // Path to source file
-  page?: number;              // For PDFs
-  startMs?: number;           // For A/V
-  endMs?: number;             // For A/V
+  sourceId: string; // Path to source file
+  page?: number; // For PDFs
+  startMs?: number; // For A/V
+  endMs?: number; // For A/V
 };
 
 type Block = {
-  id: string;                 // ULID
+  id: string; // ULID
   type: "paragraph" | "heading" | "dialogue" | "section";
   text: string;
   sourceRef: SourceRef;
   speaker?: {
-    label: string;            // Display name
-    personId?: string;        // Link to Person entity
+    label: string; // Display name
+    personId?: string; // Link to Person entity
   };
-  sequence: number;           // Order in document
+  sequence: number; // Order in document
   createdAt: string;
   updatedAt: string;
 };
@@ -342,15 +346,15 @@ User-created citations that reference specific spans of text within blocks.
 
 ```typescript
 type Cite = {
-  id: string;                 // ULID
-  docId: string;              // Parent document
-  blockId: string;            // Block being cited
-  startOffset: number;        // Character offset in block.text
-  endOffset: number;          // Character offset in block.text
-  selectedText: string;       // Exact text quoted
-  label?: string;             // User label
-  eventIds?: string[];        // Linked events
-  tags?: string[];            // User tags
+  id: string; // ULID
+  docId: string; // Parent document
+  blockId: string; // Block being cited
+  startOffset: number; // Character offset in block.text
+  endOffset: number; // Character offset in block.text
+  selectedText: string; // Exact text quoted
+  label?: string; // User label
+  eventIds?: string[]; // Linked events
+  tags?: string[]; // User tags
   createdAt: string;
   updatedAt: string;
 };
@@ -366,24 +370,24 @@ Represents legal or factual events (hearings, filings, interviews, etc.).
 type EventCategory = "legal" | "factual" | "investigatory";
 
 type EventItem = {
-  id: string;                 // ULID
-  title: string;              // System-generated title
-  customTitle?: string;       // User override
+  id: string; // ULID
+  title: string; // System-generated title
+  customTitle?: string; // User override
   category: EventCategory;
-  date?: string;              // YYYY-MM-DD
-  datetime?: string;          // ISO 8601
-  location?: Location;        // Geographic location (PR78)
+  date?: string; // YYYY-MM-DD
+  datetime?: string; // ISO 8601
+  location?: Location; // Geographic location (PR78)
   wizard?: {
     entity: "events";
-    type: string;             // Wizard template type
+    type: string; // Wizard template type
     answers: Record<string, any>;
     template_id: string;
     spec_version: number;
   };
-  data: Record<string, any>;  // Wizard answers
-  sourceId?: string;          // Linked source document
-  sourceType?: string;        // Type of linked source
-  citeIds?: string[];         // Linked citations
+  data: Record<string, any>; // Wizard answers
+  sourceId?: string; // Linked source document
+  sourceType?: string; // Type of linked source
+  citeIds?: string[]; // Linked citations
   participants?: Participation[];
   createdFrom?: "wizard" | "selection" | "source_upload";
   createdAt: string;
@@ -392,7 +396,7 @@ type EventItem = {
 
 type Participation = {
   personId: string;
-  role: string;               // "speaker" | "witness" | "defendant" | etc.
+  role: string; // "speaker" | "witness" | "defendant" | etc.
   note?: string;
   addedAt?: string;
 };
@@ -408,10 +412,10 @@ Individuals mentioned in the case (witnesses, attorneys, defendants, etc.).
 
 ```typescript
 type PersonItem = {
-  id: string;                 // ULID
+  id: string; // ULID
   name: string;
   aliases?: string[];
-  role?: string;              // Primary role
+  role?: string; // Primary role
   wizard?: {
     entity: "people";
     type: string;
@@ -420,9 +424,10 @@ type PersonItem = {
     spec_version: number;
   };
   data: Record<string, any>;
-  location?: Location;        // Geographic location (address)
-  locationNote?: string;      // Context note (e.g., "primary residence")
-  appearances?: Array<{       // Where person appears
+  location?: Location; // Geographic location (address)
+  locationNote?: string; // Context note (e.g., "primary residence")
+  appearances?: Array<{
+    // Where person appears
     sourceId: string;
     eventId?: string;
     role?: string;
@@ -436,14 +441,15 @@ type PersonItem = {
 **Storage**: `project-registries/{projectSlug}/people.json`
 
 **Location Support** (PR78):
+
 ```typescript
 type Location = {
   lat: number;
   lon: number;
-  label: string;              // Display name (e.g., "123 Main St, Detroit, MI")
+  label: string; // Display name (e.g., "123 Main St, Detroit, MI")
   source: "user" | "geocode" | "revgeocode";
   address?: Address;
-  zoomHint?: number;          // Suggested zoom level for map
+  zoomHint?: number; // Suggested zoom level for map
 };
 
 type Address = {
@@ -464,9 +470,9 @@ Rich text notes with cite embeds.
 
 ```typescript
 type Note = {
-  id: string;                 // ULID
+  id: string; // ULID
   title: string;
-  content: string;            // Markdown with cite macros
+  content: string; // Markdown with cite macros
   tags?: string[];
   createdAt: string;
   updatedAt: string;
@@ -542,6 +548,7 @@ type SplitManifestEntry = {
 ```
 
 **Storage**:
+
 - `projects/<slug>/split_sessions/*.session.json` (staged review files)
 - `projects/<slug>/sources/*/` (finalized child sources + `<pdf>.split_manifest.json`)
 
@@ -552,12 +559,14 @@ type SplitManifestEntry = {
 ### App.jsx — Main Component
 
 **Responsibilities**:
+
 - Manages current view state (`sources`, `notebooks`, `people`, `events`, `tags`, `settings`)
 - Renders sidebar navigation
 - Handles overlay/modal state
 - Provides project context to child components
 
 **Key State**:
+
 ```javascript
 const [currentView, setCurrentView] = useState("sources");
 const [mainSidebarCollapsed, setMainSidebarCollapsed] = useState(false);
@@ -566,14 +575,29 @@ const [selectedNoteId, setSelectedNoteId] = useState(null);
 ```
 
 **View Routing**:
+
 ```javascript
-{currentView === "sources" && <SourcesSpreadsheet />}
-{currentView === "notebooks" && <NotesViewer />}
-{currentView === "people" && <PeopleViewer />}
-{currentView === "events" && <EventsViewer />}
-{currentView === "locations" && <LocationsViewer />}
-{currentView === "tags" && <TagsViewer />}
-{currentView === "settings" && <Settings />}
+{
+  currentView === "sources" && <SourcesSpreadsheet />;
+}
+{
+  currentView === "notebooks" && <NotesViewer />;
+}
+{
+  currentView === "people" && <PeopleViewer />;
+}
+{
+  currentView === "events" && <EventsViewer />;
+}
+{
+  currentView === "locations" && <LocationsViewer />;
+}
+{
+  currentView === "tags" && <TagsViewer />;
+}
+{
+  currentView === "settings" && <Settings />;
+}
 ```
 
 ### State Management
@@ -581,26 +605,40 @@ const [selectedNoteId, setSelectedNoteId] = useState(null);
 #### Zustand Stores
 
 **useCanonicalDocs** (`src/state/useCanonicalDocs.js`):
+
 ```javascript
 const useCanonicalDocs = create((set, get) => ({
-  docs: [],           // Array of documents
+  docs: [], // Array of documents
   loaded: false,
   loading: false,
-  
-  loadDocs: async () => { /* Fetch all docs */ },
-  getDoc: (docId) => { /* Get single doc */ },
-  createDoc: async (manifest) => { /* Create doc */ },
-  updateDoc: async (docId, updates) => { /* Update doc */ },
-  deleteDoc: async (docId) => { /* Delete doc */ },
+
+  loadDocs: async () => {
+    /* Fetch all docs */
+  },
+  getDoc: (docId) => {
+    /* Get single doc */
+  },
+  createDoc: async (manifest) => {
+    /* Create doc */
+  },
+  updateDoc: async (docId, updates) => {
+    /* Update doc */
+  },
+  deleteDoc: async (docId) => {
+    /* Delete doc */
+  },
 }));
 ```
 
 **ProjectContext** (`src/state/ProjectContext.jsx`):
+
 ```javascript
 const ProjectContext = createContext({
-  active: null,       // Current project
-  projects: [],       // All projects
-  selectProject: (slug) => { /* Switch project */ },
+  active: null, // Current project
+  projects: [], // All projects
+  selectProject: (slug) => {
+    /* Switch project */
+  },
 });
 ```
 
@@ -630,6 +668,7 @@ api.interceptors.request.use((config) => {
 **Purpose**: Display and annotate documents (PDF or text)
 
 **Features**:
+
 - PDF.js integration for PDF rendering
 - Text view with synchronized pagination
 - Text selection → CITE/TAG/EVENT popup
@@ -645,6 +684,7 @@ api.interceptors.request.use((config) => {
 - Toggle automatically resets to collapsed when `docId` changes so new documents always start in the simplified state
 
 **Props**:
+
 ```typescript
 type DocumentViewerProps = {
   docId: string;
@@ -654,6 +694,7 @@ type DocumentViewerProps = {
 ```
 
 **Key State**:
+
 ```javascript
 const [viewMode, setViewMode] = useState<"pdf" | "text">("text");
 const [blocks, setBlocks] = useState<Block[]>([]);
@@ -662,6 +703,7 @@ const [currentPage, setCurrentPage] = useState(1);
 ```
 
 **Data Flow**:
+
 1. Load blocks from `/api/canonical/docs/{docId}/blocks`
 2. Load cites from `/api/canonical/docs/{docId}/cites`
 3. Render blocks with cite highlights
@@ -673,12 +715,14 @@ const [currentPage, setCurrentPage] = useState(1);
 **Purpose**: Unified editor for source manifest metadata using the wizard infrastructure.
 
 **Highlights**:
+
 - Fetches the current manifest via `/api/canonical/docs/:docId/manifest` and keeps filename history intact when users rename the source
 - Provides dedicated inputs for **Source Name**, **Citation Name**, and **Short Cite Name** before rendering the standard wizard form; empty values fall back to wizard-generated defaults
 - Persists updates through `PUT /api/canonical/docs/:docId/manifest` and rehydrates the canonical docs store so the active document reflects changes immediately
 - Emits the same wizard payload structure (`wizard.answers._emoji`, `_iconPath`, etc.) so downstream consumers remain compatible
 
 **Integration Touchpoints**:
+
 - `DocumentsViewer` listens for a global `edit-source` event (fired from the document header and sidebar) to mount this editor inline in the main content pane
 - Inline cite selectors and event linkers read `manifest.meta.citeName`/`shortCite`, so the editor keeps those fields authoritative
 
@@ -695,6 +739,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 **Purpose**: Rich text note-taking with live formatting and cite embedding
 
 **Features**:
+
 - Single-pane contentEditable surface with inline formatting + cite chips
 - Markdown↔HTML round-tripping via `markdownUtils.js` and `editorConversions.js`
 - Cite insertion that preserves caret position and renders non-editable chips
@@ -702,6 +747,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 - Note organization (folders, tags)
 
 **Components**:
+
 - `NotesViewer.jsx` — Main container, editor, cite toolbar, TOC + CITES tab switcher
 - `editorConversions.js` — Serializes between DOM HTML and stored markdown
 - `markdownUtils.js` — Markdown → HTML helper with heading slugging
@@ -710,6 +756,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 - `CitationsNotebook.jsx` — Aggregated citation grid per project
 
 **Cite Insertion Flow**:
+
 1. User clicks "Insert Cite" button or quote shortcut
 2. Opens `CitePicker` modal
 3. User selects cite (doc block + quote metadata)
@@ -720,6 +767,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 **Purpose**: Manage events and link to sources
 
 **Features**:
+
 - List view with category filters
 - Detail view with source linking
 - Participant management
@@ -727,11 +775,13 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 - Source → Event auto-linking
 
 **Components**:
+
 - `EventsViewer.jsx` — List view
 - `EventDetailsDrawer.tsx` — Detail panel
 - `EventWizard.tsx` — Create/edit wizard
 
 **Key APIs**:
+
 - `GET /api/events` — List events
 - `POST /api/events` — Create event
 - `PUT /api/events/:id` — Update event
@@ -743,12 +793,14 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 **Purpose**: Manage people and their appearances
 
 **Features**:
+
 - List view with search
 - Create person via wizard
 - Link to events/sources
 - Track appearances across documents
 
 **Key APIs**:
+
 - `GET /api/people` — List people
 - `POST /api/people` — Create person
 - `PUT /api/people/:id` — Update person
@@ -759,6 +811,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 **Purpose**: Centralized view of all geographic locations from People and Events
 
 **Features**:
+
 - **Sidebar list** with search and filters
 - **Spreadsheet view** with sortable columns
 - **Map view** with interactive markers and auto-zoom
@@ -767,6 +820,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 - **Location selection**: click marker or row to highlight
 
 **Map Integration** (PR78):
+
 - MapLibre GL for vector maps
 - Photon API for address autocomplete
 - Nominatim API for geocoding and reverse geocoding
@@ -774,12 +828,14 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
 - Michigan-focused defaults
 
 **Components**:
+
 - `LocationsViewer.tsx` — Main container with sidebar + view switcher
 - `LocationsMapView.tsx` — Map component with clustering
 - `LocationSelector.tsx` — Autocomplete + map for selecting locations
 - `MichiganMap.tsx` — Base map component
 
 **Key APIs**:
+
 - `GET /api/people` — Fetch people with locations
 - `GET /api/events` — Fetch events with locations
 - Map services (via CORS proxy):
@@ -788,6 +844,7 @@ Used by `DocumentViewer`, `DocumentsViewer`, and other list views to keep iconog
   - `/reverse` — Nominatim reverse geocoding
 
 **Data Types**:
+
 ```typescript
 interface Location {
   lat: number;
@@ -811,6 +868,7 @@ interface Address {
 ```
 
 **Configuration** (`.env.local`):
+
 ```env
 VITE_MAPS_BASE_URL=https://mxpsxrvxr.stevenhelton.com
 VITE_MAP_STYLE_PATH=/styles/bright/style.json
@@ -821,6 +879,7 @@ VITE_FEATURE_MAPS=1
 ```
 
 **Clustering**:
+
 - Uses Supercluster library (60px radius, max zoom 16)
 - Green cluster markers show count
 - Click to expand and zoom in
@@ -832,20 +891,23 @@ VITE_FEATURE_MAPS=1
 **Purpose**: Context menu for text selection
 
 **Triggers**:
+
 - Text selection in DocumentViewer
 - Text selection in NotesViewer
 
 **Actions**:
+
 1. **CITE** — Create citation
 2. **TAG** — Add tags (future)
 3. **EVENT** — Create event from selection
 
 **Data Flow**:
+
 ```
 1. User selects text
 2. Parent component calls:
-   onSelectionChange({ 
-     text, blockId, startOffset, endOffset 
+   onSelectionChange({
+     text, blockId, startOffset, endOffset
    })
 3. Popover renders at selection position
 4. User clicks action:
@@ -858,6 +920,7 @@ VITE_FEATURE_MAPS=1
 **Purpose**: Queue and persist structured feedback events to `/api/feedback/append` (or a project-specific file writer).
 
 **Behavior**:
+
 - Validates outgoing events with Zod (`FeedbackEventSchema`).
 - Maintains an in-memory queue; failed requests are retried with exponential backoff and survive transient offline states.
 - Exposes `pending` and `lastError` so the UI can surface status indicators.
@@ -877,6 +940,7 @@ These components are optional building blocks—you can compose them differently
 **Purpose**: Let reviewers confirm or adjust proposed segments before creating canonical child sources.
 
 **Hooks & Components**:
+
 - `useSplitSession.ts`: Local session state with selection + rename helpers; designed to load JSON generated by `tools/splitter/split_cli.py`.
 - `SegmentList.tsx`: Left rail listing segments with confidence scores and docket hints.
 - `PageStrip.tsx`: Lightweight thumbnail placeholders (pluggable with real page snapshots).
@@ -893,34 +957,41 @@ To integrate with production data, hydrate the hook with the CLI session JSON, r
 Single file containing all routes and logic (~4000 lines). Routes organized by domain:
 
 **Binding & proxy coordination**:
+
 - The Express server listens on `HOST` (default `127.0.0.1`) and `PORT` (`5050`) as written to `server/.env.local`.
 - `scripts/dev.py` also exports `CASE_PROXY_TARGET` to Vite so `/api/*` requests proxy to the same host/port combination.
 - Override with `HOST=0.0.0.0` (server) and/or `CASE_PROXY_HOST=0.0.0.0` (dev runner) when you need LAN access.
 
 **Canonical API** (`/api/canonical/*`):
+
 - Document CRUD
 - Block CRUD
 - Cite CRUD
 
 **Ingestion API** (`/ingest/*`):
+
 - PDF ingestion
 - A/V ingestion
 - Auto-event creation
 
 **Registry API** (`/api/*`):
+
 - Events CRUD
 - People CRUD
 - Tags CRUD
 
 **Wizard API** (`/api/wizard/*`):
+
 - Serve wizard specs
 - Evaluate wizard rules
 
 **Project API** (`/api/project/*`):
+
 - Project info CRUD
 - Registry management
 
 **Feedback API**:
+
 - `POST /api/feedback/append` — Append a single JSONL event to `sources/{sourceId}/feedback.jsonl`
 - `GET /api/profiles` (optional) — Serve merged YAML profiles from `public/profiles/`
 
@@ -929,6 +1000,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 #### Canonical Routes
 
 **GET /api/canonical/docs**
+
 ```typescript
 // List all documents for project
 // Query: ?project={slug}
@@ -936,24 +1008,28 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **GET /api/canonical/docs/:docId**
+
 ```typescript
 // Get document manifest
 // Response: SourceManifest
 ```
 
 **GET /api/canonical/docs/:docId/blocks**
+
 ```typescript
 // Get document blocks
 // Response: { blocks: Block[] }
 ```
 
 **GET /api/canonical/docs/:docId/cites**
+
 ```typescript
 // Get document citations
 // Response: { cites: Cite[] }
 ```
 
 **POST /api/canonical/docs/:docId/cites**
+
 ```typescript
 // Create citation
 // Body: { blockId, startOffset, endOffset, selectedText }
@@ -961,6 +1037,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **PUT /api/canonical/docs/:docId/blocks/:blockId**
+
 ```typescript
 // Update block text
 // Body: { text: string }
@@ -970,6 +1047,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 #### Ingestion Routes
 
 **POST /ingest/pdf**
+
 ```typescript
 // Upload and ingest PDF
 // Body (multipart): file, type, citeName, dates
@@ -982,6 +1060,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **POST /ingest/av**
+
 ```typescript
 // Upload and ingest audio/video
 // Body (multipart): file, type, citeName
@@ -997,6 +1076,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 #### Event Routes
 
 **GET /api/events**
+
 ```typescript
 // List events for project
 // Query: ?project={slug}&category={legal|factual|investigatory}
@@ -1004,6 +1084,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **POST /api/events**
+
 ```typescript
 // Create event
 // Body: EventItem (partial)
@@ -1011,6 +1092,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **PUT /api/events/:id**
+
 ```typescript
 // Update event
 // Body: Partial<EventItem>
@@ -1018,6 +1100,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **PUT /api/events/:id/source**
+
 ```typescript
 // Link source to event
 // Body: { sourceId: string, sourceType: string }
@@ -1025,6 +1108,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **POST /api/events/createFromSelection**
+
 ```typescript
 // Create event from text selection
 // Body: { docId, blockId, selectedText, category }
@@ -1038,6 +1122,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 #### People Routes
 
 **GET /api/people**
+
 ```typescript
 // List people for project
 // Query: ?project={slug}
@@ -1045,6 +1130,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **POST /api/people**
+
 ```typescript
 // Create person
 // Body: PersonItem (partial)
@@ -1052,6 +1138,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 ```
 
 **PUT /api/people/:id**
+
 ```typescript
 // Update person
 // Body: Partial<PersonItem>
@@ -1061,6 +1148,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 #### Feedback Routes
 
 **POST /api/feedback/append**
+
 ```typescript
 // Append feedback event to JSONL file
 // Body: FeedbackEvent (see Data Model)
@@ -1131,6 +1219,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 **Input**: PDF with Q&A format (court transcripts, depositions)
 
 **Process** (`tools/ingest/ingest_transcript.py`):
+
 1. Extract text per page using PyMuPDF
 2. Detect speaker labels (Q:, A:, MR. SMITH:, etc.)
 3. Parse dialogue blocks with page anchors
@@ -1138,6 +1227,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 5. Write blocks.jsonl
 
 **Output Block**:
+
 ```json
 {
   "id": "01HZYD...",
@@ -1157,11 +1247,19 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 }
 ```
 
+### Transcript Witness Sections & Phase Navigator (PR 86)
+
+- **Data shape:** `SourceItem.metadata.transcript.sections` mirrors to `projects/<project>/sources/<sourceId>/transcript_sections.json` for fast reads. Each section stores `displayName`, optional `personId`, `[pageStart,pageEnd]`, and nested `phases[]` (`type: "direct" | "cross" | "redirect" | "recross"`, optional `examiner`).
+- **API:** `GET/PUT /api/sources/:sourceId/transcript/sections?project=<slug>` (implemented in `server/src/routes/transcriptSections.ts`). Writes happen when the reviewer edits or accepts proposals; reads happen whenever DocumentViewer loads a transcript source.
+- **Detector / suggestion:** `src/tools/transcript/sectionizer.ts` consumes `{ page, text }[]` and emits `{ sections, detector }`, combining TOC headings (`WITNESS JANE SMITH ... 123`) with regex cues (`DIRECT EXAMINATION`, `BY MR. JOHNSON:`). UI surfaces this behind a “Suggest Sections” button—no auto-run.
+- **Viewer components:** `WitnessNavigator` injects a `Jump…` select (labels like `Jane Smith — Cross (by Ms. Patel)`), while `PhaseHeadingsProvider` overlays virtual headings and exposes smart Q/A relabeling (A. → `WITNESS [NAME]:`, Q. → `MR./MS. [EXAMINER]:`). Toggle lives in the viewer header; the underlying transcript text stays untouched.
+
 ### Narrative Pipeline
 
 **Input**: PDF with paragraph format (reports, exhibits, opinions)
 
 **Process** (`tools/ingest/ingest_doc.py`):
+
 1. Extract text per page
 2. Detect headings (ALL CAPS, short lines)
 3. Split paragraphs (deterministic chunking)
@@ -1169,6 +1267,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 5. Write blocks.jsonl
 
 **Output Block**:
+
 ```json
 {
   "id": "01HZYF...",
@@ -1189,6 +1288,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 **Input**: Audio or video file (.mp3, .wav, .mp4, .mov, etc.)
 
 **Process** (`tools/ingest/ingest_av.py`):
+
 1. Run faster-whisper transcription
 2. Get timestamped segments
 3. Detect speakers (if applicable)
@@ -1196,6 +1296,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 5. Write blocks.jsonl
 
 **Output Block**:
+
 ```json
 {
   "id": "01HZYG...",
@@ -1223,20 +1324,24 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 **Entry Point**: `tools/ingest/dual_ingest.py`
 
 **Config**: `config/extraction.yml`
+
 - `run_sequence`: ordered list of extractors (`native`, `docling`, etc.).
 - `detectors`: thresholds for title page, table of contents, and speaker segmentation.
 - `naming.suffixes`: appended to the output folder names.
 
 **Extractors**:
+
 - `tools/extractors/native_wrapper.py` → wraps `ingest_pdf_advanced` in a temp directory, copies `document.md` and `document.index.json`.
 - `tools/extractors/docling_wrapper.py` → calls Docling, maps headings/paragraphs/tables/images into the canon format via `tools/mappers/canon_mapper.py`.
 
 **Detectors**:
+
 - `tools/detectors/titlepage_detector.py`
 - `tools/detectors/toc_detector.py`
 - `tools/detectors/speaker_detector.py`
 
 **Workflow**:
+
 1. User drops PDFs into `inbox/` and runs `python tools/ingest/dual_ingest.py --in inbox --out projects/<slug>/sources --reports projects/<slug>/reports`.
 2. Script emits sibling folders `<stem>-native` and `<stem>-docling` with canonical assets.
 3. PASS/FAIL summaries live in `reports/<stem>.report.md`.
@@ -1249,6 +1354,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 **Purpose**: Break large court filings or multi-incident police PDFs into discrete sources, optionally aligned against a docket CSV.
 
 **Modules**:
+
 - `tools/splitter/page_features.py` — Extracts header/body text per page.
 - `tools/splitter/split_rules.py` — Heuristics for segment boundaries (headings, stamps, incident numbers).
 - `tools/splitter/docket_align.py` — Fuzzy title/date matching against docket rows.
@@ -1257,15 +1363,18 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 - `tools/splitter/split_cli.py` — CLI glue orchestrating the pipeline.
 
 **Supporting Config**:
+
 - `config/split.yml` — Thresholds, naming templates, and docket tolerances.
 - `public/profiles/split_patterns.yml` — Regex hints (augmented by feedback profiles).
 
 **Workflow**:
+
 1. Run the CLI with `--pdf`, optional `--docket`, and output targets (`--session`, `--report`, `--out`).
 2. Reviewers load the generated session JSON in the Split Review UI, adjust segments, and finalize.
 3. Finalization writes canonical child sources plus `<pdf>.split_manifest.json` that maps original pages to children for auditing.
 
 **Integration Hooks**:
+
 - Segment detections reuse the same profile infrastructure described in [Feedback & Profiles](#feedback-and-learning-profiles) so user-labeled headings immediately improve split accuracy.
 
 ### Auto-Event Creation
@@ -1274,18 +1383,19 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 
 **Mapping Table** (from `json_data_contract_bible.md`):
 
-| source.type   | event.type          | category      |
-|---------------|---------------------|---------------|
-| transcript    | Court Hearing       | legal         |
-| court-filing  | Court Filing        | legal         |
-| opinion       | Court Filing        | legal         |
-| police-report | Police Report       | investigatory |
-| av-interview  | A/V Interview       | investigatory |
-| bodycam       | Body Camera         | investigatory |
-| dashcam       | Dash Camera         | investigatory |
-| 911-call      | 911 Call            | investigatory |
+| source.type   | event.type    | category      |
+| ------------- | ------------- | ------------- |
+| transcript    | Court Hearing | legal         |
+| court-filing  | Court Filing  | legal         |
+| opinion       | Court Filing  | legal         |
+| police-report | Police Report | investigatory |
+| av-interview  | A/V Interview | investigatory |
+| bodycam       | Body Camera   | investigatory |
+| dashcam       | Dash Camera   | investigatory |
+| 911-call      | 911 Call      | investigatory |
 
 **Process**:
+
 1. Ingest completes successfully
 2. Determine event type from source type
 3. Create event with:
@@ -1357,6 +1467,7 @@ JSON-driven forms for creating structured entities (sources, events, people). Al
 **Location**: `server/config/wizards/{entity}/{type}.json`
 
 **Example** (`server/config/wizards/events/hearing.json`):
+
 ```json
 {
   "entity": "events",
@@ -1403,12 +1514,14 @@ JSON-driven forms for creating structured entities (sources, events, people). Al
 ### Wizard Components
 
 **Frontend** (`src/components/wizard/`):
+
 - `DynamicWizard.tsx` — Main wizard renderer
 - `WizardStep.tsx` — Single step renderer
 - `FieldRenderer.tsx` — Field type renderer
 - `ValidationEngine.ts` — Rule evaluation
 
 **Backend** (`server/src/routes/wizard.ts`):
+
 - `GET /api/wizard/:entity` — Get wizard spec for entity type
 - `POST /api/wizard/:entity/evaluate` — Evaluate conditional rules
 
@@ -1454,6 +1567,7 @@ Wizard specs include `titleTemplate` with placeholder syntax:
 ```
 
 Backend replaces placeholders with user answers:
+
 ```javascript
 const title = titleTemplate.replace(/{(\w+)}/g, (_, key) => {
   return answers[key] || "";
@@ -1467,6 +1581,7 @@ const title = titleTemplate.replace(/{(\w+)}/g, (_, key) => {
 ### Purpose
 
 The form detection system enables document-type-specific labeling and template creation for standardized forms (e.g., Michigan court forms MC227, MC220, etc.). Each form type is registered as a detector, allowing:
+
 - Form-specific label organization in training data
 - Template creation from labeled blank forms
 - Auto-application of templates to filled forms (future)
@@ -1474,11 +1589,13 @@ The form detection system enables document-type-specific labeling and template c
 ### Architecture
 
 **Configuration Files**:
+
 - `config/detectors.wizard.json` — Hierarchical detector definitions
 - `config/labels.yml` — Auto-generated labels (synced from detectors)
 - `training/{detector-type}/{doc-id}/` — Training data organized by form type
 
 **Key Scripts**:
+
 - `scripts/add_form_detector.mjs` — Add new form type as detector
 - `scripts/setup_common_forms.mjs` — Batch-add 11 common Michigan forms
 - `scripts/generate_labels_from_detectors.mjs` — Sync labels.yml from detectors
@@ -1488,6 +1605,7 @@ The form detection system enables document-type-specific labeling and template c
 ### Detector Structure
 
 **Example** (`config/detectors.wizard.json`):
+
 ```json
 {
   "id": "form_mc227",
@@ -1506,10 +1624,7 @@ The form detection system enables document-type-specific labeling and template c
       "id": "scao_header",
       "label": "SCAO Header",
       "type": "keyword_match",
-      "require_any": [
-        "STATE COURT ADMINISTRATIVE OFFICE",
-        "SCAO"
-      ],
+      "require_any": ["STATE COURT ADMINISTRATIVE OFFICE", "SCAO"],
       "search_area": "first_15_lines",
       "min_hits": 1
     }
@@ -1520,22 +1635,26 @@ The form detection system enables document-type-specific labeling and template c
 ### Adding a New Form Type
 
 **Single Form**:
+
 ```bash
 node scripts/add_form_detector.mjs MC227 "Judgment of Sentence"
 ```
 
 **What it does**:
+
 1. Creates detector in `detectors.wizard.json` with ID `form_mc227`
 2. Adds basic detectors (form number, SCAO header)
 3. Auto-regenerates `labels.yml` with form-specific labels
 4. Makes form available in "Detector Type" dropdown in UI
 
 **Batch Setup (11 Common Forms)**:
+
 ```bash
 node scripts/setup_common_forms.mjs
 ```
 
 Adds:
+
 - Criminal Disposition: MC227, MC228, MC229
 - Criminal Felony: MC220, MC221, MC260
 - Criminal Misdemeanor: MC10, MC11, MC12
@@ -1544,11 +1663,13 @@ Adds:
 ### Training Data Collection
 
 **Workflow**:
+
 1. **Upload blank form** with detector type selected (e.g., "MC227 - Judgment of Sentence")
 2. **Label PDF** — Draw boxes around all fields (defendant_name, case_number, etc.)
 3. **Auto-save** — Annotations save to `training/form_mc227/{doc-id}/`
 
 **Training Directory Structure**:
+
 ```
 training/
   form_mc227/
@@ -1561,8 +1682,9 @@ training/
 ```
 
 **Backend Implementation** (`server/src/index.ts`):
+
 ```typescript
-POST /api/feedback/append
+POST / api / feedback / append;
 // When kind === "region" and manifest.detectorType exists:
 // 1. Append to sources/{sourceId}/feedback.jsonl
 // 2. Copy to training/{detectorType}/{docId}/annotations.jsonl
@@ -1573,11 +1695,13 @@ POST /api/feedback/append
 ### Template Export
 
 **Export labeled form as template**:
+
 ```bash
 node scripts/export_form_template.mjs [doc-id] MC227
 ```
 
 **Output** (`form_templates/criminal_disposition/MC227.json`):
+
 ```json
 {
   "formCode": "MC227",
@@ -1606,6 +1730,7 @@ node scripts/export_form_template.mjs [doc-id] MC227
 ```
 
 **Field Types** (auto-inferred from label names):
+
 - `date` — Contains "date", "dob", "filed"
 - `case_number` — Contains "case", "docket", "file_number"
 - `name` — Contains "name", "defendant", "plaintiff", "attorney"
@@ -1618,17 +1743,20 @@ node scripts/export_form_template.mjs [doc-id] MC227
 ### Label Generation
 
 **Auto-sync from detectors**:
+
 ```bash
 node scripts/generate_labels_from_detectors.mjs
 ```
 
 **What it does**:
+
 1. Reads all detector IDs from `detectors.wizard.json` (recursively)
 2. Creates label entries with `doc_types` filtering
 3. Sections get `kind: ["region"]`, others get `["region", "span"]`
 4. Writes to `config/labels.yml` and `public/static/config/labels.yml`
 
 **Example Output**:
+
 ```yaml
 labels:
   - key: form_mc227
@@ -1638,7 +1766,7 @@ labels:
       - span
     doc_types:
       - form_mc227
-  
+
   - key: form_number
     title: Form Number
     kind:
@@ -1651,11 +1779,13 @@ labels:
 ### Training Statistics
 
 **View progress**:
+
 ```bash
 node scripts/training_stats.mjs
 ```
 
 **Output**:
+
 ```
 📊 Training Data Statistics
 
@@ -1675,6 +1805,7 @@ Labels per detector:
 ### Future: Template Application
 
 **Planned workflow** (not yet implemented):
+
 1. User uploads filled MC227 form
 2. System detects form type (keyword matching)
 3. Loads template `form_templates/criminal_disposition/MC227.json`
@@ -1683,6 +1814,7 @@ Labels per detector:
 6. User reviews/corrects in UI
 
 **Benefits**:
+
 - One-time labeling per form type
 - Automatic field extraction for all filled instances
 - Structured data export (JSON, CSV)
@@ -1693,6 +1825,7 @@ Labels per detector:
 **Purpose**: Automatically crawl, download, and manage Michigan SCAO forms with AI-assisted field labeling.
 
 **Architecture**:
+
 ```
 Michigan Courts → Crawler → forms/manifest.json
                              ↓
@@ -1708,18 +1841,21 @@ Michigan Courts → Crawler → forms/manifest.json
 ```
 
 **Key Scripts**:
+
 - `scripts/scao_sync.mjs` — Crawl Michigan Courts indexes and download PDFs
 - `scripts/build_form_registry.mjs` — Generate registry and auto-register detectors
 - `scripts/suggest_fields.mjs` — Use OpenAI to suggest field locations
 - `.github/workflows/scao-sync.yml` — Nightly automated sync with PR creation
 
 **Data Sources**:
+
 - Michigan Court Forms index (primary, has all metadata)
 - Circuit Court forms
 - District Court forms
 - Recently Revised forms (for change tracking)
 
 **Workflow**:
+
 1. **Nightly Sync** (GitHub Actions):
    - Crawls form indexes
    - Downloads new/updated PDFs to `form_sources/raw/`
@@ -1750,6 +1886,7 @@ Michigan Courts → Crawler → forms/manifest.json
    - Saves to `form_templates/{category}/`
 
 **Configuration**:
+
 ```env
 # .env.local
 OPENAI_API_KEY=your-openai-api-key-here
@@ -1776,16 +1913,19 @@ From `Documentation/Standards/json_data_contract_bible.md`:
 ### Validation Layers
 
 **Shape Validation** (Zod schemas):
+
 - Applied at API boundaries
 - Ensures required fields present
 - Type checking
 
 **Index Validation**:
+
 - After create/update/delete operations
 - Runs `npm run validate:touched`
 - Checks cross-references valid
 
 **UI Guarantees**:
+
 - EventDetailsView shows linked source chip
 - Non-blocking legal tip for unlinked legal events
 - People participation visible in UI
@@ -1799,6 +1939,7 @@ From `Documentation/Standards/json_data_contract_bible.md`:
 **Framework**: Vitest + Testing Library
 
 **Coverage**:
+
 - Block parsing logic
 - Cite creation/validation
 - Event creation/linking
@@ -1806,6 +1947,7 @@ From `Documentation/Standards/json_data_contract_bible.md`:
 - API utilities
 
 **Example**:
+
 ```javascript
 // tests/api/cites.spec.ts
 describe("Cite API", () => {
@@ -1815,9 +1957,9 @@ describe("Cite API", () => {
       blockId: "test-block",
       startOffset: 0,
       endOffset: 10,
-      selectedText: "test text"
+      selectedText: "test text",
     });
-    
+
     expect(cite.id).toBeDefined();
     expect(cite.selectedText).toBe("test text");
   });
@@ -1829,24 +1971,26 @@ describe("Cite API", () => {
 **Framework**: Playwright
 
 **Coverage**:
+
 - Full ingestion flow (upload → blocks → event)
 - Document viewing and annotation
 - Event creation from selection
 - Notes with cite embeds
 
 **Example**:
+
 ```javascript
 // tests/e2e/ingestion.spec.ts
 test("PDF upload creates document and event", async ({ page }) => {
   await page.goto("/");
   await page.click("text=Upload Source");
-  await page.setInputFiles('input[type="file"]', 'test.pdf');
+  await page.setInputFiles('input[type="file"]', "test.pdf");
   await page.fill('input[name="citeName"]', "Test Doc");
   await page.click("text=Upload");
-  
+
   // Verify document created
   await expect(page.locator("text=Test Doc")).toBeVisible();
-  
+
   // Verify event auto-created
   await page.click("text=Events");
   await expect(page.locator("text=Police Report")).toBeVisible();
@@ -1856,6 +2000,7 @@ test("PDF upload creates document and event", async ({ page }) => {
 ### Verification Gates
 
 **Required before PR merge**:
+
 1. `npm run lint` — 0 errors
 2. `npm run test` — All pass
 3. `npm run build` — Successful
@@ -1871,6 +2016,7 @@ test("PDF upload creates document and event", async ({ page }) => {
 **Current**: 142.55 KB gzipped (main bundle)
 
 **Optimizations**:
+
 - Tree-shaking unused dependencies
 - Code splitting by route
 - Lazy loading heavy components (PDF.js)
@@ -1882,11 +2028,13 @@ test("PDF upload creates document and event", async ({ page }) => {
 **Current**: File-based storage (no database)
 
 **Why**:
+
 - Simplicity for prototype
 - Version control friendly
 - Portable projects
 
 **Limitations**:
+
 - No complex queries
 - No concurrent write handling
 - File system I/O overhead
@@ -1899,6 +2047,7 @@ test("PDF upload creates document and event", async ({ page }) => {
 **A/V Transcription**: Real-time (1x speed with base model)
 
 **Optimizations**:
+
 - Background processing (async)
 - Progress reporting via WebSocket
 - Batch ingestion support
@@ -1925,6 +2074,7 @@ test("PDF upload creates document and event", async ({ page }) => {
 **CRITICAL**: Check `Documentation/Standards/json_data_contract_bible.md`
 
 **Steps**:
+
 1. Verify change doesn't violate Golden Invariants
 2. Update Zod schemas if needed
 3. Write migration script if breaking change
@@ -1967,6 +2117,7 @@ test("PDF upload creates document and event", async ({ page }) => {
 ### Debug Tools
 
 **Server logs**:
+
 ```bash
 # Check ingestion logs
 tail -f server/logs/ingestion.log
@@ -1976,6 +2127,7 @@ tail -f server/logs/api.log
 ```
 
 **Frontend debug**:
+
 ```javascript
 // Enable debug mode
 localStorage.setItem("DEBUG", "true");
@@ -1986,6 +2138,7 @@ console.log(useProject.getState());
 ```
 
 **Validate data**:
+
 ```bash
 # Check manifest integrity
 node scripts/check_manifests.mjs
@@ -2004,6 +2157,7 @@ npm run sweep:orphans
 ### Complete Endpoint List
 
 **Canonical API**:
+
 - `GET /api/canonical/docs` — List documents
 - `GET /api/canonical/docs/:docId` — Get document
 - `GET /api/canonical/docs/:docId/blocks` — Get blocks
@@ -2016,10 +2170,12 @@ npm run sweep:orphans
 - `DELETE /api/canonical/docs/:docId/cites/:citeId` — Delete cite
 
 **Ingestion API**:
+
 - `POST /ingest/pdf` — Upload PDF
 - `POST /ingest/av` — Upload audio/video
 
 **Events API**:
+
 - `GET /api/events` — List events
 - `GET /api/events/:id` — Get event
 - `POST /api/events` — Create event
@@ -2031,6 +2187,7 @@ npm run sweep:orphans
 - `GET /api/events/by-source/:sourceId` — Get events for source
 
 **People API**:
+
 - `GET /api/people` — List people
 - `GET /api/people/:id` — Get person
 - `POST /api/people` — Create person
@@ -2038,17 +2195,20 @@ npm run sweep:orphans
 - `DELETE /api/people/:id` — Delete person
 
 **Wizard API**:
+
 - `GET /api/wizard/:entity` — Get wizard specs
 - `GET /api/wizard/:entity/:type` — Get specific wizard
 - `POST /api/wizard/:entity/evaluate` — Evaluate rules
 
 **Project API**:
+
 - `GET /api/project` — Get project info
 - `PUT /api/project` — Update project info
 - `GET /api/registries/:type` — Get registry (events/people)
 - `PUT /api/registries/:type` — Update registry
 
 **Files API**:
+
 - `GET /api/files/:docId/source` — Get source file
 - `GET /api/files/:docId/pdf` — Get PDF
 - `GET /api/files/:docId/blocks` — Get blocks file

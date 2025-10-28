@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [JSON Data-Contract Bible — Next Actions](#json-data-contract-bible--next-actions)
   - [✅ Completed](#-completed)
@@ -75,9 +76,9 @@ tools/schemas/people.ts
 
 ```typescript
 // tools/schemas/events.ts
-import { z } from 'zod';
+import { z } from "zod";
 
-export const zEventCategory = z.enum(['legal', 'factual', 'investigatory']);
+export const zEventCategory = z.enum(["legal", "factual", "investigatory"]);
 
 export const zEventItem = z.object({
   id: z.string().ulid(),
@@ -86,30 +87,42 @@ export const zEventItem = z.object({
   category: zEventCategory,
   date: z.string().optional(), // "YYYY-MM-DD"
   datetime: z.string().datetime().optional(),
-  wizard: z.object({
-    entity: z.literal('events'),
-    type: z.string(),
-    answers: z.record(z.any()),
-    template_id: z.string(),
-    spec_version: z.number()
-  }).optional(),
+  wizard: z
+    .object({
+      entity: z.literal("events"),
+      type: z.string(),
+      answers: z.record(z.any()),
+      template_id: z.string(),
+      spec_version: z.number(),
+    })
+    .optional(),
   data: z.record(z.any()),
   sourceId: z.string().optional(),
   sourceType: z.string().optional(),
   citeIds: z.array(z.string()).optional(),
   participants: z.array(zParticipation).optional(),
-  createdFrom: z.enum(['wizard', 'selection', 'source_upload']).optional(),
+  createdFrom: z.enum(["wizard", "selection", "source_upload"]).optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
   typeId: z.string().optional(),
-  stableKey: z.string().optional()
+  stableKey: z.string().optional(),
 });
 
 // tools/schemas/people.ts
 export const zPersonRole = z.enum([
-  'speaker', 'witness', 'defendant', 'complainant',
-  'interviewee', 'interviewer', 'declarant', 'officer',
-  'caller_911', 'dispatcher_911', 'attorney', 'judge', 'other'
+  "speaker",
+  "witness",
+  "defendant",
+  "complainant",
+  "interviewee",
+  "interviewer",
+  "declarant",
+  "officer",
+  "caller_911",
+  "dispatcher_911",
+  "attorney",
+  "judge",
+  "other",
 ]);
 
 export const zParticipation = z.object({
@@ -122,7 +135,7 @@ export const zParticipation = z.object({
   page: z.number().optional(),
   note: z.string().optional(),
   addedAt: z.string().optional(),
-  addedBy: z.string().optional()
+  addedBy: z.string().optional(),
 });
 ```
 
@@ -136,15 +149,15 @@ export const zParticipation = z.object({
 
 ```typescript
 // tests/unit/schemas/events.test.ts
-import { zEventItem } from '../../../tools/schemas/events';
+import { zEventItem } from "../../../tools/schemas/events";
 
-test('validates complete event', () => {
-  const event = { id: '01HX...', title: 'Test', category: 'legal', data: {} };
+test("validates complete event", () => {
+  const event = { id: "01HX...", title: "Test", category: "legal", data: {} };
   expect(() => zEventItem.parse(event)).not.toThrow();
 });
 
-test('rejects invalid category', () => {
-  const event = { id: '01HX...', title: 'Test', category: 'invalid', data: {} };
+test("rejects invalid category", () => {
+  const event = { id: "01HX...", title: "Test", category: "invalid", data: {} };
   expect(() => zEventItem.parse(event)).toThrow();
 });
 ```
@@ -171,23 +184,23 @@ tools/index_writer.ts
 **Content:**
 
 ```typescript
-import { EventItem } from '../shared/types';
-import { readJSON, writeJSON } from './json_helpers';
+import { EventItem } from "../shared/types";
+import { readJSON, writeJSON } from "./json_helpers";
 
 // Index paths
-const EVENTS_BY_SOURCE = 'indexes/eventsBySource.json';
-const EVENTS_BY_CATEGORY = 'indexes/eventsByCategory.json';
-const EVENTS_BY_PERSON = 'indexes/eventsByPerson.json';
+const EVENTS_BY_SOURCE = "indexes/eventsBySource.json";
+const EVENTS_BY_CATEGORY = "indexes/eventsByCategory.json";
+const EVENTS_BY_PERSON = "indexes/eventsByPerson.json";
 
 export async function onEventWrite(projectSlug: string, ev: EventItem) {
   // Update category index
   await updateEventsByCategory(projectSlug, ev);
-  
+
   // Update source index if linked
   if (ev.sourceId) {
     await addEventToEventsBySource(projectSlug, ev.sourceId, ev.id);
   }
-  
+
   // Update person indexes if participants present
   if (ev.participants) {
     await updateEventsByPersonIndex(projectSlug, ev.id, ev.participants);
@@ -197,30 +210,34 @@ export async function onEventWrite(projectSlug: string, ev: EventItem) {
 export async function onEventDelete(projectSlug: string, ev: EventItem) {
   // Remove from category index
   await removeEventFromCategory(projectSlug, ev);
-  
+
   // Remove from source index if linked
   if (ev.sourceId) {
     await removeEventFromEventsBySource(projectSlug, ev.sourceId, ev.id);
   }
-  
+
   // Remove from person indexes
   await removeEventFromEventsByPersonIndex(projectSlug, ev.id);
 }
 
 async function updateEventsByCategory(projectSlug: string, ev: EventItem) {
   const path = `projects/${projectSlug}/${EVENTS_BY_CATEGORY}`;
-  const index = await readJSON(path, { legal: [], factual: [], investigatory: [] });
-  
+  const index = await readJSON(path, {
+    legal: [],
+    factual: [],
+    investigatory: [],
+  });
+
   // Remove from all categories first
-  for (const cat of ['legal', 'factual', 'investigatory']) {
-    index[cat] = index[cat].filter(id => id !== ev.id);
+  for (const cat of ["legal", "factual", "investigatory"]) {
+    index[cat] = index[cat].filter((id) => id !== ev.id);
   }
-  
+
   // Add to correct category
   if (!index[ev.category].includes(ev.id)) {
     index[ev.category].push(ev.id);
   }
-  
+
   await writeJSON(path, index);
 }
 
@@ -240,7 +257,7 @@ async function updateEventsByCategory(projectSlug: string, ev: EventItem) {
 test('onEventWrite updates category index', async () => {
   const event = { id: '01HX...', category: 'legal', ... };
   await onEventWrite('test-project', event);
-  
+
   const index = await readJSON('projects/test-project/indexes/eventsByCategory.json');
   expect(index.legal).toContain('01HX...');
 });
@@ -270,14 +287,16 @@ tools/validate_touched.js
 ```javascript
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
-import { readFileSync } from 'fs';
-import { zEventItem } from './schemas/events.js';
+import { execSync } from "child_process";
+import { readFileSync } from "fs";
+import { zEventItem } from "./schemas/events.js";
 
 // Get changed files from git
-const changedFiles = execSync('git diff --name-only HEAD', { encoding: 'utf-8' })
-  .split('\n')
-  .filter(f => f.includes('/events/') && f.endsWith('.json'));
+const changedFiles = execSync("git diff --name-only HEAD", {
+  encoding: "utf-8",
+})
+  .split("\n")
+  .filter((f) => f.includes("/events/") && f.endsWith(".json"));
 
 console.log(`Validating ${changedFiles.length} touched event files...\n`);
 
@@ -285,9 +304,9 @@ let warnings = 0;
 
 for (const file of changedFiles) {
   try {
-    const content = readFileSync(file, 'utf-8');
+    const content = readFileSync(file, "utf-8");
     const event = JSON.parse(content);
-    
+
     // Shape validation (Zod)
     try {
       zEventItem.parse(event);
@@ -297,14 +316,14 @@ for (const file of changedFiles) {
       warnings++;
       continue;
     }
-    
+
     // Soft rule: legal events should have sources
-    if (event.category === 'legal' && !event.sourceId) {
+    if (event.category === "legal" && !event.sourceId) {
       console.warn(`ℹ️  Legal event without source: ${file}`);
       console.warn(`   Consider linking a source document.`);
       warnings++;
     }
-    
+
     // Soft rule: check participant references (non-blocking)
     if (event.participants) {
       for (const p of event.participants) {
@@ -315,7 +334,6 @@ for (const file of changedFiles) {
         }
       }
     }
-    
   } catch (err) {
     console.error(`❌ Parse error: ${file}`);
     console.error(`   ${err.message}`);
@@ -324,7 +342,7 @@ for (const file of changedFiles) {
 }
 
 console.log(`\n✅ Validation complete: ${warnings} warnings`);
-console.log('(Warnings are informational; no failures in prototype mode)');
+console.log("(Warnings are informational; no failures in prototype mode)");
 process.exit(0); // Never fail in prototype
 ```
 

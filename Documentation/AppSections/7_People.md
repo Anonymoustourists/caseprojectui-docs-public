@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Purpose](#purpose)
 - [1. Person Schema](#1-person-schema)
@@ -92,7 +93,6 @@ The actual information sought or stored is flexible, but the wizard for creating
 
 1. User clicks **"Add Person"**.
 2. Minimal form asks:
-
    - Last Name (required)
    - First Name (optional)
    - Role (optional, can add later)
@@ -116,7 +116,6 @@ The actual information sought or stored is flexible, but the wizard for creating
 - Roles are **not hardcoded**.
 - Base role categories provided (Defendant, Victim, Witness, Informant, Expert, Law Enforcement, Prosecutor, Defense Attorney, Judge).
 - Each can take **subfields**:
-
   - Witness → {Eyewitness, Alibi, Expert, Other}
   - Expert → {field, employer, side (P/D)}
   - Law Enforcement → {department, badge, rank, role in investigation}

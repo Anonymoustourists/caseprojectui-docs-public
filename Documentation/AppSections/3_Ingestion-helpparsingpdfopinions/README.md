@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Michigan Court PDF to Markdown Converter - Implementation Guide](#michigan-court-pdf-to-markdown-converter---implementation-guide)
   - [What's Included](#whats-included)
@@ -69,7 +70,7 @@ The system automatically identifies and removes common Michigan court boilerplat
 Converts court outline format to Markdown headings:
 
 - `I., II., III.` → `# I. Title` (H1)
-- `A., B., C.` → `## A. Title` (H2)  
+- `A., B., C.` → `## A. Title` (H2)
 - `1., 2., 3.` → `### 1. Title` (H3)
 - `i., ii., iii.` → `#### i. Title` (H4)
 
@@ -145,14 +146,14 @@ from pdf2md_core import convert_pdf_to_markdown
 def convert_directory(input_dir: Path, output_dir: Path):
     """Convert all PDFs in a directory."""
     pdf_files = list(input_dir.glob("*.pdf"))
-    
+
     for pdf_file in pdf_files:
         print(f"Converting {pdf_file.name}...")
         success, md_path, meta_path = convert_pdf_to_markdown(
             pdf_path=pdf_file,
             output_dir=output_dir
         )
-        
+
         if success:
             print(f"✅ {pdf_file.name} -> {md_path.name}")
         else:
@@ -217,26 +218,26 @@ app = Flask(__name__)
 def convert_pdf():
     if 'pdf' not in request.files:
         return jsonify({'error': 'No PDF file provided'}), 400
-    
+
     pdf_file = request.files['pdf']
-    
+
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_dir = Path(temp_dir)
         pdf_path = temp_dir / pdf_file.filename
         pdf_file.save(pdf_path)
-        
+
         success, md_path, meta_path = convert_pdf_to_markdown(
             pdf_path=pdf_path,
             output_dir=temp_dir
         )
-        
+
         if success:
             markdown_text = md_path.read_text(encoding='utf-8')
             metadata = {}
             if meta_path:
                 import json
                 metadata = json.loads(meta_path.read_text(encoding='utf-8'))
-            
+
             return jsonify({
                 'success': True,
                 'markdown': markdown_text,
@@ -258,14 +259,14 @@ def main():
     parser = argparse.ArgumentParser(description='Convert Michigan court PDFs to Markdown')
     parser.add_argument('input', help='PDF file or directory')
     parser.add_argument('output', help='Output directory')
-    parser.add_argument('--inline-footnotes', action='store_true', 
+    parser.add_argument('--inline-footnotes', action='store_true',
                        help='Convert footnote numbers to inline format')
-    
+
     args = parser.parse_args()
-    
+
     input_path = Path(args.input)
     output_path = Path(args.output)
-    
+
     if input_path.is_file():
         # Single file
         success, md_path, meta_path = convert_pdf_to_markdown(
@@ -275,7 +276,7 @@ def main():
             print(f"Converted: {md_path}")
         else:
             print("Conversion failed")
-    
+
     elif input_path.is_dir():
         # Directory of files
         for pdf_file in input_path.glob("*.pdf"):
@@ -338,7 +339,7 @@ if success:
     print("✅ Conversion successful")
     print(f"Markdown: {md_path}")
     print(f"Metadata: {meta_path}")
-    
+
     # Check output quality
     md_text = md_path.read_text()
     print(f"Length: {len(md_text)} characters")
@@ -353,7 +354,7 @@ else:
 The "dumb" pattern recognition system is highly effective for legal documents because:
 
 1. **Consistent Formatting**: Court documents follow standardized formats
-2. **Predictable Structure**: Legal writing uses consistent outline patterns  
+2. **Predictable Structure**: Legal writing uses consistent outline patterns
 3. **Recognizable Boilerplate**: Courts use the same headers/footers repeatedly
 4. **Rule-Based Reliability**: No AI "hallucination" or unpredictable behavior
 5. **Fast Processing**: No network calls or model loading delays

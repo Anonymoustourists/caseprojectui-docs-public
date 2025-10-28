@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Structure](#structure)
 - [UI Generally](#ui-generally)
@@ -49,16 +50,16 @@
 # Sources
 
 ## Ingest a/v
+
 ### Next-Diarizer Ideas
 
 Generate MFCC embeddings (e.g., via meyda or a lightweight WASM backend) and cluster with cosine distance to reduce label swaps.
 Add an energy-based VAD pass so silence gaps are learned from the waveform instead of the transcript timing, improving segment boundaries.
 Expose a pluggable adapter layer that can handshake with WhisperX or Pyannote when GPU resources are available, falling back to the current heuristic otherwise.
 
-
 ## Transcripts Section
-Incorporate tables of contents used in transcripts to auto-generate different sections that can be navigated to more easily, and to assign witness for certain pages to "A. " durning page-ranges where they are the witness.
 
+Incorporate tables of contents used in transcripts to auto-generate different sections that can be navigated to more easily, and to assign witness for certain pages to "A. " durning page-ranges where they are the witness.
 
 ## More Info Panel
 
@@ -66,18 +67,17 @@ there should be a button in the top right corner of the source view that opens a
 
 ## Dialogue
 
-
 # Events
 
 ## Events Metadata
 
 - allow connected events, begin YYYY-MM-DD, end YYYY-MM-DD, location, notes
-  
+
 ## Events Section
 
 - Allows user to filter by event type (e.g. arrests, searches, interviews, PEOPLE, etc.)
 - Some better visual for thing where give people testify at trial, maybe symbols for things like verdict, bindover, offense date, birthdays, stuff like that
--  
+-
 
 # Notebooks
 
@@ -99,34 +99,32 @@ there should be a button in the top right corner of the source view that opens a
 ### Witness Outline Template
 
 # People
+
 - Create and show connections. Edit person + add connection > PEOPLE selector w/relationship label (i.e., "sibling," "alleged accomplice," "spouse," etc.)
 - People view - show list of people, their roles, and connections
-- Ability to search names on OTIS, 
-
+- Ability to search names on OTIS,
 
 # Export
 
-# Locations 
+# Locations
 
 ## For events, sources, people, etc. allow user to add a location (with autocomplete from Google Maps API or something else) and then show that location on a map view of the case
 
 ## Location / Timeline Mapping
+
 - allow user to see events on map view and timeline view
 - allow user to filter events by location on map view and timeline view
-- 
+-
 
-## Cellular Tower Mapping 
+## Cellular Tower Mapping
+
 - Create larger database of cell towers (location, carrier, etc.) for specific times
 - Allow user to upload cell tower dumps (from carrier or from phone) and get map of tower locations and times
 
-
-
-
-# Future 
+# Future
 
 ## Integrate with larger legal database (OpinionUI) to allow user to auto-add boilerplate, case cites, etc. to briefs and other documents
 
-## Integrate with guidelines calculator 
-
+## Integrate with guidelines calculator
 
 ## Self-Contained App (no backend)

@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Documentation Directory Overview](#documentation-directory-overview)
   - [🗺️ Directory Quick Reference](#️-directory-quick-reference)
@@ -46,30 +47,31 @@ The documentation serves two audiences:
 
 ### 📚 Main Guides (Start Here!)
 
-| Guide | Audience | Purpose |
-|-------|----------|---------|
-| **[USER_GUIDE.md](USER_GUIDE.md)** | End users | Complete guide to using the app |
+| Guide                                                | Audience   | Purpose                                      |
+| ---------------------------------------------------- | ---------- | -------------------------------------------- |
+| **[USER_GUIDE.md](USER_GUIDE.md)**                   | End users  | Complete guide to using the app              |
 | **[TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md)** | Developers | Architecture, APIs, data models, development |
-| **[index.md](index.md)** | Everyone | PR tracker, work categories, project status |
-| **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** | Developers | Command cheat sheet |
+| **[index.md](index.md)**                             | Everyone   | PR tracker, work categories, project status  |
+| **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**         | Developers | Command cheat sheet                          |
 
 ### 📁 Directory Reference
 
-| What You Need | Where to Look |
-|---------------|---------------|
-| **PR status & tracking** | [`index.md`](index.md) - Master index of all PRs |
-| **How to use the app** | [`USER_GUIDE.md`](USER_GUIDE.md) - Complete user documentation |
-| **Technical documentation** | [`TECHNICAL_REFERENCE.md`](TECHNICAL_REFERENCE.md) - Architecture & APIs |
-| **Common commands** | [`QUICK_REFERENCE.md`](QUICK_REFERENCE.md) |
-| **Project glossary** | [`project_terminology.md`](project_terminology.md) |
-| **Active PR documentation** | `PRs/in-progress/` - PRs currently being worked on |
-| **Completed PR documentation** | `PRs/completed/` - Finished PRs with full triplets |
-| **Small hotfixes** | `PATCHES/` directory - Quick fixes that didn't need PRs |
-| **Meeting notes** | `history/SESSIONS/` directory - Session logs and notes |
-| **Data contracts** | `Standards/json_data_contract_bible.md` - Golden invariants |
-| **Polish/cleanup history** | `archive/` directory - Archived polish documentation |
+| What You Need                  | Where to Look                                                            |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| **PR status & tracking**       | [`index.md`](index.md) - Master index of all PRs                         |
+| **How to use the app**         | [`USER_GUIDE.md`](USER_GUIDE.md) - Complete user documentation           |
+| **Technical documentation**    | [`TECHNICAL_REFERENCE.md`](TECHNICAL_REFERENCE.md) - Architecture & APIs |
+| **Common commands**            | [`QUICK_REFERENCE.md`](QUICK_REFERENCE.md)                               |
+| **Project glossary**           | [`project_terminology.md`](project_terminology.md)                       |
+| **Active PR documentation**    | `PRs/in-progress/` - PRs currently being worked on                       |
+| **Completed PR documentation** | `PRs/completed/` - Finished PRs with full triplets                       |
+| **Small hotfixes**             | `PATCHES/` directory - Quick fixes that didn't need PRs                  |
+| **Meeting notes**              | `history/SESSIONS/` directory - Session logs and notes                   |
+| **Data contracts**             | `Standards/json_data_contract_bible.md` - Golden invariants              |
+| **Polish/cleanup history**     | `archive/` directory - Archived polish documentation                     |
 
 **Latest polish work (October 2025)**:
+
 - ✅ Reduced lint errors from 252 → 0
 - ✅ Generated TOCs for 150+ markdown files
 - ✅ Removed unused dependencies (framer-motion, slate-react)
@@ -102,7 +104,6 @@ The documentation serves two audiences:
 
 - **Framework:** Node.js + Express + TypeScript
 - **Responsibilities:**
-
   - File I/O and canonical storage access
   - Ingestion (PDF, AV, transcripts)
   - Export and validation endpoints
@@ -129,6 +130,7 @@ Each PR includes a triplet:
 - `runlog-PR<N>.md` — implementation log with evidence
 
 **Location**:
+
 - While working: `PRs/in-progress/`
 - When complete: `PRs/completed/`
 
@@ -136,7 +138,6 @@ Each PR includes a triplet:
 
 1. **Check the Index**
    Open `/Documentation/Index.md`.
-
    - If your PR isn’t listed, add it under **In Progress PRs** with a short summary.
    - Place it in the correct **Work Category** (see section 7).
 
@@ -149,7 +150,6 @@ Each PR includes a triplet:
    ```
 
 3. **Implement Feature**
-
    - Follow architectural conventions.
    - Keep manifests current as you modify files.
 
@@ -238,7 +238,7 @@ The runlog is the audit trail proving these steps passed.
 | 📂 Project Management | Project shells, registries, scoped sources      |
 | 📥 Source Ingestion   | PDF/AV/text ingestion → canonical conversion    |
 | ✏️ Source Editing     | Block editing, cite creation, inline edits      |
-| 📄 Source View        | Document viewer, PDF↔text sync, AV playback     |
+| 📄 Source View        | Document viewer, PDF↔text sync, AV playback    |
 | 📝 Notes & Notebooks  | Rich text notes, formatting, templates          |
 | 📤 Exporting          | MD → Word/PDF export, integrity, bundling       |
 | ⚙️ Infrastructure     | Validation scripts, schema tools, dashboards    |
@@ -290,7 +290,6 @@ Update manifest and runlog continuously.
 
 - Always keep **Index.md** current — it is the project plan.
 - After each PR:
-
   - Update `progress.json` component statuses.
   - Append latest output to combined runlogs.
   - Generate new session report.
@@ -324,7 +323,6 @@ No other structural differences require code changes unless the backend hard-cod
 - Each **PR is both implementation and documentation unit**.
 - The **Index** and **progress.json** together describe total project state.
 - When starting work:
-
   1. Read Index
   2. Create PR triplet
   3. Build, test, document

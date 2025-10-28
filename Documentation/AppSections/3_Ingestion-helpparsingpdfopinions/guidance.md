@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Michigan Court PDF to Markdown Parser - Comprehensive Package](#michigan-court-pdf-to-markdown-parser---comprehensive-package)
   - [📁 Complete Package Contents](#-complete-package-contents)
@@ -99,7 +100,7 @@ python examples.py batch input_pdfs/ output_markdown/
 ```
 Input PDF:           Output Markdown:
 "I. BACKGROUND"  →   "# I. BACKGROUND"
-"A. The Facts"   →   "## A. The Facts" 
+"A. The Facts"   →   "## A. The Facts"
 "1. Evidence"    →   "### 1. Evidence"
 "i. Details"     →   "#### i. Details"
 ```

@@ -40,10 +40,12 @@ The Locations section provides a centralized view of all geographic locations as
 ### Main Content Area
 
 #### List Mode (Default)
+
 - Shows empty state with instructions when no location selected
 - Prompts user to click map icon to view all locations
 
 #### Spreadsheet Mode (Expanded)
+
 - Full-width table with columns:
   - **Type** - Badge (Person/Event)
   - **Name** - Entity name
@@ -57,6 +59,7 @@ The Locations section provides a centralized view of all geographic locations as
 - Click row to select location
 
 #### Map Mode
+
 - **Interactive Map**
   - MapLibre GL base map
   - Navigation controls (zoom, compass)
@@ -90,11 +93,13 @@ The Locations section provides a centralized view of all geographic locations as
 ## Data Sources
 
 ### People Locations
+
 - Sourced from `Person.location` field
 - Includes `Person.locationNote` for additional context
 - Type derived from `Person.data.role` or `Person.data.relation`
 
 ### Event Locations
+
 - Sourced from `EventItem.location` field
 - Type derived from `EventItem.type` (e.g., "factual", "background", "investigatory")
 - Includes `EventItem.date` for temporal context
@@ -104,6 +109,7 @@ The Locations section provides a centralized view of all geographic locations as
 ### Components
 
 #### LocationsViewer.tsx
+
 - **Path**: `src/pages/LocationsViewer.tsx`
 - **Responsibilities**:
   - Fetch locations from People and Events APIs
@@ -117,6 +123,7 @@ The Locations section provides a centralized view of all geographic locations as
   - `selectedLocationId` - Currently selected location
 
 #### LocationsMapView.tsx
+
 - **Path**: `src/components/Map/LocationsMapView.tsx`
 - **Responsibilities**:
   - Render MapLibre GL map
@@ -157,19 +164,21 @@ The Locations section provides a centralized view of all geographic locations as
 ## Type Definitions
 
 ### LocationItem
+
 ```typescript
 interface LocationItem {
-  id: string;              // "person-123" or "event-456"
-  label: string;           // Display name
+  id: string; // "person-123" or "event-456"
+  label: string; // Display name
   type: "person" | "event";
-  typeName: string;        // Role/event type
-  date?: string;           // For events
-  note?: string;           // For people (locationNote)
-  location: Location;      // Full location object
+  typeName: string; // Role/event type
+  date?: string; // For events
+  note?: string; // For people (locationNote)
+  location: Location; // Full location object
 }
 ```
 
 ### Location (Existing)
+
 ```typescript
 interface Location {
   lat: number;
@@ -184,18 +193,21 @@ interface Location {
 ## User Workflows
 
 ### Viewing All Locations on Map
+
 1. Navigate to Locations section (sidebar button)
 2. Click map icon in sidebar header
 3. Map displays all locations with auto-zoom to fit bounds
 4. Click any marker to select and view details
 
 ### Finding a Specific Location
+
 1. Navigate to Locations section
 2. Scroll through sidebar list
 3. Click location to select
 4. Switch to map view to see pin on map (selected marker highlighted)
 
 ### Analyzing Location Data
+
 1. Navigate to Locations section
 2. Click expand button for spreadsheet view
 3. View tabular data with all location attributes
@@ -205,21 +217,25 @@ interface Location {
 ## Design Patterns
 
 ### Lazy Loading
+
 - LocationsMapView is lazy-loaded with React.lazy() and Suspense
 - Reduces initial bundle size
 - Shows "Loading map..." fallback during import
 
 ### State Management
+
 - Local component state for UI controls
 - Project context for active project
 - Async data fetching on mount and project change
 
 ### Responsive Design
+
 - Sidebar collapses to icon when dismissed
 - Spreadsheet view takes full width
 - Map scales to container dimensions
 
 ### Error Handling
+
 - Try-catch blocks around API calls
 - Console logging for debugging
 - Fallback UI for map initialization errors
@@ -228,6 +244,7 @@ interface Location {
 ## Implemented Features
 
 ### ✅ Filtering
+
 - **Search** - Filter by name, type, city, county, or location note
 - **Type Filter** - Show only People, only Events, or all types
 - **Date Range Filter** - Filter events by date range
@@ -235,6 +252,7 @@ interface Location {
 - **Live Updates** - Sidebar list, spreadsheet, and map all update with filters
 
 ### ✅ Clustering
+
 - **Automatic Clustering** - Enabled by default when 10+ locations
 - **Smart Grouping** - Uses Supercluster with 60px radius
 - **Click to Expand** - Click clusters to zoom in and reveal individual markers
@@ -252,11 +270,11 @@ interface Location {
    - Export to CSV/Excel
    - Export to KML for Google Earth
 
-5. **Timeline Integration**
+3. **Timeline Integration**
    - Click event marker to jump to timeline view
    - Show temporal flow of locations
 
-6. **Heatmap Mode**
+4. **Heatmap Mode**
    - Visualize density of locations
    - Useful for cases with many addresses
 
@@ -272,6 +290,7 @@ interface Location {
 ## Configuration
 
 Maps functionality controlled by environment variables:
+
 - `VITE_FEATURE_MAPS=1` - Enable maps features
 - `VITE_MAPS_BASE_URL` - Base URL for map services
 - `VITE_MAP_STYLE_PATH` - Path to map style JSON

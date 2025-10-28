@@ -10,12 +10,6 @@
       "defaultIconPath": "transcript.svg",
       "fields": [
         {
-          "id": "date",
-          "label": "Date",
-          "type": "date",
-          "required": true
-        },
-        {
           "id": "hearing_type",
           "label": "Hearing Type",
           "type": "select",
@@ -26,9 +20,12 @@
             "Status Conference",
             "Motion Hearing",
             "Final Pretrial",
+            "Plea Hearing",
             "Trial",
             "Sentencing",
-            "Postconviction Hearing"
+            "Resentencing",
+            "Postconviction Hearing",
+            "Ginther Hearing"
           ]
         },
         {
@@ -88,12 +85,11 @@
           "help": "Select witnesses who testified"
         },
         {
-          "id": "court",
-          "label": "Court",
-          "type": "select",
-          "options": ["District Court", "Circuit Court"],
+          "id": "case_court_combo",
+          "label": "Case & Court",
+          "type": "case_court_combo",
           "required": true,
-          "help": "Preliminary Examination is always held in District Court."
+          "help": "Select the case and court/case number for this transcript."
         },
         {
           "id": "notes",
@@ -117,28 +113,24 @@
       "defaultEmoji": "📚",
       "defaultIconPath": "filing.svg",
       "fields": [
-        {
-          "id": "date",
-          "label": "Date of Filing",
-          "type": "date",
-          "required": true
-        },
+        { "id": "case_court_combo", "label": "Case & Court", "type": "case_court_combo", "required": true, "help": "Select the case and court/case number for this filing." },
         { "id": "filer", "label": "Filer", "type": "select", "options": ["Court", "Prosecutor", "Defendant"], "required": true },
-        { "id": "court", "label": "Court", "type": "select", "options": ["District Court", "Circuit Court", "Court of Appeals", "Supreme Court"], "show_if": { "filer": "Court" } },
+        { "id": "court_level", "label": "Court Level", "type": "select", "options": ["District Court", "Circuit Court", "Court of Appeals", "Supreme Court"], "show_if": { "filer": "Court" } },
 
-        { "id": "filing_type_court_district", "label": "Filing Type (District Court)", "type": "select", "options": ["Arrest Warrant", "Search Warrant", "Bindover", "Other"], "show_if": { "filer": "Court", "court": "District Court" } },
+        { "id": "filing_type_court_district", "label": "Filing Type (District Court)", "type": "select", "options": ["Arrest Warrant", "Search Warrant", "Bindover", "Other"], "show_if": { "filer": "Court", "court_level": "District Court" } },
         { "id": "district_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_district": "Other" } },
 
-        { "id": "filing_type_court_circuit", "label": "Filing Type (Circuit Court)", "type": "select", "options": ["Scheduling Order", "Order re Motion", "Other Order", "Judgment of Sentence", "Verdict", "Claim of Appeal", "Notice of Appointment", "Order", "Other"], "show_if": { "filer": "Court", "court": "Circuit Court" } },
+        { "id": "filing_type_court_circuit", "label": "Filing Type (Circuit Court)", "type": "select", "options": ["Scheduling Order", "Order re Motion", "Other Order", "Judgment of Sentence", "Verdict", "Claim of Appeal", "Notice of Appointment", "Order", "Other"], "show_if": { "filer": "Court", "court_level": "Circuit Court" } },
         { "id": "circuit_order_motion_specify", "label": "Specify Motion", "type": "text", "show_if": { "filing_type_court_circuit": "Order re Motion" } },
         { "id": "circuit_other_order_specify", "label": "Specify Other Order", "type": "text", "show_if": { "filing_type_court_circuit": "Other Order" } },
         { "id": "circuit_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_circuit": "Other" } },
 
-        { "id": "filing_type_court_coa", "label": "Filing Type (Court of Appeals)", "type": "select", "options": ["Unpublished Opinion", "Published Opinion", "Order Granting/Denying Remand", "Administrative Order", "Other Order", "Notice of Oral Argument", "Correspondence", "Other"], "show_if": { "filer": "Court", "court": "Court of Appeals" } },
+        { "id": "filing_type_court_coa", "label": "Filing Type (Court of Appeals)", "type": "select", "options": ["Unpublished Opinion", "Published Opinion", "Order Granting/Denying Remand", "Administrative Order", "Other Order", "Notice of Oral Argument", "Correspondence", "Other"], "show_if": { "filer": "Court", "court_level": "Court of Appeals" } },
         { "id": "coa_admin_order_specify", "label": "Specify Administrative Order", "type": "text", "show_if": { "filing_type_court_coa": "Administrative Order" } },
         { "id": "coa_other_order_specify", "label": "Specify Other Order", "type": "text", "show_if": { "filing_type_court_coa": "Other Order" } },
         { "id": "coa_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_court_coa": "Other" } },
 
+        { "id": "filing_type_court_sc", "label": "Filing Type (Supreme Court)", "type": "select", "options": ["Order re Leave to Appeal", "Opinion", "Other Order", "Other"], "show_if": { "filer": "Court", "court_level": "Supreme Court" } },
         { "id": "filing_type_court_sc", "label": "Filing Type (Supreme Court)", "type": "select", "options": ["Order re Leave to Appeal", "Opinion", "Other Order", "Other"], "show_if": { "filer": "Court", "court": "Supreme Court" } },
         { "id": "sc_lta_disposition", "label": "Leave to Appeal Disposition", "type": "select", "options": ["Grant", "Deny", "MOAA", "Remand", "Other"], "show_if": { "filing_type_court_sc": "Order re Leave to Appeal" } },
         { "id": "sc_lta_other_specify", "label": "Specify Other Disposition", "type": "text", "show_if": { "sc_lta_disposition": "Other" } },
@@ -209,12 +201,6 @@
       "defaultEmoji": "🖋️",
       "defaultIconPath": "police.svg",
       "fields": [
-        {
-          "id": "date",
-          "label": "Date of Filing",
-          "type": "date",
-          "required": true
-        },
         {
           "id": "agency_type",
           "label": "Police Agency",
@@ -343,12 +329,6 @@
       "defaultEmoji": "📄",
       "defaultIconPath": "document.svg",
       "fields": [
-        {
-          "id": "date",
-          "label": "Date",
-          "type": "date",
-          "required": true
-        },
         {
           "id": "document_type",
           "label": "Type of Document",
@@ -481,12 +461,6 @@
       "defaultIconPath": "interview.svg",
       "fields": [
         {
-          "id": "date",
-          "label": "Date",
-          "type": "date",
-          "required": true
-        },
-        {
           "id": "time",
           "label": "Time (optional)",
           "type": "text",
@@ -564,11 +538,6 @@
       "view": "dialogue",
       "fields": [
         {
-          "id": "date",
-          "label": "Date",
-          "type": "date"
-        },
-        {
           "id": "time_of_call",
           "label": "Time of Call (HH:MM)",
           "type": "text",
@@ -611,11 +580,6 @@
       "defaultEmoji": "📹",
       "defaultIconPath": "camera.svg",
       "fields": [
-        {
-          "id": "date",
-          "label": "Date",
-          "type": "date"
-        },
         {
           "id": "time",
           "label": "Time (HH:MM)",
@@ -680,11 +644,6 @@
       "defaultIconPath": "dashcam.svg",
       "fields": [
         {
-          "id": "date",
-          "label": "Date",
-          "type": "date"
-        },
-        {
           "id": "time",
           "label": "Time (HH:MM)",
           "type": "text",
@@ -747,11 +706,6 @@
       "defaultEmoji": "🎬",
       "defaultIconPath": "video.svg",
       "fields": [
-        {
-          "id": "date",
-          "label": "Date",
-          "type": "date"
-        },
         {
           "id": "time",
           "label": "Time (HH:MM)",

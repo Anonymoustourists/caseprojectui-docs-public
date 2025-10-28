@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [Michigan Court PDF to Markdown Conversion Specification](#michigan-court-pdf-to-markdown-conversion-specification)
   - [Conversion Rules](#conversion-rules)
@@ -35,7 +36,7 @@ The following patterns are automatically removed from the PDF text:
 #### Standard Headers
 
 - `STATE OF MICHIGAN` (normal and spaced-letter variants)
-- `COURT OF APPEALS` (normal and spaced-letter variants)  
+- `COURT OF APPEALS` (normal and spaced-letter variants)
 - `MICHIGAN SUPREME COURT`
 
 #### Page Elements
@@ -54,12 +55,12 @@ The following patterns are automatically removed from the PDF text:
 
 Court outline format is converted to Markdown headings:
 
-| Court Format | Markdown | Example |
-|--------------|----------|---------|
-| `I. TITLE` | `# I. TITLE` | Main sections |
-| `A. SUBTITLE` | `## A. SUBTITLE` | Subsections |
+| Court Format  | Markdown          | Example         |
+| ------------- | ----------------- | --------------- |
+| `I. TITLE`    | `# I. TITLE`      | Main sections   |
+| `A. SUBTITLE` | `## A. SUBTITLE`  | Subsections     |
 | `1. SUBPOINT` | `### 1. SUBPOINT` | Numbered points |
-| `i. DETAIL` | `#### i. DETAIL` | Detailed points |
+| `i. DETAIL`   | `#### i. DETAIL`  | Detailed points |
 
 **Important**: The system preserves the original numbering tokens (I., A., 1., i.) rather than converting to generic Markdown headers.
 
@@ -76,7 +77,7 @@ The system reconstructs paragraphs by:
 #### Legal Abbreviations (do NOT end sentences)
 
 - `MCL.` (Michigan Compiled Laws)
-- `MRE.` (Michigan Rules of Evidence)  
+- `MRE.` (Michigan Rules of Evidence)
 - `U.S.` (United States)
 - `Inc.`, `Co.`, `Ltd.`, `L.L.C.`, `L.L.P.` (Corporate suffixes)
 - `Ct.`, `App.` (Court abbreviations)
@@ -104,7 +105,7 @@ The system finds where the actual opinion begins by looking for:
 - `PER CURIAM.` - Most common start of COA opinions
 - Lines starting with `OPINION`
 
-#### Fallback Markers  
+#### Fallback Markers
 
 - First line matching heading patterns (`I.`, `A.`, `1.`, etc.)
 - Everything before these markers is considered caption/metadata
@@ -129,6 +130,7 @@ Footnotes are appended as:
 ## Footnotes
 
 [^1]: First footnote text here
+
 [^2]: Second footnote text here
 ```
 
@@ -234,7 +236,7 @@ On January 1, 2023, plaintiff filed his complaint against defendant.
 {
   "case_name": "John Doe v Jane Smith",
   "case_no": "123456",
-  "lc_no": "2023-001234-CZ", 
+  "lc_no": "2023-001234-CZ",
   "judges": "Judge A, Judge B, and Judge C",
   "date": "January 15, 2025",
   "publication": "UNPUBLISHED",

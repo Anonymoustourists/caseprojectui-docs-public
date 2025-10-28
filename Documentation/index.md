@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [📘 Project Index — Case Project Rebuild](#-project-index--case-project-rebuild)
   - [How to use this file](#how-to-use-this-file)
@@ -51,7 +52,9 @@ Legend:
 
 ## 🚧 In Progress / Incomplete PRs (top = higher priority)
 
+- ⚙️ **PR 87** — Case Registry & Court Dropdowns (MI District/Circuit) + Optional Judges + Default Designation
 - ⚙️ **PR 80** — Emoji and Icon Support for Events, People, Locations, and Sources
+- ⚙️ **PR 86** — Transcript Witness Sections & Phase Navigator
 - ⚙️ **PR 72** — Form Detection System: Document-Type-Specific Detectors and Template Creation (Michigan court forms)
 - ⚙️ **PR 66** — Enhanced Notebooks: Rich Text Rendering, Heading Navigation, and CITES View
   - Oct 2025: Single-pane WYSIWYG note editor with cite chips landed; follow-ups on serializer depth & editor engine migration tracked in todo.md
@@ -121,6 +124,7 @@ Legend:
 - [x] **PR 59** — Fix Missing Wizard JSON Files (Broken Symlinks) — Restored wizard functionality for creating people, events, and sources
 
 <!-- migrated PRs -->
+
 - [x] **PR 67** — Smart File Type Filtering — [PR notes](PRs/PR67-SMART-FILE-TYPE-FILTERING.md)
 - [x] **PR 68** — Sources Wizard Restructure — [design & runbook](PRs/PR68-WIZARD-RESTRUCTURE.md)
 - [x] **PR 78** — MI Maps + Address Autocomplete (Photon/Nominatim) + Locations Section — [design](PRs/in-progress/pr78.md) · [LOCATIONS_DESIGN](LOCATIONS_DESIGN.md)
@@ -163,15 +167,15 @@ Legend:
 
 ### ✏️ Source Editing
 
-- PR 7, PR 10, PR 14, PR 22, PR 35, PR 35A, PR 41, PR 80
+- PR 7, PR 10, PR 14, PR 22, PR 35, PR 35A, PR 41, PR 80, PR 86
 
 ### 📊 Data Management & Associations
 
-- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78
+- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78, PR 86, PR 87
 
 ### 📄 Source View
 
-- PR 6, PR 9, PR 18, PR 19, PR 20, PR 21, PR 23, PR 24, PR 41, PR 80
+- PR 6, PR 9, PR 18, PR 19, PR 20, PR 21, PR 23, PR 24, PR 41, PR 80, PR 86
 
 ### 📝 Notes & Notebooks
 

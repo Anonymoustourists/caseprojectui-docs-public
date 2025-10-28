@@ -131,6 +131,7 @@ When you first open Case Project, you'll see the main interface with a sidebar o
 ### What is a Project?
 
 A project is a container for all materials related to one case. Each project has its own:
+
 - Sources (documents, audio, video)
 - Events (hearings, filings, etc.)
 - People (witnesses, attorneys, etc.)
@@ -161,6 +162,7 @@ A project is a container for all materials related to one case. Each project has
 ### What is a Source?
 
 A "source" is any original document, audio file, or video file that contains case-related information. Examples:
+
 - Court transcripts (PDF)
 - Police reports (PDF)
 - Witness interviews (MP3, MP4)
@@ -181,7 +183,7 @@ A "source" is any original document, audio file, or video file that contains cas
    - **Document Type**: Select the type (Court Transcript, Police Report, etc.)
    - **Citation Name**: Short name for referencing (e.g., "Tr v1", "PR 2023-456")
    - **Date**: Date of the document (auto-detected from filename if possible)
-   
+
    **Step 2: Additional Details** (varies by document type)
    - For transcripts: Judge, case number, witnesses
    - For police reports: Agency, officer, incident number
@@ -193,6 +195,7 @@ A "source" is any original document, audio file, or video file that contains cas
 ### What Happens Next?
 
 After upload, Case Project automatically:
+
 1. **Saves the original file** to your project folder
 2. **Extracts the text** (for PDFs) or **transcribes the audio** (for A/V files)
 3. **Creates an event** linked to this source (e.g., "Court Hearing" for a transcript)
@@ -205,14 +208,18 @@ After upload, Case Project automatically:
 Case Project can now keep two extractions for every PDF so you can pick the cleanest result.
 
 1. Install the optional dependencies once:
+
    ```bash
    pip install -r requirements_minimal.txt
    ```
+
 2. Drop the PDFs you want to batch into an `inbox/` folder.
 3. Run the helper script from the repository root:
+
    ```bash
    python tools/ingest/dual_ingest.py --in inbox --out projects/<Project>/sources --reports projects/<Project>/reports
    ```
+
 4. Open your project. Each PDF becomes two sibling sources ending in `-native` and `-docling`.
 5. Open both, skim the title page, table of contents, and speaker formatting, then archive whichever version reads worse.
 6. Optional: review the generated `reports/<name>.report.md` for PASS/FAIL summaries of the automated detectors.
@@ -225,6 +232,7 @@ Use the splitter when a single PDF contains many filings or incident reports.
 
 1. Place the combined PDF in `inbox/`. If available, export its Register of Actions to CSV with columns such as `id,title,date,pages`.
 2. Run:
+
    ```bash
    python tools/splitter/split_cli.py \
      --pdf inbox/All_Filings_2024.pdf \
@@ -233,6 +241,7 @@ Use the splitter when a single PDF contains many filings or incident reports.
      --report projects/<Project>/reports/All_Filings_2024.split.md \
      --out projects/<Project>/sources
    ```
+
 3. Open the new **Split Review** view (beta) to inspect each proposed segment, drag pages between segments, merge or split, and rename titles.
 4. Click **Finalize** to write canonical child sources plus an audit manifest. If you are not ready to finalize yet, keep the generated session JSON so you can resume later.
 
@@ -258,6 +267,7 @@ Split suggestions reuse your feedback labels, so every correction sharpens the n
 Toggle between views using the **PDF/Text button** at the top.
 
 **For Audio/Video**, you see:
+
 - **Transcript**: Time-stamped dialogue
 - **Media Player**: Play/pause controls with synchronized highlighting
 
@@ -265,7 +275,7 @@ Toggle between views using the **PDF/Text button** at the top.
 
 Need to rename a document or tweak its wizard answers? Edit metadata right inside the viewer.
 
-1. Open the source. Click **More ▾** in the header to reveal advanced controls (detector selector, metadata shortcut, Docling toggles, dev-mode chip).  
+1. Open the source. Click **More ▾** in the header to reveal advanced controls (detector selector, metadata shortcut, Docling toggles, dev-mode chip).
    - Click **Less ▴** to collapse the extras. The toggle resets whenever you switch to another source.
 2. Choose **Edit Metadata**. The main pane swaps to the metadata editor.
 3. Update the dedicated fields at the top:
@@ -282,16 +292,18 @@ Need to rename a document or tweak its wizard answers? Edit metadata right insid
 A "citation" (or "cite") is a highlighted excerpt from a source that you want to reference or annotate.
 
 **To create a cite**:
+
 1. **Select text** by clicking and dragging in the document
 2. A popup appears with three options:
    - **CITE** — Create citation
    - **TAG** — Add tags (future feature)
    - **EVENT** — Create event from selection
 3. Click **"CITE"**
-4. *(Optional)* Add a label or note in the dialog that appears
+4. _(Optional)_ Add a label or note in the dialog that appears
 5. Click **"Create"**
 
 **Your cite is now saved!** It will appear:
+
 - As a highlight in the document
 - In the "Citations" list for this document
 - Available for embedding in notes
@@ -299,11 +311,13 @@ A "citation" (or "cite") is a highlighted excerpt from a source that you want to
 ### Viewing Your Cites
 
 **In the document**:
+
 - Highlighted text shows your citations
 - Hover over highlights to see cite details
 - Click highlights to view/edit
 
 **In the sidebar** (when viewing a document):
+
 - See a list of all cites for the current document
 - Click to jump to that location
 - Edit or delete cites
@@ -315,6 +329,7 @@ A "citation" (or "cite") is a highlighted excerpt from a source that you want to
 ### What are Notes?
 
 Notes are your personal workspace for organizing thoughts, outlining arguments, and building your case narrative. Think of them like a word processor, but with special powers:
+
 - **Embed citations** directly into your text
 - **Organize with headings** (auto table of contents)
 - **Rich formatting** (bold, italic, lists, etc.)
@@ -331,13 +346,13 @@ Notes are your personal workspace for organizing thoughts, outlining arguments, 
 
 The note editor formats text inline — no preview pane required. Use the toolbar at the top of the editor or keyboard shortcuts:
 
-| Control | Function |
-|---------|----------|
-| **H1–H5** | Apply heading levels (auto-builds the outline sidebar) |
-| **Bold** | Toggle bold (`Cmd/Ctrl + B`) |
-| **Italic** | Toggle italics (`Cmd/Ctrl + I`) |
-| **Insert Cite** | Drop the cite chip for the currently selected source segment |
-| **Insert Quote** | Insert the cite plus quoted text pulled from the source |
+| Control          | Function                                                     |
+| ---------------- | ------------------------------------------------------------ |
+| **H1–H5**        | Apply heading levels (auto-builds the outline sidebar)       |
+| **Bold**         | Toggle bold (`Cmd/Ctrl + B`)                                 |
+| **Italic**       | Toggle italics (`Cmd/Ctrl + I`)                              |
+| **Insert Cite**  | Drop the cite chip for the currently selected source segment |
+| **Insert Quote** | Insert the cite plus quoted text pulled from the source      |
 
 > Tip: You can still type Markdown if you prefer (e.g., `#` + space), but the editor immediately converts it to styled text.
 
@@ -346,32 +361,39 @@ The note editor formats text inline — no preview pane required. Use the toolba
 Citations appear as inline chips (📎 + label) so you can see exactly what’s linked.
 
 **Method 1: Insert Cite Button**
+
 1. Place the cursor where you want to add a cite
 2. Click **Insert Cite**
 3. Choose the document segment in the picker dialog
 4. The cite chip is inserted in-line, and the cursor moves after it so you can keep typing
 
 **Method 2: Insert Quote Button**
+
 1. Place the cursor where the quote should go
 2. Click **Insert Quote**
 3. Pick a cite segment that includes captured text
 4. The editor drops the quoted passage followed by the cite chip
 
 **Managing cites inside notes**
+
 - Click the ✕ button on a chip to remove it
 - Hover to see the quote or page/time metadata
 - Use the All Citations tab to audit every cite across the project
+
 ### Organizing Notes
 
 **Folders** (future feature):
+
 - Group related notes into folders
 - Example: "Witness Statements", "Motion to Suppress", "Trial Prep"
 
 **Tags**:
+
 - Add tags like `#credibility`, `#timeline`, `#evidence`
 - Filter notes by tag
 
 **Table of Contents**:
+
 - Automatically generated from your headings
 - Click to jump to sections
 - Appears in the sidebar when viewing a note
@@ -385,6 +407,7 @@ Citations appear as inline chips (📎 + label) so you can see exactly what’s 
 An event represents something that happened in your case. Events help you build a timeline and understand the sequence of activities.
 
 **Event Types**:
+
 - **Legal Events**: Court hearings, filings, rulings, trials
 - **Factual Events**: Incidents, observations, statements
 - **Investigatory Events**: Interviews, evidence collection, police actions
@@ -402,19 +425,20 @@ An event represents something that happened in your case. Events help you build 
 
 When you upload a source, Case Project automatically creates a related event:
 
-| Source Type | Auto-Created Event |
-|-------------|-------------------|
-| Court Transcript | Court Hearing |
-| Police Report | Police Report |
-| 911 Call | 911 Call |
-| Body Camera | Body Camera |
-| Interview Recording | A/V Interview |
+| Source Type         | Auto-Created Event |
+| ------------------- | ------------------ |
+| Court Transcript    | Court Hearing      |
+| Police Report       | Police Report      |
+| 911 Call            | 911 Call           |
+| Body Camera         | Body Camera        |
+| Interview Recording | A/V Interview      |
 
 You can edit these auto-created events to add more details.
 
 ### Creating an Event Manually
 
 **Method 1: From Event List**
+
 1. Go to **📅 Events**
 2. Click **"Create Event"** button
 3. Select **event type** (hearing, filing, interview, etc.)
@@ -440,6 +464,7 @@ Sometimes while reading a document, you come across a description of an event. Y
 Click any event in the list to see its details:
 
 **Information Shown**:
+
 - Event title and category
 - Date and time (if applicable)
 - Linked source document (if any)
@@ -448,6 +473,7 @@ Click any event in the list to see its details:
 - Custom fields (based on event type)
 
 **Actions You Can Take**:
+
 - **Edit**: Modify event details
 - **Link Source**: Associate a document with this event
 - **Add Participants**: Link people to this event with roles
@@ -489,6 +515,7 @@ The People section tracks individuals involved in your case: witnesses, attorney
 Once a person is created, you can associate them with specific sources and events.
 
 **Linking to an Event**:
+
 1. Open an event's detail view
 2. In the **Participants** section, click **"Add Participant"**
 3. Select the person
@@ -496,6 +523,7 @@ Once a person is created, you can associate them with specific sources and event
 5. Click **"Add"**
 
 **Linking to a Source**:
+
 1. Open a source document
 2. If it's a transcript/interview with speakers, click **"Associate Speaker"**
 3. Select the person from your list
@@ -506,6 +534,7 @@ Now when you see that person's name in the transcript, it's linked to their prof
 ### Viewing a Person's Appearances
 
 Click any person in the People list to see:
+
 - All events they're involved in
 - All sources where they appear
 - Their role in each context
@@ -525,6 +554,7 @@ Locations represent geographic places associated with people and events in your 
 2. See all locations from people and events in one place
 
 **View Modes**:
+
 - **List View** — Compact sidebar list with details
 - **Spreadsheet View** — Table with all location data
 - **Map View** — Interactive map with pins
@@ -536,11 +566,13 @@ Use the filter controls in the sidebar:
 **Search Box**: Find locations by name, city, county, or note
 
 **Type Filter**:
+
 - **All Types** — Show both people and events
 - **People Only** — Only show person locations
 - **Events Only** — Only show event locations
 
 **Date Range** (for events):
+
 - Set start and end dates to filter events by when they occurred
 
 **Clear Filters**: Click the "Clear Filters" button to reset
@@ -554,6 +586,7 @@ Use the filter controls in the sidebar:
    - **Green clusters** — Groups of nearby locations
 
 **Map Interactions**:
+
 - **Click a pin** — View details in popup
 - **Click a cluster** — Zoom in to see individual pins
 - **Pan and zoom** — Navigate the map freely
@@ -584,15 +617,15 @@ When creating or editing an event:
 
 Click the **expand button** in the sidebar to see all locations as a table:
 
-| Column | Description |
-|--------|-------------|
-| **Type** | Person or Event |
-| **Name** | Person name or event title |
-| **Address** | Street address |
-| **City** | City name |
-| **County** | County name |
-| **Date/Note** | Event date or person location note |
-| **Coordinates** | Latitude, longitude |
+| Column          | Description                        |
+| --------------- | ---------------------------------- |
+| **Type**        | Person or Event                    |
+| **Name**        | Person name or event title         |
+| **Address**     | Street address                     |
+| **City**        | City name                          |
+| **County**      | County name                        |
+| **Date/Note**   | Event date or person location note |
+| **Coordinates** | Latitude, longitude                |
 
 Click any row to select that location (highlights on map).
 
@@ -620,11 +653,13 @@ Click any row to select that location (highlights on map).
 ### Finding Citations
 
 **In a Source Document**:
+
 - All cites are highlighted
 - Use the cites sidebar to see a list
 - Click to jump to location
 
 **In Notes**:
+
 - Click the **"Insert Cite"** button to browse all cites
 - Use the search box to find specific quotes
 - Filter by source
@@ -671,6 +706,26 @@ If you've created a Person entry for a speaker:
 
 Now that speaker is linked to the person profile, and you can see all their testimony across documents.
 
+### Jumping to Witnesses & Phases
+
+When a transcript has defined witness sections, a **Jump…** dropdown appears in the viewer header:
+
+1. Open the transcript in Text or PDF mode.
+2. Use the dropdown to choose `Witness — Phase` (example: `Jane Smith — Cross (by Ms. Patel)`).
+3. The PDF view jumps to that page, and (if you're in Text mode) the reader scrolls to the first matching block.
+
+Need suggestions? Click **Suggest Sections** in the header. The sectionizer scans the table of contents plus standard cues (`DIRECT/CROSS/REDIRECT/RECROSS`, `BY MR./MS.`) and previews the proposed ranges before saving.
+
+### Smart Q/A Labels
+
+Enable **Smart Q/A Labels** in the header to make long transcripts easier to skim:
+
+- `A.` lines render as `WITNESS [NAME]: …` when the current witness is known.
+- `Q.` lines render as `MR./MS. [Examiner]: …` (falls back to `QUESTION:` if no examiner is recorded).
+- Toggle off at any time to see the original literal `Q.`/`A.` prefixes.
+
+These relabelings are presentation-only; the underlying transcript text and citations stay unchanged.
+
 ### Using Feedback Labels to Improve Detection
 
 Teach the system where important sections live while you review:
@@ -680,9 +735,11 @@ Teach the system where important sections live while you review:
 3. The footer badge shows pending submissions. The app retries automatically if you lose connectivity, so you can keep reading.
 4. Labeled sections appear as chips at the top of the document. Click a chip to jump back, or choose the ✎ icon to correct a mistake—the correction is logged as feedback too.
 5. When you want the system to learn from your work, run:
+
    ```bash
    python tools/profiles/compile_profiles.py --sources projects/<Project>/sources --out public/profiles
    ```
+
    The compiler promotes repeated patterns into reusable detection profiles for future documents.
 
 Every piece of feedback is appended to `sources/<sourceId>/feedback.jsonl`, giving you a full audit trail.
@@ -714,6 +771,7 @@ node scripts/add_form_detector.mjs MC227 "Judgment of Sentence"
 This adds the form type to the system and makes it available in the "Detector Type" dropdown.
 
 **For common forms** (11 Michigan forms), use the batch script:
+
 ```bash
 node scripts/setup_common_forms.mjs
 ```
@@ -721,6 +779,7 @@ node scripts/setup_common_forms.mjs
 **Step 2: Download Blank Form**
 
 Get a blank copy of the form from Michigan Courts website or use:
+
 ```bash
 node scripts/download_michigan_forms.mjs
 ```
@@ -747,6 +806,7 @@ node scripts/download_michigan_forms.mjs
 6. Click **"Done"** when finished
 
 **Common Field Labels**:
+
 - `defendant_name` — Defendant's name
 - `plaintiff_name` — Plaintiff's name
 - `case_number` — Case/docket number
@@ -768,6 +828,7 @@ node scripts/export_form_template.mjs [doc-id] MC227
 ```
 
 This creates:
+
 - `form_templates/criminal_disposition/MC227.json` — Field definitions
 - `form_templates/criminal_disposition/MC227.pdf` — Reference PDF
 
@@ -780,6 +841,7 @@ node scripts/training_stats.mjs
 ```
 
 **Output shows**:
+
 - Documents labeled per form type
 - Fields labeled per form
 - Visual progress bars
@@ -787,21 +849,25 @@ node scripts/training_stats.mjs
 ### Tips for Form Labeling
 
 **Accuracy**:
+
 - Draw boxes tight around field boundaries (not too big or small)
 - Include the entire field area where text will appear
 - Don't overlap boxes unless fields genuinely overlap
 
 **Consistency**:
+
 - Use the same label names across all similar fields
 - Follow naming conventions (e.g., `defendant_name` not `def_name`)
 - Label all instances (if a form has multiple defendant fields, label all)
 
 **Efficiency**:
+
 - Label blank forms first (cleaner, easier to see fields)
 - Focus on important fields first (names, dates, case numbers)
 - Optional fields can be added later
 
 **Organization**:
+
 - Each form type needs its own detector before labeling
 - Training data auto-saves to `training/{form-type}/{doc-id}/`
 - Export templates when labeling is complete
@@ -824,33 +890,33 @@ This will save hours of manual data entry for cases with many similar forms!
 
 ### Global Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
+| Shortcut       | Action                |
+| -------------- | --------------------- |
 | `Ctrl/Cmd + K` | Quick search (future) |
-| `Ctrl/Cmd + N` | New note |
-| `Ctrl/Cmd + S` | Save current item |
-| `Esc` | Close modal/dialog |
+| `Ctrl/Cmd + N` | New note              |
+| `Ctrl/Cmd + S` | Save current item     |
+| `Esc`          | Close modal/dialog    |
 
 ### Document Viewer Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl/Cmd + F` | Find in document (future) |
-| `→` or `Page Down` | Next page |
-| `←` or `Page Up` | Previous page |
-| `Home` | First page |
-| `End` | Last page |
+| Shortcut           | Action                    |
+| ------------------ | ------------------------- |
+| `Ctrl/Cmd + F`     | Find in document (future) |
+| `→` or `Page Down` | Next page                 |
+| `←` or `Page Up`   | Previous page             |
+| `Home`             | First page                |
+| `End`              | Last page                 |
 
 ### Note Editor Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl/Cmd + B` | Bold |
-| `Ctrl/Cmd + I` | Italic |
-| `Ctrl/Cmd + K` | Insert link (future) |
-| `Ctrl/Cmd + Shift + C` | Insert cite |
-| `Ctrl/Cmd + Z` | Undo |
-| `Ctrl/Cmd + Shift + Z` | Redo |
+| Shortcut               | Action               |
+| ---------------------- | -------------------- |
+| `Ctrl/Cmd + B`         | Bold                 |
+| `Ctrl/Cmd + I`         | Italic               |
+| `Ctrl/Cmd + K`         | Insert link (future) |
+| `Ctrl/Cmd + Shift + C` | Insert cite          |
+| `Ctrl/Cmd + Z`         | Undo                 |
+| `Ctrl/Cmd + Shift + Z` | Redo                 |
 
 ---
 
@@ -867,6 +933,7 @@ This will save hours of manual data entry for cases with many similar forms!
 ### Workflow Suggestions
 
 **For Transcript Review**:
+
 1. Upload transcript
 2. Open in document viewer
 3. Read through, creating cites for important testimony
@@ -875,6 +942,7 @@ This will save hours of manual data entry for cases with many similar forms!
 6. Insert cites into the note with your analysis
 
 **For Event Timeline**:
+
 1. Create all events manually or via source uploads
 2. Ensure every event has a date
 3. Go to **📅 Events** and sort by date
@@ -882,6 +950,7 @@ This will save hours of manual data entry for cases with many similar forms!
 5. Create a note called "Timeline" with embedded event references
 
 **For Evidence Organization**:
+
 1. Upload all sources first
 2. Tag each source by topic (e.g., #physical-evidence, #witness-statements)
 3. Create events for key incidents
@@ -908,13 +977,15 @@ This will save hours of manual data entry for cases with many similar forms!
 ### Upload Issues
 
 **Problem**: "Upload failed" error  
-**Solution**: 
+**Solution**:
+
 - Check file size (very large files may time out)
 - Verify file format is supported (PDF, MP3, MP4, WAV, etc.)
 - Try again — temporary network issue
 
 **Problem**: "Processing stuck" — upload succeeded but document won't open  
 **Solution**:
+
 - For PDFs: Check that PDF contains selectable text (not just images)
 - For A/V: Transcription takes time (1x speed) — wait and refresh
 - Check Settings → Dev Tools for processing status
@@ -923,12 +994,14 @@ This will save hours of manual data entry for cases with many similar forms!
 
 **Problem**: PDF shows blank pages  
 **Solution**:
+
 - Try switching to **Text View**
 - Refresh the browser
 - Check browser console for errors (F12)
 
 **Problem**: Text is garbled or wrong language  
 **Solution**:
+
 - PDF extraction quality depends on original PDF
 - Try re-uploading with better quality PDF
 - Use PDF View to see original formatting
@@ -937,12 +1010,14 @@ This will save hours of manual data entry for cases with many similar forms!
 
 **Problem**: Can't select text  
 **Solution**:
+
 - Make sure you're in **Text View** (not PDF view)
 - Text must be in a block (not headings or margins)
 - Try selecting smaller sections
 
 **Problem**: Cite doesn't appear in notes  
 **Solution**:
+
 - Check the cite ID is correct in your `[[CITE:id|text]]` syntax
 - Refresh the note
 - Verify the cite exists in the source document
@@ -951,12 +1026,14 @@ This will save hours of manual data entry for cases with many similar forms!
 
 **Problem**: App running slowly  
 **Solution**:
+
 - Large projects can slow down — consider archiving old cases
 - Close unused browser tabs
 - Clear browser cache
 
 **Problem**: Search not finding results  
 **Solution**:
+
 - Search looks in filenames and metadata (full-text search coming soon)
 - Try different keywords
 - Check spelling
@@ -968,6 +1045,7 @@ This will save hours of manual data entry for cases with many similar forms!
 ### Exporting Notes (Future Feature)
 
 Will support:
+
 - Export to Microsoft Word (.docx)
 - Export to PDF
 - Export to Markdown
@@ -976,11 +1054,13 @@ Will support:
 ### Backing Up Your Project
 
 **Current Setup**:
+
 - All project data is stored in the project folder
 - You can manually backup the entire folder
 - Recommended: Regular backups to external drive or cloud storage
 
 **Future**:
+
 - Built-in backup/export functionality
 - Cloud sync options
 - Project templates
@@ -1046,18 +1126,18 @@ A: Developers can edit wizard specifications in `server/config/wizards/`. User-c
 
 ### Source Document Types
 
-| Type | Description | Auto-Event |
-|------|-------------|------------|
-| **Court Transcript** | Record of court proceedings (hearing, trial, deposition) | Court Hearing (legal) |
-| **Court Filing** | Motion, brief, complaint, answer, etc. | Court Filing (legal) |
-| **Court Opinion** | Judge's written decision | Court Filing (legal) |
-| **Police Report** | Incident report, arrest report, investigation report | Police Report (investigatory) |
-| **A/V Interview** | Recorded interview (suspect, witness, etc.) | A/V Interview (investigatory) |
-| **Body Camera** | Body-worn camera footage | Body Camera (investigatory) |
-| **Dash Camera** | Dashboard camera footage | Dash Camera (investigatory) |
-| **911 Call** | Emergency call recording | 911 Call (investigatory) |
-| **Evidence Photo** | Photograph of physical evidence | N/A (manual event) |
-| **Document** | Generic document (email, letter, report, etc.) | N/A (manual event) |
+| Type                 | Description                                              | Auto-Event                    |
+| -------------------- | -------------------------------------------------------- | ----------------------------- |
+| **Court Transcript** | Record of court proceedings (hearing, trial, deposition) | Court Hearing (legal)         |
+| **Court Filing**     | Motion, brief, complaint, answer, etc.                   | Court Filing (legal)          |
+| **Court Opinion**    | Judge's written decision                                 | Court Filing (legal)          |
+| **Police Report**    | Incident report, arrest report, investigation report     | Police Report (investigatory) |
+| **A/V Interview**    | Recorded interview (suspect, witness, etc.)              | A/V Interview (investigatory) |
+| **Body Camera**      | Body-worn camera footage                                 | Body Camera (investigatory)   |
+| **Dash Camera**      | Dashboard camera footage                                 | Dash Camera (investigatory)   |
+| **911 Call**         | Emergency call recording                                 | 911 Call (investigatory)      |
+| **Evidence Photo**   | Photograph of physical evidence                          | N/A (manual event)            |
+| **Document**         | Generic document (email, letter, report, etc.)           | N/A (manual event)            |
 
 ### Event Categories
 

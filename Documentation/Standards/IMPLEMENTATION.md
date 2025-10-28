@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [JSON Data-Contract Bible — Implementation Summary](#json-data-contract-bible--implementation-summary)
   - [What Was Done](#what-was-done)
@@ -55,24 +56,24 @@
 
 ### 3. Key Sections
 
-| Section | Title | Purpose |
-|---------|-------|---------|
-| 0 | Purpose | Why this Bible exists |
-| 1 | Golden Invariants | 7 non-negotiable rules |
-| 2 | Canonical Types | TypeScript + Zod schemas |
-| 3 | Mapping Table | Source→Event (8 types) |
-| 4 | Indexes | Touched-only JSON indexes |
-| 5 | API Contract | Minimal, stable endpoints |
-| 6 | Validation Layers | Shape, soft, referential |
-| 7 | UI Guarantees | EventDetailsView behavior |
-| 8 | PR Checklists | Feature vs Refactor |
-| 9 | Tests Matrix | Unit, integration, e2e |
-| 10 | Runlog Evidence | Lint/test/build tails |
-| 11 | Migration Policy | Prototype: no migrations |
-| 12 | Tooling Stubs | Index writers, validation |
-| 13 | Troubleshooting | Common drift gotchas |
-| 14 | Codex Footer | AI agent instructions |
-| 15 | What to Do Now | Next steps |
+| Section | Title             | Purpose                   |
+| ------- | ----------------- | ------------------------- |
+| 0       | Purpose           | Why this Bible exists     |
+| 1       | Golden Invariants | 7 non-negotiable rules    |
+| 2       | Canonical Types   | TypeScript + Zod schemas  |
+| 3       | Mapping Table     | Source→Event (8 types)    |
+| 4       | Indexes           | Touched-only JSON indexes |
+| 5       | API Contract      | Minimal, stable endpoints |
+| 6       | Validation Layers | Shape, soft, referential  |
+| 7       | UI Guarantees     | EventDetailsView behavior |
+| 8       | PR Checklists     | Feature vs Refactor       |
+| 9       | Tests Matrix      | Unit, integration, e2e    |
+| 10      | Runlog Evidence   | Lint/test/build tails     |
+| 11      | Migration Policy  | Prototype: no migrations  |
+| 12      | Tooling Stubs     | Index writers, validation |
+| 13      | Troubleshooting   | Common drift gotchas      |
+| 14      | Codex Footer      | AI agent instructions     |
+| 15      | What to Do Now    | Next steps                |
 
 ---
 
@@ -90,16 +91,16 @@
 
 ## Source→Event Mapping Table
 
-| Source Type | Event Type | Category |
-|-------------|-----------|----------|
-| transcript | Court Hearing | legal |
-| court-filing | Court Filing | legal |
-| opinion | Court Filing | legal |
+| Source Type   | Event Type    | Category      |
+| ------------- | ------------- | ------------- |
+| transcript    | Court Hearing | legal         |
+| court-filing  | Court Filing  | legal         |
+| opinion       | Court Filing  | legal         |
 | police-report | Police Report | investigatory |
-| av-interview | A/V Interview | investigatory |
-| bodycam | Body Camera | investigatory |
-| dashcam | Dash Camera | investigatory |
-| 911-call | 911 Call | investigatory |
+| av-interview  | A/V Interview | investigatory |
+| bodycam       | Body Camera   | investigatory |
+| dashcam       | Dash Camera   | investigatory |
+| 911-call      | 911 Call      | investigatory |
 
 ---
 
@@ -235,13 +236,13 @@ Run lint/test/build and paste tails into the PR runlog.
 
 ## Troubleshooting Common Issues
 
-| Symptom | Likely Cause | Fix |
-|---------|--------------|-----|
-| New source uploaded but no event created | Ingest not calling `createEventForSource()` | Add hook in upload endpoint |
-| Event list slow | Scanning instead of using indexes | Use `eventsByCategory.json` lookup |
-| Legal tip not showing | Lost `category` prop or state mapping | Check EventDetailsView category logic |
-| People appearances empty | Participation not added or indexes not updated | Verify index writer hooks |
-| Duplicate saves without change | `requiresModification` flag not checked | Add validation in save handler |
+| Symptom                                  | Likely Cause                                   | Fix                                   |
+| ---------------------------------------- | ---------------------------------------------- | ------------------------------------- |
+| New source uploaded but no event created | Ingest not calling `createEventForSource()`    | Add hook in upload endpoint           |
+| Event list slow                          | Scanning instead of using indexes              | Use `eventsByCategory.json` lookup    |
+| Legal tip not showing                    | Lost `category` prop or state mapping          | Check EventDetailsView category logic |
+| People appearances empty                 | Participation not added or indexes not updated | Verify index writer hooks             |
+| Duplicate saves without change           | `requiresModification` flag not checked        | Add validation in save handler        |
 
 ---
 

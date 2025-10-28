@@ -13,24 +13,28 @@ This system uses AI to analyze blank SCAO (State Court Administrative Office) fo
 ### System Capabilities
 
 #### Phase 1: Form Detection ✅ COMPLETE
+
 - **One-Time Training**: Downloaded all 227 SCAO forms, analyzed with GPT-4o-mini
 - **Smart Detection**: AI identified unique text patterns that distinguish each form
 - **Auto-Classification**: Filled forms automatically matched to correct form type
 - **Files**: `config/detectors.wizard.json` (227 trained detectors)
 
 #### Phase 2: Field Structure Extraction 🔄 IN PROGRESS
+
 - **Field Templates**: AI extracts field definitions from blank forms
 - **Structured Definitions**: Each form has field IDs, types, labels, hint texts
 - **96 Priority Forms**: Selected high-value forms (criminal, judgments, probation)
 - **Files**: `form_sources/field_templates/{CODE}_fields.json`
 
 #### Phase 3: Wizard Integration 📋 PLANNED
+
 - **Guided Labeling**: Wizard shows pre-defined field list from templates
 - **User Training**: User clicks field → draws bbox on PDF → system learns
 - **Progressive Learning**: After ~5 labeled documents, system auto-extracts new ones
 - **Coordinate Storage**: Learned bbox coordinates stored per form type
 
 #### Phase 4: Auto-Extraction 🎯 FUTURE
+
 - **Pattern Matching**: Use learned coordinates to auto-populate wizard
 - **Confidence Scores**: Show extraction confidence, allow user corrections
 - **Continuous Learning**: Each correction improves future extractions
@@ -40,10 +44,10 @@ This system uses AI to analyze blank SCAO (State Court Administrative Office) fo
 ## Current Status (October 15, 2025)
 
 ### ✅ Completed
+
 1. **Form Detection** - All 227 forms trained
    - `config/detectors.wizard.json` - Smart detection patterns
    - Upload filled PDF → system identifies form type
-   
 2. **Form Crawler** - 8 Michigan Courts URLs
    - `forms/manifest.json` - 227 form metadata
    - `form_sources/raw/` - All blank PDFs downloaded
@@ -54,6 +58,7 @@ This system uses AI to analyze blank SCAO (State Court Administrative Office) fo
    - Output: `form_sources/field_templates/{CODE}_fields.json`
 
 ### 🔄 In Progress
+
 - Extracting field structures from 96 priority forms
 - Estimated completion: ~10 minutes
 - Cost: ~$3-5
@@ -61,30 +66,34 @@ This system uses AI to analyze blank SCAO (State Court Administrative Office) fo
 ### 📋 Next Steps
 
 #### Step 1: Complete Field Template Extraction
+
 - Wait for current extraction to finish
 - Review generated field templates
 - Commit to repository
 
 #### Step 2: Wizard Integration
+
 Build UI components to use field templates:
+
 ```javascript
 // Load field template for detected form
 const template = await loadFieldTemplate(detectedFormCode);
 
 // Display field checklist in wizard
-<FieldChecklist fields={template.fields} />
+<FieldChecklist fields={template.fields} />;
 
 // User clicks field → draws bbox → save coordinates
 onFieldLabeled(fieldId, bbox);
 ```
 
 #### Step 3: Coordinate Storage System
+
 ```json
 {
   "formCode": "MC227",
   "learnedFields": {
     "defendant_name": {
-      "bbox": {"x": 100, "y": 200, "w": 300, "h": 20},
+      "bbox": { "x": 100, "y": 200, "w": 300, "h": 20 },
       "confidence": 0.95,
       "sampleCount": 12
     }
@@ -93,6 +102,7 @@ onFieldLabeled(fieldId, bbox);
 ```
 
 #### Step 4: Auto-Extraction Engine
+
 - Match learned coordinates to new PDFs
 - Extract text at those positions
 - Pre-populate wizard fields
@@ -189,6 +199,7 @@ node scripts/train_form_detectors.mjs MC227
 ```
 
 **What this does:**
+
 1. Reads each blank PDF
 2. Sends to GPT-4o-mini: "Identify unique text patterns on this form"
 3. GPT finds distinctive phrases, headers, form codes
@@ -208,6 +219,7 @@ node scripts/extract_selected_forms.mjs
 ```
 
 **What this does:**
+
 1. Reads blank PDF for each selected form
 2. Sends to GPT-4o-mini: "List all fields on this form"
 3. GPT identifies field IDs, types, labels, hint texts
@@ -215,6 +227,7 @@ node scripts/extract_selected_forms.mjs
 5. Wizard can show pre-defined field checklist for guided labeling
 
 **Status:** 🔄 Running on 96 priority forms (est. 10 min)
+
 - 46 HIGH priority (criminal sentences, charges, judgments)
 - 40 MED priority (probation, bonds, appeals)
 - 10 LOW priority (administrative, fee waivers)
@@ -229,6 +242,7 @@ node scripts/generate_labels_from_detectors.mjs
 ### 5. Test Detection
 
 Upload a filled SCAO form to the Case Project UI. The system should automatically:
+
 - Detect which form type it is (e.g., "MC227 - Judgment of Sentence")
 - Set the detector type automatically
 - Extract fields based on the learned patterns
@@ -240,6 +254,7 @@ Upload a filled SCAO form to the Case Project UI. The system should automaticall
 ### When to Re-Sync
 
 SCAO forms don't update frequently. Only re-run the sync when:
+
 - Michigan Courts announces new forms
 - You notice a form revision you don't have
 - Approximately: Check quarterly or semi-annually
@@ -268,11 +283,13 @@ Crawls Michigan court form indexes and downloads PDFs.
 **Important:** Requires Playwright because the Michigan Courts website uses JavaScript rendering (React/Vue framework). Static HTML fetching returns an empty page. The script launches a Chromium browser to render the page and extract form listings from dynamically loaded div elements.
 
 **Usage:**
+
 ```bash
 node scripts/scao_sync.mjs [--areas=all,circuit,district] [--force]
 ```
 
 **Options:**
+
 - `--areas`: Comma-separated list of areas to sync (default: `all`)
   - `all`: Michigan Court Forms index (most comprehensive, 227+ forms)
   - `circuit`: Circuit Court forms
@@ -280,11 +297,13 @@ node scripts/scao_sync.mjs [--areas=all,circuit,district] [--force]
 - `--force`: Re-download all PDFs even if unchanged
 
 **Output:**
+
 - `forms/manifest.json`: Form metadata (code, title, revised date, hash, etc.)
 - `form_sources/raw/{CODE}/{CODE}_YYYY-MM.pdf`: Downloaded PDFs
 - `tmp/scao_debug.html`: Rendered HTML for debugging (optional)
 
 **Example:**
+
 ```bash
 # Sync all forms
 node scripts/scao_sync.mjs --areas all
@@ -298,11 +317,13 @@ node scripts/scao_sync.mjs --areas circuit --force
 Generates form registry and auto-registers new forms as detectors.
 
 **Usage:**
+
 ```bash
 node scripts/build_form_registry.mjs
 ```
 
 **Process:**
+
 1. Reads `forms/manifest.json`
 2. Generates `config/forms.registry.json` with clean mappings
 3. Checks existing detectors in `config/detectors.wizard.json`
@@ -310,9 +331,11 @@ node scripts/build_form_registry.mjs
 5. Regenerates `config/labels.yml`
 
 **Output:**
+
 - `config/forms.registry.json`: Form code → name/category/pdf mappings
 
 **Example Registry Entry:**
+
 ```json
 {
   "MC227": {
@@ -333,22 +356,26 @@ node scripts/build_form_registry.mjs
 Uses OpenAI GPT-4 to analyze PDF and suggest field names/locations.
 
 **Usage:**
+
 ```bash
 node scripts/suggest_fields.mjs [form-code] [pdf-path]
 ```
 
 **Example:**
+
 ```bash
 node scripts/suggest_fields.mjs MC227 form_sources/raw/MC227/MC227_2025-03.pdf
 ```
 
 **Process:**
+
 1. Extracts text from PDF page 1 using `pdftotext`
 2. Calls OpenAI API with structured prompt
 3. Parses JSON response with field suggestions
 4. Saves to `form_sources/suggestions/{CODE}_suggestions.json`
 
 **Output Format:**
+
 ```json
 {
   "formCode": "MC227",
@@ -373,6 +400,7 @@ node scripts/suggest_fields.mjs MC227 form_sources/raw/MC227/MC227_2025-03.pdf
 ```
 
 **Supported Field Types:**
+
 - `text`: Generic text field
 - `date`: Date fields (filing date, DOB, offense date)
 - `case_number`: Case/docket/file numbers
@@ -393,6 +421,7 @@ The workflow runs every night at 2 AM EST:
 **File:** `.github/workflows/scao-sync.yml`
 
 **Steps:**
+
 1. Checkout repository
 2. Install dependencies + poppler-utils
 3. Run `scao_sync.mjs --areas all`
@@ -403,6 +432,7 @@ The workflow runs every night at 2 AM EST:
 8. Create pull request if changes detected
 
 **PR Contents:**
+
 - Commit message with summary
 - Changelog with new/updated forms
 - Links to official "Recently Revised" page
@@ -428,6 +458,7 @@ node scripts/scao_sync.mjs --areas all
 ```
 
 **What happens:**
+
 - Fetches HTML from Michigan Courts indexes
 - Parses tables to extract form metadata
 - Downloads PDFs to `form_sources/raw/{CODE}/`
@@ -441,6 +472,7 @@ node scripts/build_form_registry.mjs
 ```
 
 **What happens:**
+
 - Reads `forms/manifest.json`
 - Generates clean registry with code → name mappings
 - Compares against existing detectors
@@ -454,6 +486,7 @@ node scripts/suggest_fields.mjs MC227 form_sources/raw/MC227/MC227_2025-03.pdf
 ```
 
 **What happens:**
+
 - Extracts page-1 text with `pdftotext`
 - Sends to OpenAI API with structured prompt
 - Receives JSON with field suggestions
@@ -462,6 +495,7 @@ node scripts/suggest_fields.mjs MC227 form_sources/raw/MC227/MC227_2025-03.pdf
 ### 4. Manual Labeling
 
 **In UI:**
+
 1. Upload blank MC227 PDF
 2. Select "MC227 - Application to Set Aside Conviction(s)" as Detector Type
 3. Open PDF Label Mode
@@ -470,6 +504,7 @@ node scripts/suggest_fields.mjs MC227 form_sources/raw/MC227/MC227_2025-03.pdf
 6. Assign labels (defendant_name, case_number, etc.)
 
 **Behind the scenes:**
+
 - Annotations save to `training/form_mc227/{docId}/annotations.jsonl`
 - PDF copies to `training/form_mc227/{docId}/document.pdf`
 - Metadata tracks label count
@@ -481,6 +516,7 @@ node scripts/export_form_template.mjs 01K7MD367W9S740P65SVMZR5KR MC227
 ```
 
 **What happens:**
+
 - Reads training annotations
 - Extracts bbox coordinates for each label
 - Infers field types from label names
@@ -535,22 +571,25 @@ form_templates/
 ### Environment Variables
 
 **`.env.local`:**
-```bash
+
+````bash
 VITE_API_BASE=http://localhost:5050
 ```env
 # .env.local
 OPENAI_API_KEY=your-openai-api-key-here
-```
+````
 
 ### Source URLs
 
 **Defined in `scripts/scao_sync.mjs`:**
+
 ```javascript
 const INDEXES = {
-  all: 'https://www.courts.michigan.gov/SCAO-forms/Michigan-court-forms/',
-  circuit: 'https://www.courts.michigan.gov/SCAO-forms/circuit-court-forms/',
-  district: 'https://www.courts.michigan.gov/SCAO-forms/district-court-index/',
-  revised: 'https://www.courts.michigan.gov/SCAO-forms/recently-revised-court-forms/'
+  all: "https://www.courts.michigan.gov/SCAO-forms/Michigan-court-forms/",
+  circuit: "https://www.courts.michigan.gov/SCAO-forms/circuit-court-forms/",
+  district: "https://www.courts.michigan.gov/SCAO-forms/district-court-index/",
+  revised:
+    "https://www.courts.michigan.gov/SCAO-forms/recently-revised-court-forms/",
 };
 ```
 
@@ -599,6 +638,7 @@ Each generated field template follows this structure:
 ```
 
 **Field Types:**
+
 - `name` - Person names
 - `text` - General text
 - `date` - Dates
@@ -612,6 +652,7 @@ Each generated field template follows this structure:
 - `dropdown` - Dropdown selections
 
 **How Fields Are Used:**
+
 1. **Wizard UI**: Display field checklist for user
 2. **Hint Texts**: Help user locate field on PDF
 3. **Type Validation**: Enforce data type rules
@@ -625,6 +666,7 @@ Each generated field template follows this structure:
 Forms were prioritized based on case management value:
 
 ### HIGH Priority (46 forms)
+
 - Criminal sentences and judgments
 - Felony/misdemeanor charges and complaints
 - Probation violations and orders
@@ -632,6 +674,7 @@ Forms were prioritized based on case management value:
 - Traffic citations and DUI forms
 
 ### MED Priority (40 forms)
+
 - Bond modifications and receipts
 - Pretrial releases and continuances
 - Attorney appointments
@@ -639,12 +682,14 @@ Forms were prioritized based on case management value:
 - Restitution orders
 
 ### LOW Priority (10 forms)
+
 - Fee waivers and administrative forms
 - Interpreter requests
 - Media coverage requests
 - Case inventory forms
 
 **Selection File:** `SCAO_FORMS_CHECKLIST.csv`
+
 - Edit "Include" column (YES/NO) to change selection
 - Re-run extraction: `node scripts/extract_selected_forms.mjs`
 
@@ -697,6 +742,7 @@ Forms were prioritized based on case management value:
 **Goal:** Auto-extract data from filled forms
 
 **Plan:**
+
 1. Detect form type from uploaded PDF (keyword matching)
 2. Load matching template from `form_templates/`
 3. OCR text from each bbox region
@@ -709,6 +755,7 @@ Forms were prioritized based on case management value:
 **Goal:** Improve field detection over time
 
 **Plan:**
+
 1. Collect user corrections as feedback
 2. Fine-tune field type classifier
 3. Improve bbox suggestions
@@ -719,6 +766,7 @@ Forms were prioritized based on case management value:
 **Goal:** Support forms from other states
 
 **Plan:**
+
 1. Add new crawlers for other state courts
 2. Generalize registry structure
 3. Support jurisdiction-specific categories
@@ -731,11 +779,13 @@ Forms were prioritized based on case management value:
 ### OpenAI Field Suggestion Prompt
 
 **System:**
+
 ```
 You are an expert at analyzing legal forms and identifying data fields. Always return valid JSON.
 ```
 
 **User Prompt Structure:**
+
 ```
 You are analyzing a Michigan court form (MC227 - Application to Set Aside Conviction(s)).
 
@@ -833,9 +883,9 @@ cat form_sources/suggestions/MC227_suggestions.json | jq '.suggestions'
 
 ## Resources
 
-- **Michigan Courts Forms**: https://www.courts.michigan.gov/SCAO-forms/
-- **Recently Revised**: https://www.courts.michigan.gov/SCAO-forms/recently-revised-court-forms/
-- **Explanation of Changes**: https://www.courts.michigan.gov/SCAO-forms/explanationofchanges-eoc/
+- **Michigan Courts Forms**: <https://www.courts.michigan.gov/SCAO-forms/>
+- **Recently Revised**: <https://www.courts.michigan.gov/SCAO-forms/recently-revised-court-forms/>
+- **Explanation of Changes**: <https://www.courts.michigan.gov/SCAO-forms/explanationofchanges-eoc/>
 - **Form Detection System**: `Documentation/TECHNICAL_REFERENCE.md#form-detection-system`
 - **Template Creation Guide**: `form_templates/README.md`
 

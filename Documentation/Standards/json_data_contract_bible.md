@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
 
 - [JSON Data-Contract "Bible" for Case-Project-UI](#json-data-contract-bible-for-case-project-ui)
   - [0) Purpose](#0-purpose)
@@ -61,15 +62,15 @@ SQL yells when you drift. JSON doesn't. This "Bible" gives you **contracts + gat
 export type EventCategory = "legal" | "factual" | "investigatory";
 
 export type EventItem = {
-  id: string;                       // ULID
-  title: string;                    // system title
-  customTitle?: string;             // user override
+  id: string; // ULID
+  title: string; // system title
+  customTitle?: string; // user override
   category: EventCategory;
-  date?: string;                    // "YYYY-MM-DD"
-  datetime?: string;                // ISO 8601
+  date?: string; // "YYYY-MM-DD"
+  datetime?: string; // ISO 8601
   wizard?: {
     entity: "events";
-    type: string;                   // e.g. "hearing", "police_report"
+    type: string; // e.g. "hearing", "police_report"
     answers: Record<string, any>;
     template_id: string;
     spec_version: number;
@@ -91,15 +92,20 @@ export type EventItem = {
 
 ```ts
 export type SourceItem = {
-  id: string;                       // ULID
+  id: string; // ULID
   type:
-    | "transcript" | "court-filing" | "opinion"
-    | "police-report" | "av-interview"
-    | "bodycam" | "dashcam" | "911-call";
+    | "transcript"
+    | "court-filing"
+    | "opinion"
+    | "police-report"
+    | "av-interview"
+    | "bodycam"
+    | "dashcam"
+    | "911-call";
   name: string;
   path?: string;
   metadata?: Record<string, any>;
-  participants?: Participation[];   // People linked to this source
+  participants?: Participation[]; // People linked to this source
   createdAt?: string;
   updatedAt?: string;
 };
@@ -109,21 +115,70 @@ export type SourceItem = {
 
 ```ts
 export type PersonRole =
-  | "speaker" | "witness" | "defendant" | "complainant"
-  | "interviewee" | "interviewer" | "declarant" | "officer"
-  | "caller_911" | "dispatcher_911" | "attorney" | "judge" | "other";
+  | "speaker"
+  | "witness"
+  | "defendant"
+  | "complainant"
+  | "interviewee"
+  | "interviewer"
+  | "declarant"
+  | "officer"
+  | "caller_911"
+  | "dispatcher_911"
+  | "attorney"
+  | "judge"
+  | "other";
 
 export type Participation = {
-  personId: string;                 // ULID of Person
+  personId: string; // ULID of Person
   role: PersonRole;
-  eventId?: string;                 // optional anchor
-  sourceId?: string;                // optional anchor
-  startMs?: number; endMs?: number; // AV anchor
-  page?: number;                    // PDF anchor
+  eventId?: string; // optional anchor
+  sourceId?: string; // optional anchor
+  startMs?: number;
+  endMs?: number; // AV anchor
+  page?: number; // PDF anchor
   note?: string;
-  addedAt?: string; addedBy?: string;
+  addedAt?: string;
+  addedBy?: string;
 };
 ```
+
+### 2.4 Case (PR87)
+
+```ts
+export type CourtKind = "district" | "circuit" | "mcoa" | "msc";
+
+export type CaseCourt = {
+  kind: CourtKind;
+  code?: string; // For district/circuit only. Up to 3 letters/digits, e.g., "36", "41A", "14B"
+  numbers: string[]; // One or more docket/case numbers
+  judges?: string[]; // Optional: one or more judges tied to THIS case for the selected court
+  isDefault?: boolean; // If true, this is the default court for the case (max one per case)
+};
+
+export type CaseItem = {
+  id: string; // ULID
+  title: string; // e.g., "People v. Smith"
+  description?: string;
+  courts: CaseCourt[]; // ≥1; each with ≥1 number
+  isDefault?: boolean; // If true, this is the default case for the project (max one per project)
+  createdAt?: string;
+  updatedAt?: string;
+};
+```
+
+**Golden Invariants (Cases)**:
+
+1. Each Case has ≥1 court.
+2. Each listed court has ≥1 docket/case number.
+3. For district/circuit, `code` is required (1–5 chars matching regex `^[A-Za-z0-9-]{1,5}$`). For mcoa/msc, `code` is forbidden.
+4. `judges[]` is optional and scoped to the specific CaseCourt entry.
+5. Max one `isDefault=true` court per case; max one `isDefault=true` case per project.
+
+**Court Dropdown Data**:
+
+- `constants/mi_courts.ts` provides labeled options for District/Circuit selection (sourced from Wikipedia, Oct 28, 2025).
+- Update on a touched-only basis when court structures change.
 
 > Use Zod schemas mirroring these types for **shape validation** at API boundaries.
 
@@ -152,11 +207,11 @@ These mappings **must** exist and be used by ingest:
 
 Persist **small** JSON indexes; update them only when related entities change:
 
-* `eventsBySource.json`: `{ [sourceId]: string[] /* eventIds */ }`
-* `eventsByCategory.json`: `{ legal:string[], factual:string[], investigatory:string[] }`
-* `sourcesByPerson.json`: `{ [personId]: string[] /* sourceIds */ }`
-* `eventsByPerson.json`: `{ [personId]: string[] /* eventIds */ }`
-* `citesByEvent.json`: `{ [eventId]: string[] /* citeIds */ }`
+- `eventsBySource.json`: `{ [sourceId]: string[] /* eventIds */ }`
+- `eventsByCategory.json`: `{ legal:string[], factual:string[], investigatory:string[] }`
+- `sourcesByPerson.json`: `{ [personId]: string[] /* sourceIds */ }`
+- `eventsByPerson.json`: `{ [personId]: string[] /* eventIds */ }`
+- `citesByEvent.json`: `{ [eventId]: string[] /* citeIds */ }`
 
 > Never scan full stores inside UI. Prefer these lookups.
 
@@ -164,14 +219,14 @@ Persist **small** JSON indexes; update them only when related entities change:
 
 ## 5) API Contract (minimal, stable)
 
-* `PUT /api/events/:id/source` → `{ sourceId }` links/replaces source.
-* `POST /api/events/:id/duplicate` → clones, suffix "(Copy)", sets `requiresModification: true` in response.
-* `DELETE /api/events/:id` → removes event (non-destructive to sources/cites).
-* `GET /api/events/by-source/:sourceId` → `[EventSummary]`.
-* `GET /api/events?category=...` → `[EventSummary]`.
-* `POST /api/events/:id/participants` / `DELETE .../participants/:idx`.
-* `POST /api/sources/:id/participants` / `DELETE .../participants/:idx`.
-* `GET /api/people/:personId/appearances` → `{ events:[], sources:[] }`.
+- `PUT /api/events/:id/source` → `{ sourceId }` links/replaces source.
+- `POST /api/events/:id/duplicate` → clones, suffix "(Copy)", sets `requiresModification: true` in response.
+- `DELETE /api/events/:id` → removes event (non-destructive to sources/cites).
+- `GET /api/events/by-source/:sourceId` → `[EventSummary]`.
+- `GET /api/events?category=...` → `[EventSummary]`.
+- `POST /api/events/:id/participants` / `DELETE .../participants/:idx`.
+- `POST /api/sources/:id/participants` / `DELETE .../participants/:idx`.
+- `GET /api/people/:personId/appearances` → `{ events:[], sources:[] }`.
 
 **Rule**: If you add an endpoint, add a **contract note** to this Bible and a test.
 
@@ -179,9 +234,9 @@ Persist **small** JSON indexes; update them only when related entities change:
 
 ## 6) Validation Layers (prototype stance)
 
-* **Layer A: Shape** (Zod): run on every API write. Reject missing required fields, bad enums, wrong types.
-* **Layer B: Soft rules**: no blocking for unlinked `legal` events—render UI tips instead.
-* **Layer C: Referential**: **disabled** in prototype (no sweeping checks), but provide a `validate-now` script devs can run locally.
+- **Layer A: Shape** (Zod): run on every API write. Reject missing required fields, bad enums, wrong types.
+- **Layer B: Soft rules**: no blocking for unlinked `legal` events—render UI tips instead.
+- **Layer C: Referential**: **disabled** in prototype (no sweeping checks), but provide a `validate-now` script devs can run locally.
 
 Sample `validate-now` (touched files only):
 
@@ -197,10 +252,10 @@ node tools/validate_touched.js  # identifies changed entities in this branch
 
 ## 7) UI Guarantees
 
-* **EventDetailsView** shows **Linked Source** chip with Link/Replace; shows **non-blocking** tip for `legal && !sourceId`.
-* **Source upload** → toast "Event created: <title>" (optional navigate).
-* **People Panel** shows **Appearances** tabs (Events, Sources) with role badges.
-* **Cite create** from transcript speaker block → suggests linking that speaker to the event/source.
+- **EventDetailsView** shows **Linked Source** chip with Link/Replace; shows **non-blocking** tip for `legal && !sourceId`.
+- **Source upload** → toast "Event created: <title>" (optional navigate).
+- **People Panel** shows **Appearances** tabs (Events, Sources) with role badges.
+- **Cite create** from transcript speaker block → suggests linking that speaker to the event/source.
 
 ---
 
@@ -208,21 +263,21 @@ node tools/validate_touched.js  # identifies changed entities in this branch
 
 ### 8.1 Feature PR (e.g., PR61/PR62)
 
-* [ ] Respects **Golden Invariants** (Sec. 1).
-* [ ] Source→Event mapping unchanged (or updated here if intended).
-* [ ] All new/changed types updated in `types/` and Zod schemas.
-* [ ] Index writers updated for all create/update/delete paths you touched.
-* [ ] UI: EventDetailsView source chip & legal-tip behavior unchanged.
-* [ ] People participation UI present where relevant (Events/Sources).
-* [ ] Added/updated **unit**, **integration**, and **e2e** tests (Sec. 9).
-* [ ] Appended lint/test/build tails to runlog.
-* [ ] This Bible updated if contracts changed.
+- [ ] Respects **Golden Invariants** (Sec. 1).
+- [ ] Source→Event mapping unchanged (or updated here if intended).
+- [ ] All new/changed types updated in `types/` and Zod schemas.
+- [ ] Index writers updated for all create/update/delete paths you touched.
+- [ ] UI: EventDetailsView source chip & legal-tip behavior unchanged.
+- [ ] People participation UI present where relevant (Events/Sources).
+- [ ] Added/updated **unit**, **integration**, and **e2e** tests (Sec. 9).
+- [ ] Appended lint/test/build tails to runlog.
+- [ ] This Bible updated if contracts changed.
 
 ### 8.2 Refactor PR
 
-* [ ] No change to mapping table or invariants unless explicitly documented.
-* [ ] Index updates still triggered on touched entities.
-* [ ] CI runs **validate_touched** and tests.
+- [ ] No change to mapping table or invariants unless explicitly documented.
+- [ ] Index updates still triggered on touched entities.
+- [ ] CI runs **validate_touched** and tests.
 
 ---
 
@@ -255,12 +310,11 @@ npm run build
 
 ## 11) Migration Policy
 
-* **Prototype**: **No migrations.** Ignore legacy drift; only update touched records.
-* **Hardening phase (future)**: introduce `gate:data` script to fail CI on:
-
-  * `legal` events without `sourceId` (if/when you decide to enforce)
-  * unknown `personId/eventId/sourceId` in participants
-  * cites pointing to missing anchors
+- **Prototype**: **No migrations.** Ignore legacy drift; only update touched records.
+- **Hardening phase (future)**: introduce `gate:data` script to fail CI on:
+  - `legal` events without `sourceId` (if/when you decide to enforce)
+  - unknown `personId/eventId/sourceId` in participants
+  - cites pointing to missing anchors
 
 > Until then, keep gates non-blocking and focused on new writes.
 
@@ -291,7 +345,8 @@ export async function onEventDelete(ev: EventItem) {
 const touched = getTouchedEntitiesFromGitDiff();
 for (const ev of touched.events) {
   zEvent.parse(ev); // shape
-  if (ev.category === "legal" && !ev.sourceId) warn("Legal event without source", ev.id);
+  if (ev.category === "legal" && !ev.sourceId)
+    warn("Legal event without source", ev.id);
 }
 for (const link of touched.participations) {
   if (!maybePerson(link.personId)) warn("Unknown personId", link);
@@ -303,11 +358,11 @@ process.exit(0); // never fail prototype
 
 ## 13) Troubleshooting Drift (common gotchas)
 
-* **New source uploaded but no event created** → ingest path isn't calling `createEventForSource()`.
-* **Event list slow** → you're scanning instead of using `eventsByCategory`.
-* **Legal tip not showing** → UI lost the `category` prop or state mapping.
-* **People appearances empty** → participation wasn't added, or indexes not updated on write.
-* **Duplicate saves without change** → the `requiresModification` flag isn't checked in UI.
+- **New source uploaded but no event created** → ingest path isn't calling `createEventForSource()`.
+- **Event list slow** → you're scanning instead of using `eventsByCategory`.
+- **Legal tip not showing** → UI lost the `category` prop or state mapping.
+- **People appearances empty** → participation wasn't added, or indexes not updated on write.
+- **Duplicate saves without change** → the `requiresModification` flag isn't checked in UI.
 
 ---
 
@@ -327,10 +382,9 @@ Run lint/test/build and paste tails into the PR runlog.
 
 ## 15) What to do **right now**
 
-* Add this file to `/Documentation/Standards/json_data_contract_bible.md`. ✅
-* In PR61 & PR62 descriptions, include the **PR checklist** (Sec. 8.1).
-* Ask Codex to:
-
+- Add this file to `/Documentation/Standards/json_data_contract_bible.md`. ✅
+- In PR61 & PR62 descriptions, include the **PR checklist** (Sec. 8.1).
+- Ask Codex to:
   1. Add Zod schemas mirroring Sec. 2 to your API boundaries (if not already present).
   2. Add `tools/index_writer.ts` hooks to event/source write paths.
   3. Add `tools/validate_touched.js` (prototype warnings only) and a `npm run validate:touched` script.
