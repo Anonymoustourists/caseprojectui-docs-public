@@ -53,6 +53,7 @@ Legend:
 ## 🚧 In Progress / Incomplete PRs (top = higher priority)
 
 - ⚙️ **PR 87** — Case Registry & Court Dropdowns (MI District/Circuit) + Optional Judges + Default Designation
+
 - ⚙️ **PR 80** — Emoji and Icon Support for Events, People, Locations, and Sources
 - ⚙️ **PR 86** — Transcript Witness Sections & Phase Navigator
 - ⚙️ **PR 72** — Form Detection System: Document-Type-Specific Detectors and Template Creation (Michigan court forms)
@@ -87,6 +88,7 @@ Legend:
 ## ✅ Completed PRs
 
 - [x] **PR 3** — Ingestion UI + Source Storage + Standardized Filenames
+- [x] **PR 87** — Docs normalization to satisfy markdownlint gates; archives ignored.
 - [x] **PR 4** — Export Markdown
 - [x] **PR 5** — Ingestion → Canonical (minimal happy path)
 - [x] **PR 6** — Viewer ↔ Canonical mapping (read-only)
@@ -237,7 +239,7 @@ Make targets:
 
 LLM review runs only if thresholds are tripped; never part of gate.
 
-```
+```text
 
 want me to wire in live links (e.g., `[PR 5](PRs/pr5.md)` and `[runlog](PRs/runlog-PR5.md)`) for every item now, or keep it minimal until you migrate the files into `/Documentation/PRs/`?
 ```
