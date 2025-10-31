@@ -1,7 +1,7 @@
 # AI Coding Agent Instructions (for VSC and Codex)
-
-applyTo: "\*\*"
-
+---
+applyTo: "**"
+---
 # Case Project — Canonical Instructions for Copilot & Agents
 
 This repository is a **ground-up rebuild**.

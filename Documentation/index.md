@@ -124,12 +124,21 @@ Legend:
 - [x] **PR 41** — Sources Viewer UX polish: cite dropdown, inline chips, simplified Dialogue view
 - [x] **PR 58** — Cleanup: remove heavy corpora from main; documentation and runlog added (merged via <https://github.com/Anonymoustourists/caseprojectui/pull/11>)
 - [x] **PR 59** — Fix Missing Wizard JSON Files (Broken Symlinks) — Restored wizard functionality for creating people, events, and sources
+- [x] **PR 88** — Root tidy: archive ephemeral files & unify ESLint flat config (merged via <https://github.com/Anonymoustourists/caseprojectui/pull/14>) — commit `0ff816d1386c223af49e20a3b5a6008b68fda188`
 
 <!-- migrated PRs -->
 
 - [x] **PR 67** — Smart File Type Filtering — [PR notes](PRs/PR67-SMART-FILE-TYPE-FILTERING.md)
 - [x] **PR 68** — Sources Wizard Restructure — [design & runbook](PRs/PR68-WIZARD-RESTRUCTURE.md)
 - [x] **PR 78** — MI Maps + Address Autocomplete (Photon/Nominatim) + Locations Section — [design](PRs/in-progress/pr78.md) · [LOCATIONS_DESIGN](LOCATIONS_DESIGN.md)
+
+### Triage — 2025-10-30
+
+- PR85 — completed: implemented (commit abc123). (Stamped TRIAGE; moved from in-progress.)
+- pr78 — completed: implemented (maps). (Stamped TRIAGE; moved from in-progress.)
+- runlog-PR87.md — completed: formatting-only cleanup committed (2010840). (Stamped TRIAGE; moved from in-progress.)
+- pr61 — archived: superseded by PR64. (Stamped TRIAGE; moved from in-progress.)
+- pr86 — archived: partial attempt; will re-open clean later. (Stamped TRIAGE; moved from in-progress.)
 
 ---
 
@@ -243,3 +252,8 @@ LLM review runs only if thresholds are tripped; never part of gate.
 
 want me to wire in live links (e.g., `[PR 5](PRs/pr5.md)` and `[runlog](PRs/runlog-PR5.md)`) for every item now, or keep it minimal until you migrate the files into `/Documentation/PRs/`?
 ```
+
+### Triage - 2025-10-30
+
+- Archived: pr1-manifest.json, pr50-manifest.json, pr35-manifest.json, pr60.md, pr62.md, PR64.md, pr81.md, PR65-SOURCE-WIZARD-ALIGNMENT.md, pr51.md, pr52.md, pr53.md, pr55.md, pr56.md, pr57.md, pr75.md, pr13.md, pr37-test-fix.md, pr39.md, PR66.md, pr54.md, pr74.md, pr82.md, PR84-CURRENT-STATE.md, pr26.md, pr27.md, pr40.md. (Stamped TRIAGE; moved from in-progress.)
+- Completed: pr87.md - courts metadata implemented. (Stamped TRIAGE; moved from in-progress.)

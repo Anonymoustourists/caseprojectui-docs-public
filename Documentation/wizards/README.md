@@ -1,8 +1,10 @@
+<!-- markdownlint-disable MD001 MD025 MD036 -->
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Wizard Template Variables & JSON Guide](#wizard-template-variables--json-guide)
+- [Wizard Template Variables \& JSON Guide](#wizard-template-variables--json-guide)
   - [Wizard JSON Guide](#wizard-json-guide)
     - [Basic Structure](#basic-structure)
     - [Field Types Reference](#field-types-reference)
@@ -41,8 +43,11 @@ This directory contains wizard specifications for creating Sources, People, Even
 **Quick Links:**
 
 - [Wizard JSON Guide](#wizard-json-guide) — How to write wizard specs
+
 - [Project Info Access](#project-info-access) — Using case metadata in templates
+
 - [Registry Lookups](#registry-lookups) — Shared dropdown lists
+
 - [Template Filters](#template-filters) — Formatting variables
 
 ---
@@ -62,15 +67,15 @@ All wizard specs follow this structure:
       "id": "transcript",
       "label": "Transcript",
       "view": "dialogue",
-      "fields": [...],
-      "logic": [...],
-      "filename": [...]
+      "fields": ``````[...]``````,
+      "logic": ``````[...]``````,
+      "filename": ``````[...]``````
     }
   ],
   "lookups": {...},
   "helpers": {...}
 }
-```
+```text
 
 ### Field Types Reference
 
@@ -103,7 +108,7 @@ Show/hide fields based on other field values.
       "id": "hearing_type",
       "label": "Hearing Type",
       "type": "select",
-      "options": ["Trial", "Motion", "Prelim", "Sentencing"],
+      "options": ``````["Trial", "Motion", "Prelim", "Sentencing"]``````,
       "required": true
     },
     {
@@ -121,7 +126,7 @@ Show/hide fields based on other field values.
     }
   ]
 }
-```
+```text
 
 **Result:** The `volume` and `witness_name` fields only appear after user selects "Trial".
 
@@ -138,7 +143,7 @@ Show/hide fields based on other field values.
       "id": "interview_type",
       "label": "Interview Type",
       "type": "select",
-      "options": ["Witness", "Suspect", "Expert", "Victim"],
+      "options": ``````["Witness", "Suspect", "Expert", "Victim"]``````,
       "required": true
     },
     {
@@ -158,7 +163,7 @@ Show/hide fields based on other field values.
     }
   ]
 }
-```
+```text
 
 ### Dropdown of Case Numbers with Manual Entry
 
@@ -169,7 +174,7 @@ Show/hide fields based on other field values.
   "id": "court_type",
   "label": "Court Type",
   "type": "select",
-  "options": ["Circuit", "District", "Appeals"],
+  "options": ``````["Circuit", "District", "Appeals"]``````,
   "required": true
 },
 {
@@ -190,10 +195,10 @@ Show/hide fields based on other field values.
   "label": "Enter Custom Case Number",
   "type": "text",
   "show_if": { "case_number_preset": "(Enter custom)" },
-  "pattern": "^[0-9]{2}-[0-9]{5}-[A-Z]{2}$",
+  "pattern": "^``````[0-9]``````{2}-``````[0-9]``````{5}-``````[A-Z]``````{2}$",
   "help": "Format: XX-XXXXX-XX"
 }
-```
+```text
 
 **Better approach using project info:**
 
@@ -206,7 +211,7 @@ Show/hide fields based on other field values.
   "show_if": { "court_type": "Circuit" },
   "help": "Defaults to project case number, edit if needed"
 }
-```
+```text
 
 ### Multiple Conditions with `in`
 
@@ -217,24 +222,24 @@ Show/hide fields based on other field values.
   "id": "court",
   "label": "Court",
   "type": "select",
-  "options": ["Circuit", "District", "COA", "MSC", "Federal"],
+  "options": ``````["Circuit", "District", "COA", "MSC", "Federal"]``````,
   "required": true
 },
 {
   "id": "federal_district",
   "label": "Federal District",
   "type": "select",
-  "options": ["E.D. Mich.", "W.D. Mich.", "6th Circuit"],
-  "show_if": { "court": { "in": ["Federal"] } }
+  "options": ``````["E.D. Mich.", "W.D. Mich.", "6th Circuit"]``````,
+  "show_if": { "court": { "in": ``````["Federal"]`````` } }
 },
 {
   "id": "state_judge",
   "label": "Judge",
   "type": "lookup",
   "source": "judges",
-  "show_if": { "court": { "in": ["Circuit", "District"] } }
+  "show_if": { "court": { "in": ``````["Circuit", "District"]`````` } }
 }
-```
+```text
 
 ### Dynamic Field Defaults
 
@@ -266,7 +271,7 @@ Show/hide fields based on other field values.
     }
   ]
 }
-```
+```text
 
 ### Multi-Person Selection
 
@@ -294,7 +299,7 @@ Show/hide fields based on other field values.
   "source": "agencies",
   "show_if": { "is_custodial": true }
 }
-```
+```text
 
 ### Logic Rules for Auto-Fill
 
@@ -311,15 +316,15 @@ Use `logic` to automatically set fields based on other fields.
     },
     {
       "set": { "view": "narrative" },
-      "when": { "hearing_type": { "in": ["Motion", "Sentencing"] } }
+      "when": { "hearing_type": { "in": ``````["Motion", "Sentencing"]`````` } }
     },
     {
       "set": { "has_testimony": true },
-      "when": { "hearing_type": { "in": ["Trial", "Prelim"] } }
+      "when": { "hearing_type": { "in": ``````["Trial", "Prelim"]`````` } }
     }
   ]
 }
-```
+```text
 
 ### Complex Filename Templates
 
@@ -347,11 +352,12 @@ Use `logic` to automatically set fields based on other fields.
     }
   ]
 }
-```
+```text
 
 **Result Examples:**
 
 - `2025-10-11_12-34567-FH_Trial_Vol3_jane-smith.pdf`
+
 - `2025-10-11_12-34567-FH_Motion_suppress-evidence.pdf`
 
 ### Validation Patterns
@@ -363,17 +369,17 @@ Use `pattern` for regex validation.
   "id": "case_no",
   "label": "Case Number",
   "type": "text",
-  "pattern": "^[0-9]{2}-[0-9]{5}-[A-Z]{2}$",
+  "pattern": "^``````[0-9]``````{2}-``````[0-9]``````{5}-``````[A-Z]``````{2}$",
   "help": "Format: XX-XXXXX-XX (e.g., 12-34567-FH)"
 },
 {
   "id": "phone",
   "label": "Phone Number",
   "type": "phone",
-  "pattern": "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$",
+  "pattern": "^\\(``````[0-9]``````{3}\\) ``````[0-9]``````{3}-``````[0-9]``````{4}$",
   "help": "Format: (XXX) XXX-XXXX"
 }
-```
+```text
 
 ### Complete Real-World Example
 
@@ -414,7 +420,7 @@ Use `pattern` for regex validation.
       "id": "session",
       "label": "Session",
       "type": "select",
-      "options": ["Morning", "Afternoon", "Full Day"],
+      "options": ``````["Morning", "Afternoon", "Full Day"]``````,
       "default": "Full Day"
     },
     {
@@ -429,7 +435,7 @@ Use `pattern` for regex validation.
       "id": "page_range",
       "label": "Page Range",
       "type": "text",
-      "pattern": "^[0-9]+-[0-9]+$",
+      "pattern": "^``````[0-9]``````+-``````[0-9]``````+$",
       "help": "e.g., 1-50"
     }
   ],
@@ -450,9 +456,9 @@ Use `pattern` for regex validation.
       "template": "{{date|YYYY-MM-DD}}_{{case_number}}_Trial_{{session|slug}}_{{witness_testifying|slug}}.pdf"
     }
   ],
-  "tags": ["trial", "transcript", "{{witness_testifying}}", "vol{{volume}}"]
+  "tags": ``````["trial", "transcript", "{{witness_testifying}}", "vol{{volume}}"]``````
 }
-```
+```text
 
 ---
 
@@ -496,7 +502,7 @@ In `sources.wizard.json`:
       "id": "hearing_type",
       "label": "Hearing Type",
       "type": "select",
-      "options": ["Trial", "Motion", "Sentencing"]
+      "options": ``````["Trial", "Motion", "Sentencing"]``````
     }
   ],
   "filename": [
@@ -506,7 +512,7 @@ In `sources.wizard.json`:
     }
   ]
 }
-```
+```text
 
 **Result:** `2025-10-11_12-34567-FH_Trial_Transcript.pdf`
 
@@ -533,7 +539,7 @@ In `people.wizard.json`:
     }
   ]
 }
-```
+```text
 
 **Result:** Field `case_relation` will be pre-filled with `"Witness in People v. Doe"`
 
@@ -572,7 +578,7 @@ In `events.wizard.json`:
     }
   ]
 }
-```
+```text
 
 **Result:** Event title will be `"2025-10-11 Hearing - 12-34567-FH"` and fields will be pre-filled with court and judge from project info.
 
@@ -585,7 +591,9 @@ Wizards can use **shared registries** (agencies, courts, judges) for dropdown fi
 ### Available Registry Types
 
 - **`agencies`** — Law enforcement agencies (Detroit PD, MSP, FBI, etc.)
+
 - **`courts`** — Courts (Wayne Circuit, Michigan COA, etc.)
+
 - **`judges`** — Judges (Hon. Smith, Hon. Johnson, etc.)
 
 ### Using Registries in Wizards
@@ -597,12 +605,14 @@ Wizards can use **shared registries** (agencies, courts, judges) for dropdown fi
   "type": "lookup",
   "source": "agencies"
 }
-```
+```text
 
 The dropdown will be populated from:
 
 1. **App defaults:** `server/config/registries/agencies.json`
-2. **Project overrides:** `<project>/config/registries/agencies.json`
+
+1. **Project overrides:** `<project>/config/registries/agencies.json`
+
 
 Project overrides take precedence and are merged by ID.
 
@@ -638,7 +648,7 @@ Project overrides take precedence and are merged by ID.
     }
   ]
 }
-```
+```bash
 
 **Result:** User selects "Detroit PD" from dropdown → filename becomes `2025-10-11_detroit-pd_Report_12345.pdf`
 
@@ -649,20 +659,35 @@ Project overrides take precedence and are merged by ID.
 To make project info available to all wizards:
 
 1. Open **Settings** (⚙️ icon in sidebar)
-2. Scroll to **Project Information** section
-3. Click **Edit**
-4. Fill in case metadata fields:
+
+1. Scroll to **Project Information** section
+
+1. Click **Edit**
+
+1. Fill in case metadata fields:
+
    - Case Number
+
    - Case Caption
+
    - Circuit Court
+
    - District Court
+
    - Trial Judge
+
    - Defendant
+
    - Prosecutor
+
    - Defense Attorney
+
    - Charges (one per line)
+
    - etc.
-5. Click **Save**
+
+1. Click **Save**
+
 
 Now all wizards in the project can access these values via `{{projectInfo.*}}` variables.
 
@@ -675,7 +700,9 @@ Now all wizards in the project can access these values via `{{projectInfo.*}}` v
 Edit files in `server/config/registries/`:
 
 - `agencies.json`
+
 - `courts.json`
+
 - `judges.json`
 
 These apply to all projects unless overridden.
@@ -685,7 +712,9 @@ These apply to all projects unless overridden.
 Create files in `<project>/config/registries/`:
 
 - `agencies.json`
+
 - `courts.json`
+
 - `judges.json`
 
 These override app defaults by ID for the specific project only.
@@ -705,7 +734,7 @@ These override app defaults by ID for the specific project only.
     }
   ]
 }
-```
+```text
 
 This agency will now appear in the dropdown alongside app defaults.
 
@@ -727,12 +756,17 @@ Variables support filters for formatting:
 ## Summary
 
 - **Project Info** provides case-level metadata accessible via `{{projectInfo.*}}`
+
 - **Registries** provide shared lookup lists (agencies, courts, judges)
+
 - **All wizards** (Sources, People, Events) can use both in templates and defaults
+
 - **Per-project overrides** allow customization without affecting other cases
 
 For more information on wizard specs, see:
 
 - `sources.wizard.json` — Source ingestion wizard
+
 - `people.wizard.json` — People creation wizard
+
 - `events.wizard.json` — Events creation wizard
