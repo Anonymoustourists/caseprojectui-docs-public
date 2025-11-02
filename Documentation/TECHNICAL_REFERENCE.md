@@ -1155,7 +1155,47 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: { ok: true }
 ```
 
-Implementation tip: resolve `sources/{sourceId}/feedback.jsonl` within the active project, open in append mode, write the serialized JSON plus `\n`, and flush immediately. The client’s retry loop assumes idempotent append semantics.
+Implementation tip: resolve `sources/{sourceId}/feedback.jsonl` within the active project, open in append mode, write the serialized JSON plus `\n`, and flush immediately. The client's retry loop assumes idempotent append semantics.
+
+#### Batch Upload Routes (PR91)
+
+**POST /api/sources/batch**
+
+```typescript
+// Upload multiple files simultaneously
+// Body: FormData with files[] field (up to 20 files)
+// Query: ?project={slug}
+// Process:
+//   1. Save files temporarily
+//   2. Detect source type from extension
+//   3. Create SourceItem with status:"pending_name", requiresName:true
+//   4. Create draft EventItem (draft:true) to satisfy 1:1 invariant
+//   5. Draft events excluded from indexes until published
+// Response: { ok: true, created: Array<{sourceId, eventId, detectedType, tempName}> }
+```
+
+**GET /api/sources/pending**
+
+```typescript
+// Fetch list of sources awaiting user-provided names
+// Query: ?project={slug}
+// Response: { pending: SourceItem[] }
+// Only returns sources with requiresName:true
+```
+
+**POST /api/sources/:id/name**
+
+```typescript
+// Finalize a pending source by providing name and optional citation fields
+// Params: :id = sourceId
+// Query: ?project={slug}
+// Body: { name: string, citationName?: string, shortCiteName?: string }
+// Process:
+//   1. Update source: name, metadata, requiresName:false, status:"ready"
+//   2. Update linked event: title, draft:false
+//   3. Trigger index updates (onEventWrite)
+// Response: { ok: true, source: SourceItem }
+```
 
 ---
 

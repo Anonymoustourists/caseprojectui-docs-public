@@ -121,6 +121,8 @@ export type EventItem = {
   updatedAt?: string;
   typeId?: string;
   stableKey?: string;
+  // PR91: Batch upload workflow
+  draft?: boolean; // true until source is named (publish)
 };
 
 ```text
@@ -145,6 +147,9 @@ export type SourceItem = {
   participants?: Participation[]; // People linked to this source
   createdAt?: string;
   updatedAt?: string;
+  // PR91: Batch upload workflow
+  status?: "pending_name" | "processing" | "ready" | "failed";
+  requiresName?: boolean; // true when created via batch ingest
 };
 
 ```text
@@ -284,6 +289,10 @@ Persist **small** JSON indexes; update them only when related entities change:
 - `POST /api/sources/:id/participants` / `DELETE .../participants/:idx`.
 
 - `GET /api/people/:personId/appearances` → `{ events:[], sources:[] }`.
+
+- **PR91**: `POST /api/sources/batch` → accepts multiple files; creates pending sources + draft events; triggers processing.
+
+- **PR91**: `POST /api/sources/:id/name` → set `name`, optional citation/short-cite; transitions to published; indexes update.
 
 **Rule**: If you add an endpoint, add a **contract note** to this Bible and a test.
 

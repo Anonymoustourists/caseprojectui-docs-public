@@ -77,6 +77,7 @@ Legend:
 
 ## 🚧 In Progress / Incomplete PRs (top = higher priority)
 
+- ⚙️ **PR 91** — Batch Upload + Hold-for-Name (type-aware ingest for PDFs & A/V)
 - ⚙️ **PR 87** — Case Registry & Court Dropdowns (MI District/Circuit) + Optional Judges + Default Designation
 
 - ⚙️ **PR 80** — Emoji and Icon Support for Events, People, Locations, and Sources
@@ -199,15 +200,15 @@ Legend:
 
 ### 📥 Source Ingestion
 
-- PR 3, PR 5, PR 8, PR 12C, PR 25, PR 28, PR 30, PR 31, PR 37, PR 38, PR 40, PR 59
+- PR 3, PR 5, PR 8, PR 12C, PR 25, PR 28, PR 30, PR 31, PR 37, PR 38, PR 40, PR 59, PR 91
 
 ### ✏️ Source Editing
 
-- PR 7, PR 10, PR 14, PR 22, PR 35, PR 35A, PR 41, PR 80, PR 86
+- PR 7, PR 10, PR 14, PR 22, PR 35, PR 35A, PR 41, PR 80, PR 86, PR 91
 
 ### 📊 Data Management & Associations
 
-- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78, PR 86, PR 87
+- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78, PR 86, PR 87, PR 91
 
 ### 📄 Source View
 
