@@ -148,7 +148,7 @@ Case Project is a legal case management application for organizing, annotating, 
 
 ### High-Level Design
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                        Frontend (React)                      │
 │  ┌──────────┐  ┌───────────┐  ┌──────────┐  ┌────────────┐ │
@@ -186,7 +186,8 @@ Case Project is a legal case management application for organizing, annotating, 
 
 ### Directory Structure
 
-```
+```text
+
 case-project-ui/
 ├── src/                          # Frontend React application
 │   ├── App.jsx                   # Main app component, routing
@@ -268,6 +269,7 @@ case-project-ui/
     ├── USER_GUIDE.md             # User-facing guide
     ├── PRs/                      # PR designs & runlogs
     └── Standards/                # Data contracts & standards
+
 ```
 
 ---
@@ -903,7 +905,7 @@ VITE_FEATURE_MAPS=1
 
 **Data Flow**:
 
-```
+```text
 1. User selects text
 2. Parent component calls:
    onSelectionChange({
@@ -999,7 +1001,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 
 #### Canonical Routes
 
-**GET /api/canonical/docs**
+#### GET /api/canonical/docs
 
 ```typescript
 // List all documents for project
@@ -1007,28 +1009,28 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: { docs: SourceManifest[] }
 ```
 
-**GET /api/canonical/docs/:docId**
+#### GET /api/canonical/docs/:docId
 
 ```typescript
 // Get document manifest
 // Response: SourceManifest
 ```
 
-**GET /api/canonical/docs/:docId/blocks**
+#### GET /api/canonical/docs/:docId/blocks
 
 ```typescript
 // Get document blocks
 // Response: { blocks: Block[] }
 ```
 
-**GET /api/canonical/docs/:docId/cites**
+#### GET /api/canonical/docs/:docId/cites
 
 ```typescript
 // Get document citations
 // Response: { cites: Cite[] }
 ```
 
-**POST /api/canonical/docs/:docId/cites**
+#### POST /api/canonical/docs/:docId/cites
 
 ```typescript
 // Create citation
@@ -1036,7 +1038,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: { cite: Cite }
 ```
 
-**PUT /api/canonical/docs/:docId/blocks/:blockId**
+#### PUT /api/canonical/docs/:docId/blocks/:blockId
 
 ```typescript
 // Update block text
@@ -1046,7 +1048,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 
 #### Ingestion Routes
 
-**POST /ingest/pdf**
+#### POST /ingest/pdf
 
 ```typescript
 // Upload and ingest PDF
@@ -1059,7 +1061,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: { docId, basename, manifest }
 ```
 
-**POST /ingest/av**
+#### POST /ingest/av
 
 ```typescript
 // Upload and ingest audio/video
@@ -1075,7 +1077,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 
 #### Event Routes
 
-**GET /api/events**
+#### GET /api/events
 
 ```typescript
 // List events for project
@@ -1083,7 +1085,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: EventItem[]
 ```
 
-**POST /api/events**
+#### POST /api/events
 
 ```typescript
 // Create event
@@ -1107,7 +1109,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: EventItem
 ```
 
-**POST /api/events/createFromSelection**
+#### POST /api/events/createFromSelection
 
 ```typescript
 // Create event from text selection
@@ -1121,7 +1123,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 
 #### People Routes
 
-**GET /api/people**
+#### GET /api/people
 
 ```typescript
 // List people for project
@@ -1129,7 +1131,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 // Response: PersonItem[]
 ```
 
-**POST /api/people**
+#### POST /api/people
 
 ```typescript
 // Create person
@@ -1147,7 +1149,7 @@ Single file containing all routes and logic (~4000 lines). Routes organized by d
 
 #### Feedback Routes
 
-**POST /api/feedback/append**
+#### POST /api/feedback/append
 
 ```typescript
 // Append feedback event to JSONL file
@@ -1159,7 +1161,7 @@ Implementation tip: resolve `sources/{sourceId}/feedback.jsonl` within the activ
 
 #### Batch Upload Routes (PR91)
 
-**POST /api/sources/batch**
+#### POST /api/sources/batch
 
 ```typescript
 // Upload multiple files simultaneously
@@ -1174,7 +1176,7 @@ Implementation tip: resolve `sources/{sourceId}/feedback.jsonl` within the activ
 // Response: { ok: true, created: Array<{sourceId, eventId, detectedType, tempName}> }
 ```
 
-**GET /api/sources/pending**
+#### GET /api/sources/pending
 
 ```typescript
 // Fetch list of sources awaiting user-provided names
@@ -1183,7 +1185,7 @@ Implementation tip: resolve `sources/{sourceId}/feedback.jsonl` within the activ
 // Only returns sources with requiresName:true
 ```
 
-**POST /api/sources/:id/name**
+#### POST /api/sources/:id/name
 
 ```typescript
 // Finalize a pending source by providing name and optional citation fields
@@ -1207,7 +1209,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 
 ### Pipeline Flow
 
-```
+```text
 ┌─────────────┐
 │   Upload    │
 │   (File)    │
@@ -1710,7 +1712,7 @@ Adds:
 
 **Training Directory Structure**:
 
-```
+```text
 training/
   form_mc227/
     01K7MD367W9S740P65SVMZR5KR/
@@ -1826,7 +1828,7 @@ node scripts/training_stats.mjs
 
 **Output**:
 
-```
+```text
 📊 Training Data Statistics
 
 Documents per detector type:
@@ -1866,7 +1868,7 @@ Labels per detector:
 
 **Architecture**:
 
-```
+```text
 Michigan Courts → Crawler → forms/manifest.json
                              ↓
                   Registry Builder → config/forms.registry.json

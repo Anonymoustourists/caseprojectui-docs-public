@@ -50,7 +50,7 @@ If you are reviewing migrations, start with the decisions JSON and then inspect 
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# 📘 Project Index — Case Project Rebuild
+## 📘 Project Index — Case Project Rebuild
 
 **Location:** `/Documentation/Index.md`  
 **Last updated:** October 2025
@@ -77,7 +77,6 @@ Legend:
 
 ## 🚧 In Progress / Incomplete PRs (top = higher priority)
 
-- ⚙️ **PR 91** — Batch Upload + Hold-for-Name (type-aware ingest for PDFs & A/V)
 - ⚙️ **PR 87** — Case Registry & Court Dropdowns (MI District/Circuit) + Optional Judges + Default Designation
 
 - ⚙️ **PR 80** — Emoji and Icon Support for Events, People, Locations, and Sources
@@ -113,6 +112,7 @@ Legend:
 
 ## ✅ Completed PRs
 
+- [x] **PR 91** — Batch Upload + Hold-for-Name (type-aware ingest for PDFs & A/V)
 - [x] **PR 3** — Ingestion UI + Source Storage + Standardized Filenames
 - [x] **PR 87** — Docs normalization to satisfy markdownlint gates; archives ignored.
 - [x] **PR 4** — Export Markdown
