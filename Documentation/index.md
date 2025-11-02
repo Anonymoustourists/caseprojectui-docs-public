@@ -1,3 +1,28 @@
+# Documentation index
+
+This folder is the canonical documentation for the project. Use the inventories and decisions in `Documentation/INVENTORY/` to review migrations from `docs/`.
+
+## Inventory & decisions
+
+- Inventory snapshot (enriched): `Documentation/INVENTORY/docs-inventory-2025-10-31.json`
+- First-pass decisions: `Documentation/INVENTORY/docs-inventory-2025-10-31-decision-2025-10-31.json`
+
+## Archives
+
+Archived copies of files from `docs/` are stored under:
+
+`Documentation/archive/docs-archive-2025-10-31/`
+
+Each archived file has a sibling `.meta.json` containing source path, commit SHA and commit date.
+
+## Migration notes
+
+- Work is being performed on branch `chore/docs-cleanup/2025-10-31`. Nothing on `main` has been deleted.
+- Draft migrated files are created under `Documentation/` with a provenance header. Review and clean before merging.
+
+- Batch 2 (2025-10-31): added 3 draft migrations into `Documentation/devnotes/` (provenance headers and `.migrated.meta.json` siblings added). Review before merging.
+
+If you are reviewing migrations, start with the decisions JSON and then inspect the drafts in `Documentation/devnotes/` and `Documentation/architecture/`.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
