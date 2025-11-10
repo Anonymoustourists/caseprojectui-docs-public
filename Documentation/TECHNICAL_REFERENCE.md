@@ -33,10 +33,13 @@
     - [API Layer (`src/api.js`)](#api-layer-srcapijs)
     - [Key Components](#key-components)
       - [DocumentViewer (`src/pages/DocumentViewer.jsx`)](#documentviewer-srcpagesdocumentviewerjsx)
+      - [SourceMetadataEditor (`src/components/sources/SourceMetadataEditor.tsx`)](#sourcemetadataeditor-srccomponentssourcessourcemetadataeditortsx)
+      - [Source display helpers (`src/lib/sources/display.ts`)](#source-display-helpers-srclibsourcesdisplayts)
       - [NotesViewer (`src/pages/NotesViewer/`)](#notesviewer-srcpagesnotesviewer)
       - [EventsViewer (`src/pages/EventsViewer/`)](#eventsviewer-srcpageseventsviewer)
       - [PeopleViewer (`src/pages/PeopleViewer.jsx`)](#peopleviewer-srcpagespeopleviewerjsx)
       - [LocationsViewer (`src/pages/LocationsViewer.tsx`)](#locationsviewer-srcpageslocationsviewertsx)
+      - [ImageViewer (`src/components/sources/ImageViewer.tsx`)](#imageviewer-srccomponentssourcesimageviewertsx)
       - [SelectionActionPopover (`src/components/SelectionActionPopover.jsx`)](#selectionactionpopover-srccomponentsselectionactionpopoverjsx)
       - [FeedbackProvider (`src/components/feedback/FeedbackProvider.tsx`)](#feedbackprovider-srccomponentsfeedbackfeedbackprovidertsx)
       - [Feedback UI Components](#feedback-ui-components)
@@ -45,16 +48,36 @@
     - [Server Entry Point (`server/src/index.ts`)](#server-entry-point-serversrcindexts)
     - [Key Route Handlers](#key-route-handlers)
       - [Canonical Routes](#canonical-routes)
+      - [GET /api/canonical/docs](#get-apicanonicaldocs)
+      - [GET /api/canonical/docs/:docId](#get-apicanonicaldocsdocid)
+      - [GET /api/canonical/docs/:docId/blocks](#get-apicanonicaldocsdocidblocks)
+      - [GET /api/canonical/docs/:docId/cites](#get-apicanonicaldocsdocidcites)
+      - [POST /api/canonical/docs/:docId/cites](#post-apicanonicaldocsdocidcites)
+      - [PUT /api/canonical/docs/:docId/blocks/:blockId](#put-apicanonicaldocsdocidblocksblockid)
       - [Ingestion Routes](#ingestion-routes)
+      - [POST /ingest/pdf](#post-ingestpdf)
+      - [POST /ingest/av](#post-ingestav)
       - [Event Routes](#event-routes)
+      - [GET /api/events](#get-apievents)
+      - [POST /api/events](#post-apievents)
+      - [POST /api/events/createFromSelection](#post-apieventscreatefromselection)
       - [People Routes](#people-routes)
+      - [GET /api/people](#get-apipeople)
+      - [POST /api/people](#post-apipeople)
       - [Feedback Routes](#feedback-routes)
+      - [POST /api/feedback/append](#post-apifeedbackappend)
+      - [Batch Upload Routes (PR91)](#batch-upload-routes-pr91)
+      - [POST /api/sources/batch](#post-apisourcesbatch)
+      - [GET /api/sources/pending](#get-apisourcespending)
+      - [POST /api/sources/:id/name](#post-apisourcesidname)
   - [Ingestion Pipeline](#ingestion-pipeline)
     - [Overview](#overview-1)
     - [Pipeline Flow](#pipeline-flow)
     - [Transcript Pipeline](#transcript-pipeline)
+    - [Transcript Witness Sections \& Phase Navigator (PR 86)](#transcript-witness-sections--phase-navigator-pr-86)
     - [Narrative Pipeline](#narrative-pipeline)
     - [A/V Pipeline](#av-pipeline)
+    - [Image Pipeline](#image-pipeline)
     - [Dual Extractor (Native + Docling)](#dual-extractor-native--docling)
     - [Mega PDF Splitter](#mega-pdf-splitter)
     - [Auto-Event Creation](#auto-event-creation)
@@ -888,6 +911,45 @@ VITE_FEATURE_MAPS=1
 - Toggle button to enable/disable
 - Dynamic updates on map movement
 
+#### ImageViewer (`src/components/sources/ImageViewer.tsx`)
+
+**Purpose**: Display image sources with zoom and lightbox capabilities
+
+**Features**:
+
+- **Zoom controls**: In/out/reset buttons
+- **Pan**: Drag to pan when zoomed in
+- **Lightbox mode**: Click image to view full-screen overlay
+- **Close on click**: Click lightbox background to exit
+- **Responsive**: Fits to container, respects max dimensions
+
+**Props**:
+
+```typescript
+interface ImageViewerProps {
+  imageUrl: string; // Image source URL
+  imageName: string; // Display name for alt text
+  onClose?: () => void; // Optional close handler
+}
+```
+
+**State**:
+
+```javascript
+const [zoom, setZoom] = useState(1.0); // Current zoom level (1.0 = 100%)
+const [lightbox, setLightbox] = useState(false); // Lightbox open/closed
+```
+
+**Interactions**:
+
+- Zoom in: +20% (max 300%)
+- Zoom out: -20% (min 50%)
+- Reset: Return to 100%
+- Lightbox: Click image → full screen overlay
+- Close: Click overlay background or press Esc
+
+**Usage**: Automatically rendered by DocumentViewer when `source.type === 'image'`.
+
 #### SelectionActionPopover (`src/components/SelectionActionPopover.jsx`)
 
 **Purpose**: Context menu for text selection
@@ -1359,6 +1421,50 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 }
 ```
 
+### Image Pipeline
+
+**Input**: Image file (.jpg, .jpeg, .png, .gif, .tiff, .tif, .bmp, .webp)
+
+**Process**: Zero-metadata extraction (no OCR, no EXIF parsing)
+
+1. File extension detected → `sourceKind = "image"`
+2. User selects actual source TYPE (e.g., "police-report", "court-filing")
+3. Single placeholder block created with image reference
+4. No text extraction or classification
+5. Auto-Event created based on selected source type (not "Photograph")
+
+**Key Concept**: Images are a **format** (kind), not a source type. Any document type can be an image:
+- Police report that's a photograph
+- Court filing that's a scanned/photographed document
+- 911 call transcript that's a screenshot
+
+**Output Block**:
+
+```json
+{
+  "id": "01HZYH...",
+  "type": "note",
+  "text": "Reference file: police-report_2024-08-27.jpg",
+  "sourceRef": {
+    "kind": "image",
+    "sourceId": "sources/police-report/crime-scene.jpg"
+  },
+  "sequence": 1,
+  "createdAt": "2025-10-14T..."
+}
+```
+
+**Viewer**: `ImageViewer` component provides:
+
+- Pan and zoom controls
+- Lightbox mode (click to expand)
+- Zoom in/out/reset buttons
+- Drag to pan in zoomed state
+
+**DocumentViewer Integration**: Automatically detects `sourceRef.kind === "image"` and renders `ImageViewer` instead of text/PDF view.
+
+**Upload**: Images bypass all text classifiers and transcript section detection. User selects actual document type in SourcesWizard.
+
 ### Dual Extractor (Native + Docling)
 
 **Purpose**: Run the legacy PDF pipeline and Docling in parallel, emit two canonical sources, and score quality detectors for fast side-by-side comparison.
@@ -1435,6 +1541,7 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
 | bodycam       | Body Camera   | investigatory |
 | dashcam       | Dash Camera   | investigatory |
 | 911-call      | 911 Call      | investigatory |
+| image         | Photograph    | investigatory |
 
 **Process**:
 

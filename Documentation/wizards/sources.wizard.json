@@ -25,8 +25,25 @@
             "Sentencing",
             "Resentencing",
             "Postconviction Hearing",
-            "Ginther Hearing"
+            "Ginther Hearing",
+            "Other"
           ]
+        },
+        {
+          "id": "hearing_type_other_source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "show_if": { "hearing_type": "Other" },
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "hearing_type_other_short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "show_if": { "hearing_type": "Other" },
+          "help": "Enter a short citation reference"
         },
         {
           "id": "motion_specify",
@@ -100,11 +117,63 @@
       "logic": [],
       "filename": [
         {
+          "id": "other",
+          "when": { "hearing_type": "Other" },
+          "template": "{{hearing_type_other_source_name|slug}}.pdf"
+        },
+        {
           "id": "default",
           "template": "{{date|YYYY-MM-DD}}_{{court|slug}}_{{hearing_type|slug}}_Transcript.pdf"
         }
       ],
       "tags": ["transcript", "{{court}}", "{{hearing_type}}"]
+    },
+    {
+      "id": "transcript_other",
+      "label": "Transcript: Other",
+      "view": "dialogue",
+      "defaultEmoji": "📝",
+      "defaultIconPath": "transcript.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.pdf"
+        }
+      ],
+      "tags": ["transcript", "other"]
     },
     {
       "id": "legal_filing",
@@ -114,7 +183,7 @@
       "defaultIconPath": "filing.svg",
       "fields": [
         { "id": "case_court_combo", "label": "Case & Court", "type": "case_court_combo", "required": true, "help": "Select the case and court/case number for this filing." },
-        { "id": "filer", "label": "Filer", "type": "select", "options": ["Court", "Prosecutor", "Defendant"], "required": true },
+        { "id": "filer", "label": "Filer", "type": "select", "options": ["Court", "Prosecutor", "Defendant", "Other"], "required": true },
         { "id": "court_level", "label": "Court Level", "type": "select", "options": ["District Court", "Circuit Court", "Court of Appeals", "Supreme Court"], "show_if": { "filer": "Court" } },
 
         { "id": "filing_type_court_district", "label": "Filing Type (District Court)", "type": "select", "options": ["Arrest Warrant", "Search Warrant", "Bindover", "Other"], "show_if": { "filer": "Court", "court_level": "District Court" } },
@@ -144,6 +213,10 @@
         { "id": "filing_type_defendant", "label": "Filing Type (Defendant)", "type": "select", "options": ["Motion", "Appearance", "Discovery Demand", "Speedy Trial Demand", "Sentencing Memorandum", "Brief on Appeal", "Application", "Other"], "show_if": { "filer": "Defendant" } },
         { "id": "def_motion_specify", "label": "Specify Motion", "type": "text", "show_if": { "filing_type_defendant": "Motion" } },
         { "id": "def_other_specify", "label": "Specify Other", "type": "text", "show_if": { "filing_type_defendant": "Other" } },
+        
+        { "id": "filer_other_source_name", "label": "Source Name", "type": "text", "required": true, "show_if": { "filer": "Other" }, "help": "Enter a descriptive name for this source" },
+        { "id": "filer_other_short_cite", "label": "Short Cite", "type": "text", "required": true, "show_if": { "filer": "Other" }, "help": "Enter a short citation reference" },
+        
         {
           "id": "notes",
           "label": "Notes",
@@ -193,6 +266,53 @@
         { "id": "default", "template": "{{date|YYYY-MM-DD}}_legal_filing.pdf" }
       ],
       "tags": ["legal-filing", "{{filer}}", "{{court}}"]
+    },
+    {
+      "id": "legal_filing_other",
+      "label": "Legal Filing: Other",
+      "view": "narrative",
+      "defaultEmoji": "📚",
+      "defaultIconPath": "filing.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.pdf"
+        }
+      ],
+      "tags": ["legal-filing", "other"]
     },
     {
       "id": "police_report",
@@ -321,6 +441,53 @@
         }
       ],
       "tags": ["police-report", "{{agency_type}}", "{{document_type}}"]
+    },
+    {
+      "id": "police_report_other",
+      "label": "Police Report: Other",
+      "view": "narrative",
+      "defaultEmoji": "🖋️",
+      "defaultIconPath": "police.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.pdf"
+        }
+      ],
+      "tags": ["police-report", "other"]
     },
     {
       "id": "investigatory_document",
@@ -454,6 +621,53 @@
       "tags": ["investigatory", "{{document_type}}"]
     },
     {
+      "id": "investigatory_document_other",
+      "label": "Other Investigatory Document: Other",
+      "view": "narrative",
+      "defaultEmoji": "📄",
+      "defaultIconPath": "document.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.pdf"
+        }
+      ],
+      "tags": ["investigatory", "other"]
+    },
+    {
       "id": "av_police_interview",
       "label": "A/V Recording: Police Interview",
       "view": "dialogue",
@@ -533,6 +747,53 @@
       "tags": ["av-recording", "police-interview", "{{agency_type}}"]
     },
     {
+      "id": "av_police_interview_other",
+      "label": "A/V Recording: Police Interview - Other",
+      "view": "dialogue",
+      "defaultEmoji": "🎤",
+      "defaultIconPath": "interview.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.mp4"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.mp4"
+        }
+      ],
+      "tags": ["av-recording", "police-interview", "other"]
+    },
+    {
       "id": "av_911_call",
       "label": "A/V Recording: 911 Call",
       "view": "dialogue",
@@ -572,6 +833,52 @@
         }
       ],
       "tags": ["av-recording", "911-call"]
+    },
+    {
+      "id": "av_911_call_other",
+      "label": "A/V Recording: 911 Call - Other",
+      "view": "dialogue",
+      "defaultEmoji": "📞",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.mp3"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.mp3"
+        }
+      ],
+      "tags": ["av-recording", "911-call", "other"]
     },
     {
       "id": "av_bodycam",
@@ -637,6 +944,53 @@
       "tags": ["av-recording", "bodycam", "{{agency_type}}"]
     },
     {
+      "id": "av_bodycam_other",
+      "label": "A/V Recording: Police Bodycam - Other",
+      "view": "dialogue",
+      "defaultEmoji": "📹",
+      "defaultIconPath": "camera.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.mp4"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.mp4"
+        }
+      ],
+      "tags": ["av-recording", "bodycam", "other"]
+    },
+    {
       "id": "av_dashcam",
       "label": "A/V Recording: Police Dashcam",
       "view": "dialogue",
@@ -700,23 +1054,31 @@
       "tags": ["av-recording", "dashcam", "{{agency_type}}"]
     },
     {
-      "id": "av_other",
-      "label": "A/V Recording: Other",
+      "id": "av_dashcam_other",
+      "label": "A/V Recording: Police Dashcam - Other",
       "view": "dialogue",
-      "defaultEmoji": "🎬",
-      "defaultIconPath": "video.svg",
+      "defaultEmoji": "📹",
+      "defaultIconPath": "dashcam.svg",
       "fields": [
         {
-          "id": "time",
-          "label": "Time (HH:MM)",
+          "id": "source_name",
+          "label": "Source Name",
           "type": "text",
-          "help": "Enter time in HH:MM format (optional)"
+          "required": true,
+          "help": "Enter a descriptive name for this source"
         },
         {
-          "id": "recording_type",
-          "label": "Specify Recording Type",
+          "id": "short_cite",
+          "label": "Short Cite",
           "type": "text",
-          "help": "Describe the type of recording"
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
         },
         {
           "id": "notes",
@@ -727,8 +1089,60 @@
       "logic": [],
       "filename": [
         {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.mp4"
+        },
+        {
           "id": "default",
-          "template": "{{date|YYYY-MM-DD}}_{{recording_type|slug}}.mp4"
+          "template": "{{source_name|slug}}.mp4"
+        }
+      ],
+      "tags": ["av-recording", "dashcam", "other"]
+    },
+    {
+      "id": "av_other",
+      "label": "A/V Recording: Other",
+      "view": "dialogue",
+      "defaultEmoji": "🎬",
+      "defaultIconPath": "video.svg",
+      "fields": [
+        {
+          "id": "source_name",
+          "label": "Source Name",
+          "type": "text",
+          "required": true,
+          "help": "Enter a descriptive name for this source"
+        },
+        {
+          "id": "short_cite",
+          "label": "Short Cite",
+          "type": "text",
+          "required": true,
+          "help": "Enter a short citation reference"
+        },
+        {
+          "id": "source_date",
+          "label": "Source Date (optional)",
+          "type": "text",
+          "help": "Enter date in YYYY-MM-DD format if known"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "with_date",
+          "when": { "source_date": "*" },
+          "template": "{{source_date}}_{{source_name|slug}}.mp4"
+        },
+        {
+          "id": "default",
+          "template": "{{source_name|slug}}.mp4"
         }
       ],
       "tags": ["av-recording", "other"]

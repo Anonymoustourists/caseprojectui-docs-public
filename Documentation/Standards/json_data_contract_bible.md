@@ -250,6 +250,8 @@ These mappings **must** exist and be used by ingest:
 | dashcam       | Dash Camera             | investigatory |
 | 911-call      | 911 Call                | investigatory |
 
+**Note**: Images (photos, screenshots) are a **format** (kind), not a source type. Any source type above can be an image file (e.g., a police report that's a photograph, a court filing that's a scanned document).
+
 **Invariant #3**: creation is **1:1** and immediate on successful upload.
 
 ---
