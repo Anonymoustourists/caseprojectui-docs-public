@@ -2,7 +2,7 @@
 
 **Case Project** — Your complete guide to managing legal cases
 
-**Last Updated**: October 14, 2025  
+**Last Updated**: November 10, 2025  
 **Version**: 0.1.0
 
 ---
@@ -1130,6 +1130,7 @@ A: Developers can edit wizard specifications in `server/config/wizards/`. User-c
 | -------------------- | -------------------------------------------------------- | ----------------------------- |
 | **Court Transcript** | Record of court proceedings (hearing, trial, deposition) | Court Hearing (legal)         |
 | **Court Filing**     | Motion, brief, complaint, answer, etc.                   | Court Filing (legal)          |
+| **Exhibit / Appendix** | Trial exhibit, hearing exhibit, filing appendix        | Exhibit / Appendix (legal)    |
 | **Court Opinion**    | Judge's written decision                                 | Court Filing (legal)          |
 | **Police Report**    | Incident report, arrest report, investigation report     | Police Report (investigatory) |
 | **A/V Interview**    | Recorded interview (suspect, witness, etc.)              | A/V Interview (investigatory) |
@@ -1154,5 +1155,5 @@ A: Developers can edit wizard specifications in `server/config/wizards/`. User-c
 ---
 
 **Document Version**: 1.0  
-**Last Updated**: October 14, 2025  
+**Last Updated**: November 10, 2025  
 **Compatible with**: Case Project v0.1.0

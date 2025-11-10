@@ -315,6 +315,70 @@
       "tags": ["legal-filing", "other"]
     },
     {
+      "id": "exhibit",
+      "label": "Exhibit / Appendix",
+      "view": "narrative",
+      "defaultEmoji": "📎",
+      "defaultIconPath": "document.svg",
+      "fields": [
+        {
+          "id": "kind",
+          "label": "Type",
+          "type": "select",
+          "options": ["exhibit", "appendix"],
+          "required": true,
+          "default": "exhibit",
+          "help": "Select whether this is marked as an exhibit or appendix"
+        },
+        {
+          "id": "numberOrLetter",
+          "label": "Number or Letter",
+          "type": "text",
+          "help": "Enter the exhibit label (e.g., A, B, 1, 2)"
+        },
+        {
+          "id": "titleOrDescription",
+          "label": "Title or Description",
+          "type": "text",
+          "help": "Provide a descriptive title if no number/letter is available"
+        },
+        {
+          "id": "offeredBy",
+          "label": "Offered By",
+          "type": "select",
+          "options": ["prosecution", "defense", "other"]
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea"
+        }
+      ],
+      "logic": [],
+      "filename": [
+        {
+          "id": "number_and_title",
+          "when": { "numberOrLetter": "*", "titleOrDescription": "*" },
+          "template": "{{kind|slug}}_{{numberOrLetter|slug}}_{{titleOrDescription|slug}}.pdf"
+        },
+        {
+          "id": "number_only",
+          "when": { "numberOrLetter": "*" },
+          "template": "{{kind|slug}}_{{numberOrLetter|slug}}.pdf"
+        },
+        {
+          "id": "title_only",
+          "when": { "titleOrDescription": "*" },
+          "template": "{{kind|slug}}_{{titleOrDescription|slug}}.pdf"
+        },
+        {
+          "id": "default",
+          "template": "{{kind|slug}}.pdf"
+        }
+      ],
+      "tags": ["exhibit", "{{kind}}", "{{offeredBy}}"]
+    },
+    {
       "id": "police_report",
       "label": "Police Report or Other Document",
       "view": "narrative",

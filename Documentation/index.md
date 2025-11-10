@@ -112,6 +112,7 @@ Legend:
 
 ## ✅ Completed PRs
 
+- [x] **PR 96** — New Source Type: Exhibit / Appendix — [design](PRs/pr96.md) · [backlog](BACKLOG_EXHIBIT_ENHANCEMENTS.md)
 - [x] **PR 91** — Batch Upload + Hold-for-Name (type-aware ingest for PDFs & A/V)
 - [x] **PR 3** — Ingestion UI + Source Storage + Standardized Filenames
 - [x] **PR 87** — Docs normalization to satisfy markdownlint gates; archives ignored.
@@ -200,7 +201,7 @@ Legend:
 
 ### 📥 Source Ingestion
 
-- PR 3, PR 5, PR 8, PR 12C, PR 25, PR 28, PR 30, PR 31, PR 37, PR 38, PR 40, PR 59, PR 91
+- PR 3, PR 5, PR 8, PR 12C, PR 25, PR 28, PR 30, PR 31, PR 37, PR 38, PR 40, PR 59, PR 91, PR 96
 
 ### ✏️ Source Editing
 
@@ -208,7 +209,7 @@ Legend:
 
 ### 📊 Data Management & Associations
 
-- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78, PR 86, PR 87, PR 91
+- PR 30, PR 31, PR 35, PR 35A, PR 36, PR 36B, PR 41, PR 60, PR 72, PR 78, PR 86, PR 87, PR 91, PR 96
 
 ### 📄 Source View
 

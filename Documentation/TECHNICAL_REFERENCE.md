@@ -2,7 +2,7 @@
 
 **Case Project UI** — Complete technical documentation for developers
 
-**Last Updated**: October 14, 2025  
+**Last Updated**: November 10, 2025  
 **Version**: 0.1.0
 
 ---
@@ -1386,6 +1386,41 @@ The ingestion pipeline converts uploaded files (PDF, audio, video) into canonica
   "createdAt": "2025-10-14T..."
 }
 ```
+
+### Exhibit/Appendix Pipeline (PR96)
+
+**Input**: Any file type (PDF, image, document) designated as Exhibit or Appendix
+
+**Process**: Exhibits bypass specialized ingestion (no transcript parsing, no text extraction). They are stored as opaque sources with rich metadata.
+
+**Metadata Structure** (`ExhibitMetadata`):
+
+```typescript
+{
+  kind: "exhibit" | "appendix",
+  numberOrLetter?: string,        // "A", "1", "23-B"
+  titleOrDescription?: string,    // "Medical Records"
+  offeredBy?: "prosecution" | "defense" | "other",
+  connectedTo: {
+    mode: "proceeding" | "filing",
+    proceeding?: {
+      type: "prelim" | "pretrial" | "trial" | "other",
+      note?: string                // "Motion Hearing"
+    }
+  }
+}
+```
+
+**Validation**: Zod schema requires **at least one** of `numberOrLetter` or `titleOrDescription`.
+
+**Filename Auto-Detection** (`server/src/lib/exhibitFilenameParser.ts`):
+- Detects `offeredBy` from patterns: "D's Exhibit", "P's Exhibit", "Defense Exhibit"
+- Extracts number/letter from delimiters: "Exhibit-A.pdf" → "A"
+- Extracts title from filename: "Def-1-Medical-Records.pdf" → number=1, title="Medical Records"
+
+**Auto-Event**: Creates "Exhibit / Appendix" event (legal category) with title combining kind + number + description.
+
+**No Blocks**: Exhibits don't generate canonical blocks—they're viewed as whole documents via PDF viewer or image viewer.
 
 ### A/V Pipeline
 

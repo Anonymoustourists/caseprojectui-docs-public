@@ -140,7 +140,8 @@ export type SourceItem = {
     | "av-interview"
     | "bodycam"
     | "dashcam"
-    | "911-call";
+    | "911-call"
+    | "exhibit"; // PR96
   name: string;
   path?: string;
   metadata?: Record<string, any>;
@@ -244,6 +245,7 @@ These mappings **must** exist and be used by ingest:
 | transcript    | Court Hearing           | legal         |
 | court-filing  | Court Filing            | legal         |
 | opinion       | Court Filing            | legal         |
+| exhibit       | Exhibit / Appendix      | legal         |
 | police-report | Police Report           | investigatory |
 | av-interview  | A/V Interview           | investigatory |
 | bodycam       | Body Camera             | investigatory |
